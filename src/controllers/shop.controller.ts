@@ -10,6 +10,15 @@ export const getWeaponsShop = (req: Request, res: Response) => {
         req.session.weapon_buy = false; // reset flash
     }
 
+    let weaponsTableHtml = "";
+    let weaponsOptionsHtml = "";
+    for (let i = 1; i < WEAPONS.length; i++) { // skip index 0 since it is 'Fists' (free/default)
+        const weapon = WEAPONS[i];
+        const rowClass = i % 2 === 1 ? 'con1' : 'con2';
+        weaponsTableHtml += `<tr class='${rowClass}'><td>${weapon.name}</td><td>${weapon.stat}</td><td>${formatAdena(weapon.cost)}</td></tr>`;
+        weaponsOptionsHtml += `<option value="${i}">Buy ${weapon.name}</option>`;
+    }
+
     let mainContent = `
         ${alertHtml}
         You have arrived at Weapons Shop.<br>
@@ -18,21 +27,13 @@ export const getWeaponsShop = (req: Request, res: Response) => {
 
         <table class='main' width='100%' cellspacing='1' cellpadding='4'>
             <tr class='bottom'><td width='50%'>Name</td><td width='30%'>Physical Attack</td><td width='20%'>Adena</td></tr>
-            <tr class='con1'><td>Elven Sword</td><td>16</td><td>${formatAdena(300)}</td></tr>
-            <tr class='con2'><td>Stormbringer</td><td>18</td><td>${formatAdena(5000)}</td></tr>
-            <tr class='con1'><td>Sword Of Valhalla</td><td>32</td><td>${formatAdena(18000)}</td></tr>
-            <tr class='con2'><td>Elemental Sword</td><td>45</td><td>${formatAdena(160000)}</td></tr>
-            <tr class='con1'><td>The Forgotten Blade</td><td>85</td><td>${formatAdena(3000000)}</td></tr>
+            ${weaponsTableHtml}
         </table>
         <br>
         <form method="POST" action="/shop/weapons">
             <select class="box" name="select_weapon">
                 <option value="">Get out of Weapons Shop</option>
-                <option value="1">Buy Elven Sword</option>
-                <option value="2">Buy Stormbringer</option>
-                <option value="3">Buy Sword Of Valhalla</option>
-                <option value="4">Buy Elemental Sword</option>
-                <option value="5">Buy The Forgotten Blade</option>
+                ${weaponsOptionsHtml}
             </select>
             <input type="submit" class="box" value="Submit">
         </form>
@@ -64,6 +65,15 @@ export const getArmorsShop = (req: Request, res: Response) => {
         req.session.armor_buy = false; // reset flash
     }
 
+    let armorsTableHtml = "";
+    let armorsOptionsHtml = "";
+    for (let i = 1; i < ARMORS.length; i++) { // skip index 0 since it is 'Regular Clothes' (free/default)
+        const armor = ARMORS[i];
+        const rowClass = i % 2 === 1 ? 'con1' : 'con2';
+        armorsTableHtml += `<tr class='${rowClass}'><td>${armor.name}</td><td>${armor.stat}</td><td>${formatAdena(armor.cost)}</td></tr>`;
+        armorsOptionsHtml += `<option value="${i}">Buy ${armor.name}</option>`;
+    }
+
     let mainContent = `
         ${alertHtml}
         You have arrived at Armor Shop.<br>
@@ -72,21 +82,13 @@ export const getArmorsShop = (req: Request, res: Response) => {
 
         <table class='main' width='100%' cellspacing='1' cellpadding='4'>
             <tr class='bottom'><td width='50%'>Name</td><td width='30%'>Physical Defense</td><td width='20%'>Adena</td></tr>
-            <tr class='con1'><td>Leather Armor</td><td>10</td><td>${formatAdena(500)}</td></tr>
-            <tr class='con2'><td>Wooden Armor</td><td>15</td><td>${formatAdena(8000)}</td></tr>
-            <tr class='con1'><td>Plate Armor</td><td>29</td><td>${formatAdena(30000)}</td></tr>
-            <tr class='con2'><td>Steel Armor</td><td>38</td><td>${formatAdena(120000)}</td></tr>
-            <tr class='con1'><td>Mithril Alloy Armor</td><td>59</td><td>${formatAdena(1500000)}</td></tr>
+            ${armorsTableHtml}
         </table>
         <br>
         <form method="POST" action="/shop/armors">
             <select class="box" name="select_armor">
                 <option value="">Get out of Armor Shop</option>
-                <option value="1">Buy Leather Armor</option>
-                <option value="2">Buy Wooden Armor</option>
-                <option value="3">Buy Plate Armor</option>
-                <option value="4">Buy Steel Armor</option>
-                <option value="5">Buy Mithril Alloy Armor</option>
+                ${armorsOptionsHtml}
             </select>
             <input type="submit" class="box" value="Submit">
         </form>
@@ -118,6 +120,15 @@ export const getInn = (req: Request, res: Response) => {
         req.session.inn_buy = false; // reset flash
     }
 
+    let foodTableHtml = "";
+    let foodOptionsHtml = "";
+    for (let i = 0; i < FOOD.length; i++) {
+        const food = FOOD[i];
+        const rowClass = i % 2 === 0 ? 'con1' : 'con2';
+        foodTableHtml += `<tr class='${rowClass}'><td>${food.name}</td><td>${food.hp}</td><td>${formatAdena(food.cost)}</td></tr>`;
+        foodOptionsHtml += `<option value="${i}">Buy ${food.name}</option>`;
+    }
+
     let mainContent = `
         ${alertHtml}
         You have arrived at Inn.<br>
@@ -125,22 +136,14 @@ export const getInn = (req: Request, res: Response) => {
         You see a menu and you open it. Inside you read:<br><br>
 
         <table class='main' width='100%' cellspacing='1' cellpadding='4'>
-            <tr class='bottom'><td width='50%'>Name</td><td width='30%'>HP Restoration</td><td width='20%'>Adena</td></tr>
-            <tr class='con1'><td>Juice</td><td>4</td><td>${formatAdena(8)}</td></tr>
-            <tr class='con2'><td>Apple</td><td>6</td><td>${formatAdena(11)}</td></tr>
-            <tr class='con1'><td>Hotdog</td><td>15</td><td>${formatAdena(30)}</td></tr>
-            <tr class='con2'><td>Mash Potatos</td><td>25</td><td>${formatAdena(80)}</td></tr>
-            <tr class='con1'><td>Turkey</td><td>50</td><td>${formatAdena(180)}</td></tr>
+            <tr class='bottom'><td width='50%'>Name</td><td width='30%'>Healing</td><td width='20%'>Adena</td></tr>
+            ${foodTableHtml}
         </table>
         <br>
         <form method="POST" action="/inn">
             <select class="box" name="select_food">
                 <option value="">Get out of Inn</option>
-                <option value="0">Buy Juice (4 health restoration)</option>
-                <option value="1">Buy Apple (6 health restoration)</option>
-                <option value="2">Buy Hotdog (15 health restoration)</option>
-                <option value="3">Buy Mash Potatos (25 health restoration)</option>
-                <option value="4">Buy Turkey (50 health restoration)</option>
+                ${foodOptionsHtml}
             </select>
             <input type="submit" class="box" value="Submit">
         </form>
@@ -150,9 +153,9 @@ export const getInn = (req: Request, res: Response) => {
 };
 
 export const postInn = (req: Request, res: Response) => {
-    if (!req.body.item) return res.redirect('/');
+    if (!req.body.select_food) return res.redirect('/');
 
-    const val = parseInt(req.body.item);
+    const val = parseInt(req.body.select_food);
     const food = FOOD[val];
     if (!food || req.session.adena! < food.cost) {
         return res.send(renderPage("Error", req.session, `Sorry, you need more money.<br><br><a href="/inn">Go back</a>`));

@@ -2,18 +2,17 @@ import { WEAPONS, ARMORS } from '../common/data';
 import { calculateLevel, formatAdena } from '../common/utils';
 
 export function renderStatus(session: any): string {
-    const isGuest = !session.firstTime;
-    const race = isGuest ? "Guest" : session.race;
-    const level = isGuest ? 1 : calculateLevel(session.experience!);
-    const hp = isGuest ? 0 : session.health!;
-    const adena = isGuest ? 0 : session.adena!;
+    const race = session.race;
+    const level = calculateLevel(session.experience!);
+    const hp = session.health!;
+    const adena = session.adena!;
 
     // calculate exp limits based on PHP formula:
     // limit for level N = N * (176 + (N * 162))
     const prevLimit = level === 1 ? 0 : Math.round(level * (176 + (level * 162)));
     const nextLimit = Math.round((level + 1) * (176 + ((level + 1) * 162)));
 
-    const actualExp = isGuest ? 0 : session.experience! - prevLimit;
+    const actualExp = session.experience! - prevLimit;
     const requiredExp = nextLimit - prevLimit;
 
     let expPercent = (actualExp / requiredExp) * 100;
@@ -21,7 +20,7 @@ export function renderStatus(session: any): string {
     if (expPercent < 0) expPercent = 0;
     expPercent = Math.round(expPercent * 10) / 10; // 1 decimal place
 
-    const alertStyle = hp < 25 && !isGuest ? "style='background-color: #f7dfdf;'" : "";
+    const alertStyle = hp < 25 ? "style='background-color: #f7dfdf;'" : "";
 
     return `
 <table class='main' cellspacing='1' cellpadding='4'>
@@ -31,7 +30,7 @@ export function renderStatus(session: any): string {
             <table width='100%' cellspacing='0' cellpadding='0'>
                 <tr class='empty'>
                     <td>${race} lvl ${level} </td>
-                    ${isGuest ? '' : `<td align='right'><a href='/exp-table'>EXP Table</a></td>`}
+                    <td align='right'><a href='/exp-table'>EXP Table</a></td>
                 </tr>
             </table>
         </td>
@@ -42,7 +41,7 @@ export function renderStatus(session: any): string {
                 <tr class='empty'>
                     <td width='15%'>HP: </td>
                     <td width='85%'>
-                        <table width='${hp}%' cellpadding='0' cellspacing='0'>
+                        <table width='${Math.min(hp, 100)}%' cellpadding='0' cellspacing='0'>
                             <tr>
                                 <td>
                                     <table width='100%' cellpadding='0' cellspacing='0'>

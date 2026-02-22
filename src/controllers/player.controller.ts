@@ -17,7 +17,7 @@ export const getSuicide = (req: Request, res: Response) => {
 };
 
 export const postSuicide = (req: Request, res: Response) => {
-    if (req.body.c === 'yes') {
+    if (req.body.suicide === 'yes') {
         req.session.dead = true;
         res.redirect('/death');
     } else {

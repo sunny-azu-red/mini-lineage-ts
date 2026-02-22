@@ -5,8 +5,9 @@ import { renderPage, renderSimplePage } from '../views';
 export const getHome = (req: Request, res: Response) => {
     // if they haven't chosen a race yet, show the start screen
     if (!isGameStarted(req)) {
-        return res.send(renderSimplePage('Game Start | <a href="/highscores">See Highscores</a>', `
-            Hello!<br><br>
+        return res.send(renderSimplePage('Game Start', `
+            Hello!<br>
+            You can start a new game or check the <a href="/highscores">Highscores</a>!<br><br>
             What race do you want to be?<br><table><tr><td></td></tr></table>
             <form onsubmit="window.location.href=this.querySelector('select').value; return false;">
                 <select class="box" name="start">
