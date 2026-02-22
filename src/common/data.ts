@@ -18,10 +18,10 @@ export const ARMORS: Item[] = [
     { id: 5, name: 'Mithril Alloy Armor', stat: 59, cost: 1_500_000 },
 ];
 
-export const FOOD: { id: number, name: string, hp: number, cost: number }[] = [
-    { id: 0, name: 'Juice', hp: 4, cost: 8 },
-    { id: 1, name: 'Apple', hp: 6, cost: 11 },
-    { id: 2, name: 'Hotdog', hp: 15, cost: 30 },
-    { id: 3, name: 'Mash Potatos', hp: 25, cost: 80 },
-    { id: 4, name: 'Turkey', hp: 50, cost: 180 },
+export const FOODS: Item[] = [
+    { id: 0, name: 'Juice', stat: 4, cost: 8 },
+    { id: 1, name: 'Apple', stat: 6, cost: 11 },
+    { id: 2, name: 'Hotdog', stat: 15, cost: 30 },
+    { id: 3, name: 'Mash Potatos', stat: 25, cost: 80 },
+    { id: 4, name: 'Turkey', stat: 50, cost: 180 },
 ];

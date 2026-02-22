@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { calculateLevel } from '../common/utils';
+import { calculateLevel, calculateExpForLevel } from '../common/utils';
 import { renderPage, renderSimplePage } from '../views';
 
 export const getSuicide = (req: Request, res: Response) => {
@@ -44,8 +44,6 @@ export const getRestart = (req: Request, res: Response) => {
 };
 
 export const getExpTable = (req: Request, res: Response) => {
-    if (!req.session.race) return res.redirect('/');
-
     const currentExp = req.session.experience || 0;
     const currentLevel = calculateLevel(currentExp);
 
@@ -53,7 +51,7 @@ export const getExpTable = (req: Request, res: Response) => {
         let html = `<table class='main' width='100%' cellspacing='1' cellpadding='4'>
             <tr class='bottom'><td width='30%' align='center'>Level</td><td width='70%'>Experience</td></tr>`;
         for (let i = start; i <= end; i++) {
-            const expReq = i === 1 ? 0 : Math.round(i * (176 + (i * 162)));
+            const expReq = calculateExpForLevel(i);
             const rowClass = currentLevel === i ? 'con4' : (i % 2 === 0 ? 'con1' : 'con2');
             html += `<tr class='${rowClass}'><td align='center'>${i}</td><td>${expReq}</td></tr>`;
         }
@@ -79,8 +77,8 @@ export const getExpTable = (req: Request, res: Response) => {
         <td width='25%'>
             ${getLayoutForLevels(61, 80)}
         </td></tr></table>
-        <br><br><a href="/">Go back</a>
+        <br>Your current XP is ${currentExp}, <a href="/">go back!</a>
     `;
 
-    res.send(renderSimplePage(`Experience Table [Current XP: ${currentExp}]`, mainContent));
+    res.send(renderSimplePage(`Experience Table`, mainContent));
 };

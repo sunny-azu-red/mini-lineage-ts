@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { formatAdena } from '../common/utils';
 import { renderPage } from '../views';
-import { WEAPONS, ARMORS, FOOD } from '../common/data';
+import { WEAPONS, ARMORS, FOODS } from '../common/data';
 
 export const getWeaponsShop = (req: Request, res: Response) => {
     let alertHtml = "";
@@ -122,10 +122,10 @@ export const getInn = (req: Request, res: Response) => {
 
     let foodTableHtml = "";
     let foodOptionsHtml = "";
-    for (let i = 0; i < FOOD.length; i++) {
-        const food = FOOD[i];
+    for (let i = 0; i < FOODS.length; i++) {
+        const food = FOODS[i];
         const rowClass = i % 2 === 0 ? 'con1' : 'con2';
-        foodTableHtml += `<tr class='${rowClass}'><td>${food.name}</td><td>${food.hp}</td><td>${formatAdena(food.cost)}</td></tr>`;
+        foodTableHtml += `<tr class='${rowClass}'><td>${food.name}</td><td>${food.stat}</td><td>${formatAdena(food.cost)}</td></tr>`;
         foodOptionsHtml += `<option value="${i}">Buy ${food.name}</option>`;
     }
 
@@ -156,13 +156,13 @@ export const postInn = (req: Request, res: Response) => {
     if (!req.body.select_food) return res.redirect('/');
 
     const val = parseInt(req.body.select_food);
-    const food = FOOD[val];
+    const food = FOODS[val];
     if (!food || req.session.adena! < food.cost) {
         return res.send(renderPage("Error", req.session, `Sorry, you need more money.<br><br><a href="/inn">Go back</a>`));
     }
 
     req.session.adena! -= food.cost;
-    req.session.health = Math.min(100, req.session.health! + food.hp);
+    req.session.health = Math.min(100, req.session.health! + food.stat);
     req.session.inn_buy = true;
     res.redirect('/inn');
 };

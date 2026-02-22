@@ -1,17 +1,13 @@
 import { WEAPONS, ARMORS } from '../common/data';
-import { calculateLevel, formatAdena } from '../common/utils';
+import { calculateLevel, formatAdena, calculateExpForLevel } from '../common/utils';
 
 export function renderStatus(session: any): string {
     const race = session.race;
     const level = calculateLevel(session.experience!);
     const hp = session.health!;
     const adena = session.adena!;
-
-    // calculate exp limits based on PHP formula:
-    // limit for level N = N * (176 + (N * 162))
-    const prevLimit = level === 1 ? 0 : Math.round(level * (176 + (level * 162)));
-    const nextLimit = Math.round((level + 1) * (176 + ((level + 1) * 162)));
-
+    const prevLimit = calculateExpForLevel(level);
+    const nextLimit = calculateExpForLevel(level + 1);
     const actualExp = session.experience! - prevLimit;
     const requiredExp = nextLimit - prevLimit;
 
@@ -21,6 +17,7 @@ export function renderStatus(session: any): string {
     expPercent = Math.round(expPercent * 10) / 10; // 1 decimal place
 
     const alertStyle = hp < 25 ? "style='background-color: #f7dfdf;'" : "";
+    const levelDisplay = session.caught ? `${race} lvl ${level}` : `<a href='/exp-table'>${race} lvl ${level}</a>`;
 
     return `
 <table class='main' cellspacing='1' cellpadding='4'>
@@ -29,8 +26,7 @@ export function renderStatus(session: any): string {
         <td>
             <table width='100%' cellspacing='0' cellpadding='0'>
                 <tr class='empty'>
-                    <td>${race} lvl ${level} </td>
-                    <td align='right'><a href='/exp-table'>EXP Table</a></td>
+                    <td>${levelDisplay}</td>
                 </tr>
             </table>
         </td>
@@ -46,9 +42,9 @@ export function renderStatus(session: any): string {
                                 <td>
                                     <table width='100%' cellpadding='0' cellspacing='0'>
                                         <tr>
-                                            <td width='2'><img src='/style/hp_a.gif' width='2' height='12'></td>
-                                            <td width='100%' background='/style/hp_b.gif'></td>
-                                            <td width='2'><img src='/style/hp_c.gif' width='2' height='12'></td>
+                                            <td width='2'><img src='/images/hp_a.gif' width='2' height='12'></td>
+                                            <td width='100%' background='/images/hp_b.gif'></td>
+                                            <td width='2'><img src='/images/hp_c.gif' width='2' height='12'></td>
                                         </tr>
                                     </table>
                                 </td>
@@ -70,9 +66,9 @@ export function renderStatus(session: any): string {
                                 <td>
                                     <table width='100%' cellpadding='0' cellspacing='0'>
                                         <tr>
-                                            <td width='2'><img src='/style/exp_a.gif' width='2' height='12'></td>
-                                            <td width='100%' background='/style/exp_b.gif'></td>
-                                            <td width='2'><img src='/style/exp_c.gif' width='2' height='12'></td>
+                                            <td width='2'><img src='/images/exp_a.gif' width='2' height='12'></td>
+                                            <td width='100%' background='/images/exp_b.gif'></td>
+                                            <td width='2'><img src='/images/exp_c.gif' width='2' height='12'></td>
                                         </tr>
                                     </table>
                                 </td>
@@ -83,7 +79,7 @@ export function renderStatus(session: any): string {
             </table>
         </td>
     </tr>
-    <tr class='con1'><td>Adena: ${formatAdena(session.adena!)}</td></tr>
+    <tr class='con1'><td>Adena: ${formatAdena(adena)}</td></tr>
 </table>
     `;
 }
@@ -112,17 +108,23 @@ export function renderPage(title: string, session: any, mainContent: string): st
 
     let lowHealthAlert = "";
     if (session.health! < 25 && session.health! > 0) {
-        lowHealthAlert = `<font color='red'>Your HP is dangerously low [${session.health!}] !! You should buy some food to rejuvenate yourself.</font><br><br>`;
+        if (session.caught) {
+            lowHealthAlert = `<font color='red'>Your HP is dangerously low [${session.health!}] !!</font><br><br>`;
+        } else {
+            lowHealthAlert = `<font color='red'>Your HP is dangerously low [${session.health!}] !! You should buy some food to rejuvenate yourself.</font><br><br>`;
+        }
     }
 
     return `
-<link href='/style/style.css' rel='stylesheet' type='text/css'>
+<link href='/style.css' rel='stylesheet' type='text/css'>
+<link rel='icon' href='/favicon.ico' type='image/x-icon'>
+<title>Mini Lineage - ${title}</title>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>
 <table class='middle' cellspacing='0' cellpadding='0'>
     <tr>
         <td class='zero'>
             <div id='wrapper'>
-                <img src='/style/header.jpg'><br>
+                <img src='/images/header.jpg'><br>
                 <table width='100%' cellspacing='0' cellpadding='0'>
                     <tr valign='top'>
                         <td class='empty' width='29%'>${statusHtml}<br>${inventoryHtml}</td>
@@ -150,10 +152,12 @@ export function renderPage(title: string, session: any, mainContent: string): st
 
 export function renderSimplePage(title: string, mainContent: string): string {
     return `
-<link href='/style/style.css' rel='stylesheet' type='text/css'>
+<link href='/style.css' rel='stylesheet' type='text/css'>
+<link rel='icon' href='/favicon.ico' type='image/x-icon'>
+<title>Mini Lineage - ${title}</title>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>
 <table class='middle' cellspacing='0' cellpadding='0'><tr><td class='zero'><div id='wrapper'>
-<img src='/style/header.jpg'><br>
+<img src='/images/header.jpg'><br>
 <table class='main' cellspacing='1' cellpadding='4'>
     <tr class='head'><td>${title}</td></tr>
     <tr class='con1'><td>

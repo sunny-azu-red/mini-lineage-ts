@@ -37,8 +37,7 @@
  * ========================================
  */
 
-body
-{ 
+body {
 	background: #FFFFFF;
 	color: #3F3F3F;
 	font-family: Verdana, Tahoma, Arial;
@@ -54,8 +53,7 @@ body
  * ========================================
  */
 
-#wrapper
-{
+#wrapper {
 	margin: 0px auto;
 	text-align: left;
 	width: 600px;
@@ -63,7 +61,7 @@ body
 	padding: 15px;
 }
 
-#wrapper > img {
+#wrapper>img {
 	display: block;
 	background: #F6F6F6;
 	padding: 1px;
@@ -87,15 +85,13 @@ body
 
 a:link,
 a:visited,
-a:active
-{
+a:active {
 	background: transparent;
 	color: #39668E;
 	text-decoration: none;
 }
 
-a:hover
-{
+a:hover {
 	background: transparent;
 	color: #4C8BCC;
 }
@@ -106,10 +102,9 @@ a:hover
  * ========================================
  */
 
-form
-{
+form {
 	display: inline;
-	margin: 0; 
+	margin: 0;
 	padding: 0;
 }
 
@@ -118,24 +113,21 @@ form input:hover,
 form select:focus,
 form select:hover,
 form textarea:focus,
-form textarea:hover
-{
+form textarea:hover {
 	border: #6F6F6F 1px solid;
 	color: #3A3A3A;
 }
 
-optgroup
-{
+optgroup {
 	font: inherit;
 	font-weight: bold;
 }
 
-.box
-{
-	margin-left:0px;
-	margin-bottom:0px;
+.box {
+	margin-left: 0px;
+	margin-bottom: 0px;
 	border: 1px solid #A2A2A2;
-	background-color:#FAFAFA;
+	background-color: #FAFAFA;
 	color: #606060;
 	font-family: Verdana, Tahoma, Arial;
 	font-size: 12px;
@@ -158,68 +150,61 @@ TD.zero {
 	padding: 0px;
 }
 
-TABLE.main
-{
-	font-size: 12px; 
+TABLE.main {
+	font-size: 12px;
 	color: #606060;
 	font-family: verdana, Tahoma, Arial;
 	width: 100%;
-	background: #F6F6F6; 
+	background: #F6F6F6;
 	border: 1px solid #D4D1D1;
 }
 
-TR.head
-{
-	font-size: 12px; 
+TR.head {
+	font-size: 12px;
 	color: #606060;
 	font-family: Tahoma, Arial;
-	background: transparent url(tile_sub.gif);
+	background: transparent url(images/tile_sub.gif);
 	background-repeat: repeat-x;
 	background-color: #D6D6D6;
 	font-weight: bold;
 }
 
-TR.bottom
-{
-	font-size: 12px; 
+TR.bottom {
+	font-size: 12px;
 	color: #848484;
 	font-family: Tahoma, Arial;
-	background: transparent url(tile_bot.gif);
+	background: transparent url(images/tile_bot.gif);
 	background-repeat: repeat-x;
 	background-color: #D6D6D6;
 	font-weight: bold;
 }
 
 TR.empty,
-TD.empty
-{
-	font-size: 12px; 
+TD.empty {
+	font-size: 12px;
 	color: #606060;
 	font-family: verdana, Tahoma, Arial;
 }
 
 TR.con1,
-TD.con1
-{
-	font-size: 12px; 
+TD.con1 {
+	font-size: 12px;
 	color: #606060;
 	font-family: verdana, Tahoma, Arial;
 	background-color: #e8e8e8;
 }
 
 TR.con2,
-TD.con2
-{
-	font-size: 12px; 
+TD.con2 {
+	font-size: 12px;
 	color: #606060;
 	font-family: verdana, Tahoma, Arial;
 	background-color: #dedede;
 }
 
 TR.con4,
-TD.con4
-{
-	font-size: 12px; 
+TD.con4 {
+	font-size: 12px;
 	color: #606060;
 	font-family: verdana, Tahoma, Arial;
 	background-color: #f7d39c;

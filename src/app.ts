@@ -7,7 +7,7 @@ import router from './routes';
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
-app.use('/style', express.static(path.join(__dirname, '../style')));
+app.use(express.static(path.join(__dirname, '../public')));
 app.use(session({
     secret: process.env.SESSION_SECRET || 'fallback-secret',
     resave: false,

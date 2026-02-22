@@ -24,9 +24,9 @@ export const getHome = (req: Request, res: Response) => {
     if (age > 18 && age <= 50) definition = "man";
     else if (age > 50) definition = "old timer";
 
-    let helloMsg = "Welcome to City of Aden.<br><br>";
-    if (req.session.firstTime && !req.session.welcomed) {
-        helloMsg = `You have selected to be Human. Congratulations!<br>Welcome to City of Aden. You are an average ${definition}, aged ${age}, and you came here with ${formatAdena(req.session.adena!)} adena.<br><br>`;
+    let helloMsg = `Welcome to <a href="/highscores">City of Aden</a>.<br><br>`;
+    if (!req.session.welcomed) {
+        helloMsg = `You have selected to be Human. Congratulations!<br>Welcome to <a href="/highscores">City of Aden</a>. You are an average ${definition}, aged ${age}, and you came here with ${formatAdena(req.session.adena!)} adena.<br><br>`;
         req.session.welcomed = true;
     }
 
@@ -47,26 +47,18 @@ export const getHome = (req: Request, res: Response) => {
 };
 
 export const getHuman = (req: Request, res: Response) => {
-    if (isGameStarted(req)) {
-        return res.redirect('/');
-    }
-
     req.session.race = 'Human';
     req.session.health = 100;
     req.session.adena = 300;
     req.session.experience = 0;
     req.session.weaponId = 0;
     req.session.armorId = 0;
-    req.session.firstTime = true;
+    req.session.welcomed = false;
 
     res.redirect('/');
 };
 
 export const getOrc = (req: Request, res: Response) => {
-    if (isGameStarted(req)) {
-        return res.redirect('/');
-    }
-
     res.send(renderSimplePage('Hmmm', `
         Module not yet finished :(<br><br>
         <a href="/">Go back</a>

@@ -17,11 +17,10 @@ declare module 'express-session' {
         armorId: number;
         dead?: boolean;
         caught?: boolean;
-        firstTime?: boolean;
+        welcomed?: boolean;
         wrote_highscore?: boolean;
         weapon_buy?: boolean;
         armor_buy?: boolean;
         inn_buy?: boolean;
-        welcomed?: boolean;
     }
 }
