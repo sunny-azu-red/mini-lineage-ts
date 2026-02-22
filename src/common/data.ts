@@ -1,0 +1,27 @@
+import { Item } from './types';
+
+export const WEAPONS: Record<number, Item> = {
+    0: { id: 0, name: 'Fists', stat: 7, cost: 0 },
+    1: { id: 1, name: 'Elven Sword', stat: 16, cost: 300 },
+    2: { id: 2, name: 'Stormbringer', stat: 18, cost: 5_000 },
+    3: { id: 3, name: 'Sword Of Valhalla', stat: 32, cost: 18_000 },
+    4: { id: 4, name: 'Elemental Sword', stat: 45, cost: 160_000 },
+    5: { id: 5, name: 'The Forgotten Blade', stat: 85, cost: 3_000_000 },
+};
+
+export const ARMORS: Record<number, Item> = {
+    0: { id: 0, name: 'Regular Clothes', stat: 2, cost: 0 },
+    1: { id: 1, name: 'Leather Armor', stat: 10, cost: 500 },
+    2: { id: 2, name: 'Wooden Armor', stat: 15, cost: 8_000 },
+    3: { id: 3, name: 'Plate Armor', stat: 29, cost: 30_000 },
+    4: { id: 4, name: 'Steel Armor', stat: 38, cost: 120_000 },
+    5: { id: 5, name: 'Mithril Alloy Armor', stat: 59, cost: 1_500_000 },
+};
+
+export const FOOD: Record<number, { id: number, name: string, hp: number, cost: number }> = {
+    0: { id: 0, name: 'Juice', hp: 4, cost: 8 },
+    1: { id: 1, name: 'Apple', hp: 6, cost: 11 },
+    2: { id: 2, name: 'Hotdog', hp: 15, cost: 30 },
+    3: { id: 3, name: 'Mash Potatos', hp: 25, cost: 80 },
+    4: { id: 4, name: 'Turkey', hp: 50, cost: 180 },
+};

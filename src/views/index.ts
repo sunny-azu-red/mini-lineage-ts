@@ -1,21 +1,5 @@
-export function randomInt(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-// O(1) Level calculation using the Quadratic Formula
-export function calculateLevel(exp: number): number {
-    if (exp < 1000) return 1;
-    const a = 162, b = 176, c = -exp;
-    const level = Math.floor((-b + Math.sqrt(Math.pow(b, 2) - 4 * a * c)) / (2 * a));
-    return Math.min(Math.max(level, 1), 80);
-}
-
-export function formatAdena(adena: number): string {
-    if (adena <= 999) return adena.toString();
-    if (adena <= 999_000) return (adena / 1_000).toFixed(1).replace('.0', '') + 'k';
-    if (adena <= 999_000_000) return (adena / 1_000_000).toFixed(1).replace('.0', '') + 'kk';
-    return (adena / 1_000_000_000).toFixed(1).replace('.0', '') + 'kkk';
-}
+import { WEAPONS, ARMORS } from '../common/data';
+import { calculateLevel, formatAdena } from '../common/utils';
 
 export function renderStatus(session: any): string {
     const isGuest = !session.firstTime;
@@ -24,7 +8,7 @@ export function renderStatus(session: any): string {
     const hp = isGuest ? 0 : session.health!;
     const adena = isGuest ? 0 : session.adena!;
 
-    // Calculate EXP limits based on PHP formula:
+    // calculate exp limits based on PHP formula:
     // limit for level N = N * (176 + (N * 162))
     const prevLimit = level === 1 ? 0 : Math.round(level * (176 + (level * 162)));
     const nextLimit = Math.round((level + 1) * (176 + ((level + 1) * 162)));
@@ -105,8 +89,6 @@ export function renderStatus(session: any): string {
     `;
 }
 
-import { WEAPONS, ARMORS } from './gamedata';
-
 export function renderInventory(session: any): string {
     const weaponName = WEAPONS[session.weaponId!]?.name || "Fists";
     const weaponStat = WEAPONS[session.weaponId!]?.stat || 7;
@@ -129,7 +111,6 @@ export function renderPage(title: string, session: any, mainContent: string): st
     const statusHtml = renderStatus(session);
     const inventoryHtml = renderInventory(session);
 
-    // Add the low health alert per user request
     let lowHealthAlert = "";
     if (session.health! < 25 && session.health! > 0) {
         lowHealthAlert = `<font color='red'>Your HP is dangerously low [${session.health!}] !! You should buy some food to rejuvenate yourself.</font><br><br>`;
@@ -183,4 +164,3 @@ export function renderSimplePage(title: string, mainContent: string): string {
 </div><div id='copyright'>Version 1.5 &copy; 2005 - ${new Date().getFullYear()}</div></td></tr></table>
     `;
 }
-

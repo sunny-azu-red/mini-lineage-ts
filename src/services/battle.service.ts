@@ -1,4 +1,4 @@
-import { randomInt } from './utils';
+import { randomInt } from '../common/utils';
 
 export function simulateBattle(weaponId: number, armorId: number, exp: number) {
     const weaponConfig = [
