@@ -61,7 +61,8 @@ body {
 	padding: 15px;
 }
 
-#wrapper>img {
+#wrapper>img,
+#wrapper>a>img {
 	display: block;
 	background: #F6F6F6;
 	padding: 1px;
@@ -153,7 +154,7 @@ TD.zero {
 TABLE.main {
 	font-size: 12px;
 	color: #606060;
-	font-family: verdana, Tahoma, Arial;
+	font-family: Verdana, Tahoma, Arial;
 	width: 100%;
 	background: #F6F6F6;
 	border: 1px solid #D4D1D1;
@@ -179,14 +180,14 @@ TR.empty,
 TD.empty {
 	font-size: 12px;
 	color: #606060;
-	font-family: verdana, Tahoma, Arial;
+	font-family: Verdana, Tahoma, Arial;
 }
 
 TR.con1,
 TD.con1 {
 	font-size: 12px;
 	color: #606060;
-	font-family: verdana, Tahoma, Arial;
+	font-family: Verdana, Tahoma, Arial;
 	background-color: #e8e8e8;
 }
 
@@ -194,7 +195,7 @@ TR.con2,
 TD.con2 {
 	font-size: 12px;
 	color: #606060;
-	font-family: verdana, Tahoma, Arial;
+	font-family: Verdana, Tahoma, Arial;
 	background-color: #dedede;
 }
 
@@ -202,6 +203,6 @@ TR.con4,
 TD.con4 {
 	font-size: 12px;
 	color: #606060;
-	font-family: verdana, Tahoma, Arial;
+	font-family: Verdana, Tahoma, Arial;
 	background-color: #ede0ff;
 }

@@ -1,14 +1,17 @@
 import { randomInt } from '../common/utils';
+import { BattleResult, WeaponConfig } from '../common/types';
 
-export function simulateBattle(weaponId: number, armorId: number, exp: number) {
-    const weaponConfig = [
-        { orcs: [1, 2], hpLoss: [50, 55], exp: [50, 150], adena: [50, 90] },
-        { orcs: [4, 7], hpLoss: [40, 45], exp: [150, 250], adena: [100, 290] },
-        { orcs: [8, 12], hpLoss: [45, 50], exp: [250, 350], adena: [300, 690] },
-        { orcs: [13, 18], hpLoss: [50, 55], exp: [350, 450], adena: [700, 1290] },
-        { orcs: [19, 23], hpLoss: [45, 50], exp: [450, 550], adena: [1300, 5490] },
-        { orcs: [36, 45], hpLoss: [40, 45], exp: [550, 650], adena: [5500, 14900] }
-    ][weaponId] || { orcs: [1, 2], hpLoss: [50, 55], exp: [50, 150], adena: [50, 90] };
+export const WEAPON_CONFIGS: WeaponConfig[] = [
+    { orcs: [1, 2], hpLoss: [50, 55], exp: [50, 150], adena: [50, 90] },
+    { orcs: [4, 7], hpLoss: [40, 45], exp: [150, 250], adena: [100, 290] },
+    { orcs: [8, 12], hpLoss: [45, 50], exp: [250, 350], adena: [300, 690] },
+    { orcs: [13, 18], hpLoss: [50, 55], exp: [350, 450], adena: [700, 1290] },
+    { orcs: [19, 23], hpLoss: [45, 50], exp: [450, 550], adena: [1300, 5490] },
+    { orcs: [36, 45], hpLoss: [40, 45], exp: [550, 650], adena: [5500, 14900] }
+];
+
+export function simulateBattle(weaponId: number, armorId: number, exp: number): BattleResult {
+    const weaponConfig = WEAPON_CONFIGS[weaponId] || WEAPON_CONFIGS[0];
 
     const armorMitigation = armorId * 4;
 

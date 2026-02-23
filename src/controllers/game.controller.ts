@@ -1,66 +1,43 @@
 import { Request, Response } from 'express';
-import { randomInt, formatAdena, isGameStarted } from '../common/utils';
-import { renderPage, renderSimplePage } from '../views';
+import { PlayerState } from '../common/types';
+import { isGameStarted } from '../common/utils';
+import { renderSimplePage } from '../views/layout';
+import { renderGameStartView, renderHomeView } from '../views/game.views';
+import { Race } from '../common/types';
 
 export const getHome = (req: Request, res: Response) => {
-    // if they haven't chosen a race yet, show the start screen
-    if (!isGameStarted(req)) {
-        return res.send(renderSimplePage('Game Start', `
-            Hello!<br>
-            You can start a new game or check the <a href="/highscores">Highscores</a>!<br><br>
-            What race do you want to be?<br><table><tr><td></td></tr></table>
-            <form onsubmit="window.location.href=this.querySelector('select').value; return false;">
-                <select class="box" name="start">
-                    <option value="/human">Human</option>
-                    <option value="/orc">Orc</option>
-                </select>
-                <input type="submit" class="box" value="Submit">
-            </form>
-        `));
-    }
+    if (!isGameStarted(req))
+        return res.send(renderGameStartView());
 
-    const age = randomInt(10, 70);
-    let definition = "boy";
-    if (age > 18 && age <= 50) definition = "man";
-    else if (age > 50) definition = "old timer";
+    const player = req.session as PlayerState;
+    if (player.caught)
+        return res.redirect('/battle');
 
-    let helloMsg = `Welcome to <a href="/highscores">City of Aden</a>.<br><br>`;
-    if (!req.session.welcomed) {
-        helloMsg = `You have selected to be Human. Congratulations!<br>Welcome to <a href="/highscores">City of Aden</a>. You are an average ${definition}, aged ${age}, and you came here with ${formatAdena(req.session.adena!)} adena.<br><br>`;
-        req.session.welcomed = true;
-    }
+    const isNewPlayer = !player.welcomed;
+    if (isNewPlayer)
+        player.welcomed = true;
 
-    const html = renderPage("Home Town", req.session, `
-        ${helloMsg}
-        <form onsubmit="window.location.href=this.querySelector('select').value; return false;">
-            <select class="box" name="travel">
-                <option value="/shop/armors">Go to Armor Shop</option>
-                <option value="/shop/weapons">Go to Weapon Shop</option>
-                <option value="/inn">Go to Inn</option>
-                <option value="/battle">Fight on the Battlefield</option>
-                <option value="/suicide">Commit Suicide</option>
-            </select>
-            <input type="submit" class="box" value="Submit">
-        </form>
-    `);
+    const html = renderHomeView(player, isNewPlayer);
     res.send(html);
 };
 
 export const getHuman = (req: Request, res: Response) => {
-    req.session.race = 'Human';
-    req.session.health = 100;
-    req.session.adena = 300;
-    req.session.experience = 0;
-    req.session.weaponId = 0;
-    req.session.armorId = 0;
-    req.session.welcomed = false;
+    const player = req.session as PlayerState;
+
+    player.race = Race.Human;
+    player.health = 100;
+    player.adena = 300;
+    player.experience = 0;
+    player.weaponId = 0;
+    player.armorId = 0;
+    player.welcomed = false;
 
     res.redirect('/');
 };
 
 export const getOrc = (req: Request, res: Response) => {
     res.send(renderSimplePage('Hmmm', `
-        Module not yet finished :(<br><br>
+        Module not yet finished 🥹<br><br>
         <a href="/">Go back</a>
     `));
 };

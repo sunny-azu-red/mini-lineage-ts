@@ -1,14 +1,16 @@
 import { WEAPONS, ARMORS } from '../common/data';
-import { calculateLevel, formatAdena, calculateExpForLevel } from '../common/utils';
+import { calculateLevel, calculateExpForLevel } from '../services/math.service';
+import { formatAdena } from '../common/utils';
+import { PlayerState } from '../common/types';
 
-export function renderStatus(session: any): string {
-    const race = session.race;
-    const level = calculateLevel(session.experience!);
-    const hp = session.health!;
-    const adena = session.adena!;
+export function renderStatus(player: PlayerState): string {
+    const race = player.race;
+    const level = calculateLevel(player.experience);
+    const hp = player.health;
+    const adena = player.adena;
     const prevLimit = calculateExpForLevel(level);
     const nextLimit = calculateExpForLevel(level + 1);
-    const actualExp = session.experience! - prevLimit;
+    const actualExp = player.experience - prevLimit;
     const requiredExp = nextLimit - prevLimit;
 
     let expPercent = (actualExp / requiredExp) * 100;
@@ -17,7 +19,7 @@ export function renderStatus(session: any): string {
     expPercent = Math.round(expPercent * 10) / 10; // 1 decimal place
 
     const alertStyle = hp < 25 ? "style='background-color: #f7dfdf;'" : "";
-    const levelDisplay = session.caught ? `${race} lvl ${level}` : `<a href='/exp-table'>${race} lvl ${level}</a>`;
+    const levelDisplay = player.caught ? `${race} lvl ${level}` : `<a href='/exp-table'>${race} lvl ${level}</a>`;
 
     return `
 <table class='main' cellspacing='1' cellpadding='4'>
@@ -84,9 +86,9 @@ export function renderStatus(session: any): string {
     `;
 }
 
-export function renderInventory(session: any): string {
-    const weaponStr = session.weaponId! > 0 ? WEAPONS[session.weaponId!]?.name : "No Weapon";
-    const armorStr = session.armorId! > 0 ? ARMORS[session.armorId!]?.name : "No Armor";
+export function renderInventory(player: PlayerState): string {
+    const weaponStr = player.weaponId > 0 ? WEAPONS[player.weaponId]?.name : "No Weapon";
+    const armorStr = player.armorId > 0 ? ARMORS[player.armorId]?.name : "No Armor";
 
     return `
 <table class='main' cellspacing='1' cellpadding='4'>
@@ -97,18 +99,20 @@ export function renderInventory(session: any): string {
     `;
 }
 
-export function renderPage(title: string, session: any, mainContent: string): string {
-    const statusHtml = renderStatus(session);
-    const inventoryHtml = renderInventory(session);
+export function renderPage(title: string, player: PlayerState, mainContent: string): string {
+    const statusHtml = renderStatus(player);
+    const inventoryHtml = renderInventory(player);
 
     let lowHealthAlert = "";
-    if (session.health! < 25 && session.health! > 0) {
-        if (session.caught) {
-            lowHealthAlert = `<font color='red'>Your HP is dangerously low [${session.health!}] !!</font><br><br>`;
+    if (player.health < 25 && player.health > 0) {
+        if (player.caught) {
+            lowHealthAlert = `<font color='red'>Your HP is dangerously low [${player.health}] !!</font><br><br>`;
         } else {
-            lowHealthAlert = `<font color='red'>Your HP is dangerously low [${session.health!}] !! You should buy some food to rejuvenate yourself.</font><br><br>`;
+            lowHealthAlert = `<font color='red'>Your HP is dangerously low [${player.health}] !! You should buy some food to rejuvenate yourself.</font><br><br>`;
         }
     }
+
+    const headerImage = player.caught ? `<img src='/images/header.jpg'>` : `<a href="/"><img src='/images/header.jpg'></a>`;
 
     return `
 <link href='/style.css' rel='stylesheet' type='text/css'>
@@ -119,7 +123,7 @@ export function renderPage(title: string, session: any, mainContent: string): st
     <tr>
         <td class='zero'>
             <div id='wrapper'>
-                <img src='/images/header.jpg'><br>
+                ${headerImage}<br>
                 <table width='100%' cellspacing='0' cellpadding='0'>
                     <tr valign='top'>
                         <td class='empty' width='29%'>${statusHtml}<br>${inventoryHtml}</td>
@@ -152,7 +156,7 @@ export function renderSimplePage(title: string, mainContent: string): string {
 <title>Mini Lineage - ${title}</title>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>
 <table class='middle' cellspacing='0' cellpadding='0'><tr><td class='zero'><div id='wrapper'>
-<img src='/images/header.jpg'><br>
+<a href="/"><img src='/images/header.jpg'></a><br>
 <table class='main' cellspacing='1' cellpadding='4'>
     <tr class='head'><td>${title}</td></tr>
     <tr class='con1'><td>
