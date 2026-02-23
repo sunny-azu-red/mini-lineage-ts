@@ -32,7 +32,7 @@ export const getBattle = (req: Request, res: Response) => {
         Your Health ${leveledUp ? 'was rejuvenated' : 'dropped'} to ${s.health!} ${leveledUp ? 'plus' : 'but'} you gained ${results.expGained} Experience and ${formatAdena(results.adenaGained)} adena.<br><br>
     `;
 
-    if (leveledUp) html += `<b>Congratulations! You have reached level ${newLevel}.</b><br><br>`;
+    if (leveledUp) html += `<font color="green">Congratulations! You have reached level ${newLevel}.</font><br><br>`;
 
     if (isAmbushed) {
         const surprises = [

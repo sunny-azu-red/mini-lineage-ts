@@ -30,7 +30,7 @@ export const getDeath = (req: Request, res: Response) => {
         ? "You were caught trying to flee an ambush! Game Over !!"
         : "Your health dropped to 0 and you died.";
 
-    res.send(renderSimplePage("Ups...", `
+    res.send(renderSimplePage("Oops...", `
         <font color='red'>${reason}</font><br><br>
         <a href="/highscores/submit">Write your status in Highscores!</a><br>
         <a href="/restart">Play Again?</a>

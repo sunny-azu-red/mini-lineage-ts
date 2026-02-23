@@ -15,14 +15,14 @@ export function formatAdena(adena: number): string {
     return (adena / 1_000_000_000).toFixed(1).replace('.0', '') + 'kkk';
 };
 
-// O(1) Level calculation using the Quadratic Formula
-export function calculateLevel(exp: number): number {
-    if (exp < 1000) return 1;
-    const a = 162, b = 176, c = -exp;
-    const level = Math.floor((-b + Math.sqrt(Math.pow(b, 2) - 4 * a * c)) / (2 * a));
-    return Math.min(Math.max(level, 1), 80);
+export function calculateExpForLevel(level: number): number {
+    return level <= 1 ? 0 : Math.round(130 * Math.pow(level, 2) + 130 * level);
 };
 
-export function calculateExpForLevel(level: number): number {
-    return level <= 1 ? 0 : Math.round(level * (176 + (level * 162)));
+export function calculateLevel(exp: number): number {
+    let level = 1;
+    while (level < 80 && calculateExpForLevel(level + 1) <= exp) {
+        level++;
+    }
+    return level;
 };

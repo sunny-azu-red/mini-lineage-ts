@@ -85,13 +85,8 @@ export function renderStatus(session: any): string {
 }
 
 export function renderInventory(session: any): string {
-    const weaponName = WEAPONS[session.weaponId!]?.name || "Fists";
-    const weaponStat = WEAPONS[session.weaponId!]?.stat || 7;
-    const weaponStr = session.weaponId! > 0 ? `${weaponName} (${weaponStat} p.atk)` : "No Weapon";
-
-    const armorName = ARMORS[session.armorId!]?.name || "Regular Clothes";
-    const armorStat = ARMORS[session.armorId!]?.stat || 2;
-    const armorStr = session.armorId! > 0 ? `${armorName} (${armorStat} p.def)` : "No Armor";
+    const weaponStr = session.weaponId! > 0 ? WEAPONS[session.weaponId!]?.name : "No Weapon";
+    const armorStr = session.armorId! > 0 ? ARMORS[session.armorId!]?.name : "No Armor";
 
     return `
 <table class='main' cellspacing='1' cellpadding='4'>
