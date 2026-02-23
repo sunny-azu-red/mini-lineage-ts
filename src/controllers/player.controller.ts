@@ -77,7 +77,7 @@ export const getExpTable = (req: Request, res: Response) => {
         <td width='25%'>
             ${getLayoutForLevels(61, 80)}
         </td></tr></table>
-        <br>Your current XP is ${currentExp}, <a href="/">go back!</a>
+        <br>Your current XP is ${currentExp}, now <a href="/">go back!</a>
     `;
 
     res.send(renderSimplePage(`Experience Table`, mainContent));

@@ -78,6 +78,6 @@ export const getHighscores = async (req: Request, res: Response) => {
 
     res.send(renderSimplePage('Highscores', `
         ${headerMessage}${contentHtml}
-        <br>${footerMessage}, <a href="/">go back!</a>
+        <br>${footerMessage}, or just <a href="/">go back!</a>
     `));
 };

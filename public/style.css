@@ -163,9 +163,7 @@ TR.head {
 	font-size: 12px;
 	color: #606060;
 	font-family: Tahoma, Arial;
-	background: transparent url(images/tile_sub.gif);
-	background-repeat: repeat-x;
-	background-color: #D6D6D6;
+	background: #D6D6D6 linear-gradient(to bottom, #E9E9E9 0px, #D6D6D6 30px);
 	font-weight: bold;
 }
 
@@ -173,9 +171,7 @@ TR.bottom {
 	font-size: 12px;
 	color: #848484;
 	font-family: Tahoma, Arial;
-	background: transparent url(images/tile_bot.gif);
-	background-repeat: repeat-x;
-	background-color: #D6D6D6;
+	background: #D6D6D6 linear-gradient(to bottom, #D6D6D6 0px, #E9E9E9 30px);
 	font-weight: bold;
 }
 
