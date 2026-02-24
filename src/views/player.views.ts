@@ -54,7 +54,7 @@ export function renderExpTableView(currentExp: number, currentLevel: number): st
         <td width='25%'>
             ${getLayoutForLevels(61, 80)}
         </td></tr></table>
-        <br>Your current XP is ${currentExp} | ${calculateExpForLevel(currentLevel + 1) - currentExp} XP needed to level up | <a href="/">Go back</a>
+        <br>Your current XP is ${currentExp} ${currentLevel < 80 ? `| ${calculateExpForLevel(currentLevel + 1) - currentExp} XP needed to level up` : ''} | <a href="/">Go back</a>
     `;
 
     return renderSimplePage(`Experience Table`, mainContent);

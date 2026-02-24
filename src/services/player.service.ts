@@ -19,4 +19,5 @@ export function applyBattleResult(player: PlayerState, hpLost: number, expGained
 
     if (player.health <= 0)
         player.dead = true;
+    // player.health = 100; // DEBUG: respawn on death
 }

@@ -12,10 +12,8 @@ export const getBattle = (req: Request, res: Response) => {
         player.caught = false;
 
     const level = calculateLevel(player.experience);
-    const results = simulateBattle(player.weaponId, player.armorId, player.experience);
-
+    const results = simulateBattle(player.weaponId, player.armorId);
     applyBattleResult(player, results.hpLost, results.expGained, results.adenaGained);
-
     if (player.health <= 0) {
         player.dead = true;
         return res.redirect('/death');
@@ -26,8 +24,8 @@ export const getBattle = (req: Request, res: Response) => {
     if (leveledUp)
         player.health = 100;
 
-    const luck = randomInt(1, 5);
-    let isAmbushed = luck === 15;
+    const luck = randomInt(1, 15);
+    let isAmbushed = luck === 5;
     if (isAmbushed)
         player.caught = true;
 

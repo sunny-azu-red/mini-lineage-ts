@@ -1,34 +1,31 @@
 import { randomInt } from '../common/utils';
-import { BattleResult, WeaponConfig } from '../common/types';
+import { BattleResult } from '../common/types';
+import { WEAPONS, ARMORS } from '../common/data';
 
-export const WEAPON_CONFIGS: WeaponConfig[] = [
-    { orcs: [1, 2], hpLoss: [50, 55], exp: [50, 150], adena: [50, 90] },
-    { orcs: [4, 7], hpLoss: [40, 45], exp: [150, 250], adena: [100, 290] },
-    { orcs: [8, 12], hpLoss: [45, 50], exp: [250, 350], adena: [300, 690] },
-    { orcs: [13, 18], hpLoss: [50, 55], exp: [350, 450], adena: [700, 1290] },
-    { orcs: [19, 23], hpLoss: [45, 50], exp: [450, 550], adena: [1300, 5490] },
-    { orcs: [36, 45], hpLoss: [40, 45], exp: [550, 650], adena: [5500, 14900] }
-];
+export function simulateBattle(weaponId: number, armorId: number): BattleResult {
+    const weapon = WEAPONS[weaponId]?.stat || WEAPONS[0].stat;
+    const armor = ARMORS[armorId]?.stat || ARMORS[0].stat;
 
-export function simulateBattle(weaponId: number, armorId: number, exp: number): BattleResult {
-    const weaponConfig = WEAPON_CONFIGS[weaponId] || WEAPON_CONFIGS[0];
+    // orcs killed: scales dynamically with weapon stat
+    const minOrcs = Math.max(1, Math.floor(weapon * 0.3));
+    const maxOrcs = Math.max(2, Math.floor(weapon * 0.6));
+    const orcsKilled = randomInt(minOrcs, maxOrcs);
 
-    const armorMitigation = armorId * 4;
+    // hp lost: danger scales linearly, but armor scales sub-linearly to prevent invincibility
+    const dangerLevel = Math.floor(weapon * 0.6);
+    const protection = Math.floor(Math.pow(armor, 0.95) * 0.8);
+    const hpLost = Math.max(1, randomInt(10, 25) + dangerLevel - protection);
 
-    let orcsKilled = randomInt(weaponConfig.orcs[0], weaponConfig.orcs[1]);
-    let hpLost = randomInt(weaponConfig.hpLoss[0], weaponConfig.hpLoss[1]) - randomInt(armorMitigation - 3, armorMitigation);
-    let expGained = randomInt(weaponConfig.exp[0], weaponConfig.exp[1]);
-    let adenaGained = randomInt(weaponConfig.adena[0], weaponConfig.adena[1]);
+    // experience gained: scales nicely with weapon
+    const expGained = (orcsKilled * randomInt(10, 18)) + Math.floor(Math.pow(weapon, 1.5) * 0.8);
 
-    if (exp >= 593760) {
-        orcsKilled += randomInt(35, 44); hpLost -= randomInt(10, 12); expGained += randomInt(350, 500); adenaGained += randomInt(5000, 15000);
-    } else if (exp >= 266240) {
-        orcsKilled += randomInt(25, 34); hpLost -= randomInt(7, 9); expGained += randomInt(150, 350); adenaGained += randomInt(1500, 4000);
-    } else if (exp >= 68320) {
-        orcsKilled += randomInt(15, 24); hpLost -= randomInt(4, 6); expGained += randomInt(50, 150); adenaGained += randomInt(150, 400);
-    } else if (exp >= 17960) {
-        orcsKilled += randomInt(5, 14); hpLost -= randomInt(1, 3); expGained += randomInt(10, 50); adenaGained += randomInt(10, 40);
-    }
+    // adena gained: exponential scaling for smoother economy pacing
+    const adenaGained = (orcsKilled * randomInt(2, 4)) + Math.floor(Math.pow(weapon, 2.65) * 0.05);
 
-    return { orcsKilled, hpLost: Math.max(1, hpLost), expGained, adenaGained };
+    return {
+        orcsKilled,
+        hpLost,
+        expGained,
+        adenaGained
+    };
 }

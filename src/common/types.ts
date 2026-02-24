@@ -12,13 +12,6 @@ export enum Race {
     Orc = 'Orc'
 }
 
-export interface WeaponConfig {
-    orcs: [number, number];
-    hpLoss: [number, number];
-    exp: [number, number];
-    adena: [number, number];
-}
-
 export interface BattleResult {
     orcsKilled: number;
     hpLost: number;
