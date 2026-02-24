@@ -12,7 +12,7 @@ export function renderHighscoresSubmitView(): string {
 
 export function renderHighscoresView(highscores: any[]): string {
     let headerMessage = '';
-    let footerMessage = 'You could be among them too';
+    let footerMessage = 'You could also be in this list';
     let contentHtml = '';
 
     if (highscores.length === 0) {
@@ -61,6 +61,6 @@ export function renderHighscoresView(highscores: any[]): string {
 export function renderHighscoresErrorView(): string {
     return renderSimplePage('Highscores', `
         <table class='main' width='100%' cellspacing='1' cellpadding='4'><tr class='con1'><td colspan='5'>Error loading highscores...</td></tr></table>
-        <br>You could be among them too | <a href="/">Go back</a>
+        <br><a href="/">Go back</a>
     `);
 }
