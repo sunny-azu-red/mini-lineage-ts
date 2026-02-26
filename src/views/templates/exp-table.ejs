@@ -1,0 +1,34 @@
+<div class="exp-table-grid">
+    <% columns.forEach(function(col, ci) { %>
+        <table class="data-table exp-col">
+            <thead>
+                <tr>
+                    <th>Level</th>
+                    <th>Experience</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% col.forEach(function(row) { %>
+                    <tr class="<%= row.rowClass %>">
+                        <td class="center">
+                            <%= row.level %>
+                        </td>
+                        <td>
+                            <%= row.expReq %>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
+        <% }); %>
+</div>
+<br>
+Your current XP is <strong>
+    <%= currentExp %>
+</strong>
+<% if (currentLevel < 80) { %>
+    | <span class="gold">
+        <%= xpNeeded %> XP needed to level up
+    </span>
+    <% } %>
+        | <a href="/">Go back</a>

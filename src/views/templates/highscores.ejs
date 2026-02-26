@@ -1,0 +1,42 @@
+<% if (headerMessage) { %>
+    <p><%- headerMessage %></p>
+    <% } %>
+
+        <% if (rows.length> 0) { %>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Level</th>
+                        <th>Total XP</th>
+                        <th>Adena</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% rows.forEach(function(row, i) { %>
+                        <tr class="<%= i % 2 === 0 ? 'row-even' : 'row-odd' %>">
+                            <td>
+                                <%= row.name %>
+                            </td>
+                            <td class="center">
+                                <%= row.level %>
+                            </td>
+                            <td>
+                                <%= row.totalExp %>
+                            </td>
+                            <td class="gold">
+                                <%= row.adena %>
+                            </td>
+                            <td class="muted">
+                                <%= row.date %>
+                            </td>
+                        </tr>
+                        <% }); %>
+                </tbody>
+            </table>
+            <% } %>
+
+                <br><span class="muted">
+                    <%= footerMessage %>
+                </span> | <a href="/">Go back</a>

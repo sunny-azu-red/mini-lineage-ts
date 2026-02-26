@@ -1,0 +1,14 @@
+<%- helloMsg %>
+
+    <form onsubmit="window.location.href=this.querySelector('select').value; return false;">
+        <div class="form-row">
+            <select class="form-select" name="travel">
+                <option value="/shop/armors">⚔️ Armor Shop</option>
+                <option value="/shop/weapons">🗡️ Weapon Shop</option>
+                <option value="/inn">🍺 Inn</option>
+                <option value="/battle">💀 Battlefield</option>
+                <option value="/suicide">☠️ Commit Suicide</option>
+            </select>
+            <button type="submit" class="btn">Go</button>
+        </div>
+    </form>

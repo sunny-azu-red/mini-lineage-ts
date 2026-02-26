@@ -1,0 +1,17 @@
+<%- battleText %>
+
+    <% if (leveledUp) { %>
+        <div class="alert alert-success">🎉 Congratulations! You have reached level <%= newLevel %>.</div>
+        <% } %>
+
+            <% if (caught) { %>
+                <div class="alert alert-danger">🔴 <%- caughtMessage %></div>
+                <div class="action-links">
+                    <a href="/battle" class="btn btn-danger">⚔️ Fight them!</a>
+                </div>
+                <% } else { %>
+                    <div class="action-links">
+                        <a href="/battle" class="btn"><%- nextMove %></a>
+                        <a href="/" class="btn btn-secondary">🏠 Go back to town</a>
+                    </div>
+                    <% } %>

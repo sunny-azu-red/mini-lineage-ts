@@ -1,0 +1,45 @@
+<% if (alertHtml) { %>
+    <div class="alert alert-info"><%- alertHtml %></div>
+    <% } %>
+
+        You have arrived at the Weapons Shop.<br>
+        The nice man greets you and lets you look through his swords.<br><br>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Physical Attack</th>
+                    <th>Adena</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% weapons.forEach(function(weapon, i) { %>
+                    <tr class="<%= i % 2 === 0 ? 'row-even' : 'row-odd' %>">
+                        <td>
+                            <%= weapon.name %>
+                        </td>
+                        <td>
+                            <%= weapon.stat %>
+                        </td>
+                        <td class="gold">
+                            <%= weapon.costFormatted %>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
+        <br>
+
+        <form method="POST" action="/shop/weapons">
+            <div class="form-row">
+                <select class="form-select" name="select_weapon">
+                    <option value="">🚪 Leave Weapons Shop</option>
+                    <% weapons.forEach(function(weapon, i) { %>
+                        <option value="<%= i + 1 %>">Buy <%= weapon.name %>
+                        </option>
+                        <% }); %>
+                </select>
+                <button type="submit" class="btn">Submit</button>
+            </div>
+        </form>
