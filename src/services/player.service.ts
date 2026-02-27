@@ -24,8 +24,8 @@ export function applyBattleResult(player: PlayerState, hpLost: number, expGained
 
 // TODO: if ur caught cheating, you shouldnt be able to write your name in the highscores
 
-// TODO: buttons have 3 classes, btn, btn-secondary and btn-danger, can we pick btn and btn-danger for buttons with emojis and btn-secondary for buttons without emojis?
 // TODO: split the css into multiple files by logical groups
+
 // TODO: the same way we have an Item interface for weapon and armor and food, we need to make one for Human and Orc so that we can sepcify the emoji for each there
 // TODO: make it that if we dont have enough money, it shows a red flash message, not a separate page with go back
 // TODO: make it so that you cant buy armor or weapon if you already have the exact one, the option should be disabled in the list

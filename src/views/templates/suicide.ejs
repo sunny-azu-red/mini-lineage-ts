@@ -6,7 +6,7 @@
             <option value="no">No, I changed my mind</option>
             <option value="yes">Yes, stab yourself in the heart</option>
         </select>
-        <button type="submit" class="btn" id="suicide-btn">Phew 😅</button>
+        <button type="submit" class="btn btn-secondary" id="suicide-btn">Return</button>
     </div>
 </form>
 <script>
@@ -19,7 +19,7 @@
                 btn.className = 'btn btn-danger';
             } else {
                 btn.textContent = 'Phew 😅';
-                btn.className = 'btn';
+                btn.className = 'btn btn-secondary';
             }
         });
     })();

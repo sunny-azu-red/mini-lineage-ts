@@ -19,11 +19,11 @@ export function renderHighscoresSubmitView(): string {
 
 export function renderHighscoresView(highscores: any[]): string {
     let headerMessage = '';
-    let footerMessage = 'You could also be in this list 😊';
+    let footerMessage = 'Your name could be here too 😊';
 
     if (highscores.length === 0) {
-        headerMessage = 'No highscores yet...<br>';
-        footerMessage = 'You could be the first one here';
+        headerMessage = 'No heroes here yet...<br>';
+        footerMessage = 'You could be the first one';
     }
 
     const rows = highscores.map((score, idx) => {
@@ -40,9 +40,9 @@ export function renderHighscoresView(highscores: any[]): string {
     });
 
     const content = render(highscoresTpl, { headerMessage, footerMessage, rows });
-    return renderSimplePage('Highscores', content);
+    return renderSimplePage('Hall of Champions', content);
 }
 
 export function renderHighscoresErrorView(): string {
-    return renderSimplePage('Highscores', render(highscoresErrorTpl, {}));
+    return renderSimplePage('Hall of Champions', render(highscoresErrorTpl, {}));
 }

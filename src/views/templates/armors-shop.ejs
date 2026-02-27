@@ -34,7 +34,7 @@
                 <option value="<%= a.id %>">Pick <%= a.emoji %> <%= a.name %></option>
             <% }); %>
         </select>
-        <button type="submit" class="btn" id="armor-btn">Travel</button>
+        <button type="submit" class="btn btn-secondary" id="armor-btn">Return</button>
     </div>
 </form>
 <script>
@@ -42,7 +42,8 @@
         var sel = document.getElementById('armor-select');
         var btn = document.getElementById('armor-btn');
         sel.addEventListener('change', function () {
-            btn.textContent = sel.value === '' ? 'Travel' : '🪙 Purchase';
+            btn.textContent = sel.value === '' ? 'Return' : '🪙 Purchase';
+            btn.className = sel.value === '' ? 'btn btn-secondary' : 'btn';
         });
     })();
 </script>
