@@ -3,7 +3,7 @@ import { Item } from './types';
 /**
  * Item Data Configurations
  * 
- * Game combat math (HP lost, Orcs killed, XP and Adena gained) scales 
+ * Game combat math (HP lost, Enemies killed, XP and Adena gained) scales 
  * dynamically based solely on the `stat` property of the equipped Weapon and Armor.
  * 
  * You can seamlessly add new Items to the end of these arrays without breaking 

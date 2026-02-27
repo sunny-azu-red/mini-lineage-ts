@@ -84,7 +84,7 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
     let lowHealthAlert = '';
     if (player.health < 25 && player.health > 0) {
         lowHealthAlert = player.caught
-            ? `Your HP is dangerously low!`
+            ? `Your HP is dangerously low!<br>You fell into a trap and can't do anything... good luck hero 🥲`
             : `Your HP is dangerously low!<br>You should buy some food from the <a href='/inn'>Inn</a> to rejuvenate yourself.`;
     }
 

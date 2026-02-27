@@ -53,13 +53,26 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
     const outcomeLine = outcomeLines[randomInt(0, outcomeLines.length - 1)];
 
     const surprises = [
-        'Out of the blue 3 Orcs surrounded you and you can\'t escape.',
-        'You forgot to check your back and you get stormed by 6 Orcs.',
-        'You find yourself in a delicate position, the Orc Leader has come with reinforcements.',
-        'As you were walking along 4 Orcs jumped out of the bushes.',
-        'You reached a dead-end and you find yourself cornered by 3 Orcs.',
+        `Out of the blue 3 ${enemyEmoji} surrounded you and you can't escape.`,
+        `You forgot to check your back and you get stormed by 6 ${enemyEmoji}.`,
+        `You find yourself in a delicate position, the ${enemyEmoji} leader has come with reinforcements.`,
+        `As you were walking along 4 ${enemyEmoji} jumped out of the bushes.`,
+        `You reached a dead-end and you find yourself cornered by 3 ${enemyEmoji}.`,
     ];
-    const moves = ['Look behind the tree', 'Walk further', 'Check the cave', 'Jump in the bushes', 'Look behind', 'Run up the hill', 'Go and look behind the big rock', 'Enter the abandoned house', 'Enter the abandoned town', 'Scream I want more orcs', 'Check out the orc ruins', 'Open the locked tower'];
+    const moves = [
+        'Look behind the tree',
+        'Walk further',
+        'Check the cave',
+        'Jump in the bushes',
+        'Look behind',
+        'Run up the hill',
+        'Go and look behind the big rock',
+        'Enter the old house',
+        'Enter the abandoned town',
+        'Scream I want more action',
+        'Check out the ruins',
+        'Open the locked tower'
+    ];
 
     const content = render(battlegroundTpl, {
         battleText,

@@ -21,11 +21,15 @@ export function renderHomeView(player: PlayerState, isNewPlayer: boolean): strin
     let helloMsg = '';
 
     if (isNewPlayer) {
+        const builds = ['a slim', 'a lean', 'an average', 'a fit', 'a stocky', 'a broad', 'a round'];
+        const build = builds[randomInt(0, builds.length - 1)];
         const age = randomInt(10, 70);
-        let definition = 'kid';
+
+        let definition = 'boy';
         if (age > 18 && age <= 50) definition = 'man';
-        else if (age > 50) definition = 'old fart';
-        helloMsg = `You have selected to be Human. Congratulations!<br>You are an average ${definition}, aged ${age}, and you came here with ${formatAdena(player.adena)} adena.`;
+        else if (age > 50) definition = 'grandpa';
+
+        helloMsg = `You have selected to be Human. Congratulations!<br>You are ${build} ${definition}, aged ${age}, and you came here with ${formatAdena(player.adena)} adena.`;
     }
 
     const content = render(homeTpl, { helloMsg });
