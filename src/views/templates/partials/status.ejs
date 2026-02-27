@@ -1,6 +1,6 @@
 <div class="panel">
   <div class="panel-header">Status</div>
-  <div class="panel-body">
+  <div class="panel-body small">
     <div class="stat-row">
       <span class="stat-label">Race</span>
       <span class="stat-value"><%- levelDisplay %></span>
@@ -8,26 +8,26 @@
     <div class="stat-row <% if (hp < 25) { %>danger<% } %>">
       <span class="stat-label">HP</span>
       <div class="bar-track">
-        <div class="bar hp-bar" style="width: <%= Math.min(hp, 100) %>%"></div>
-        <span class="bar-text">
-          <%= hp %>
-        </span>
+        <div class="bar hp-bar" style="width: <%= hpPercent %>%"></div>
+        <span class="bar-text"><%= hp %>/<%= maxHp %></span>
       </div>
     </div>
     <div class="stat-row">
       <span class="stat-label">XP</span>
       <div class="bar-track">
-        <div class="bar xp-bar" style="width: <%= expPercent %>%"></div>
+        <div class="bar xp-bar" style="width: <%= isMaxLevel ? 100 : expPercent %>%"></div>
         <span class="bar-text">
-          <%= expPercent %>%
+          <% if (isMaxLevel) { %>
+            <%= totalXp %>
+          <% } else { %>
+            <%= currentXp %>/<%= nextLevelXp %>
+          <% } %>
         </span>
       </div>
     </div>
     <div class="stat-row">
       <span class="stat-label">Adena</span>
-      <span class="stat-value gold">
-        <%= adena %>
-      </span>
+      <span class="stat-value gold"><%= adena %></span>
     </div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 <% if (helloMsg) { %>
     <div class="alert alert-info"><%- helloMsg %></div>
 <% } %>
-<p>Welcome to <a href="/highscores">City of Aden</a>.</p>
+<p>Welcome to <a href="/highscores">City of Aden</a>.<br>Where do you want to go?</p>
 <form onsubmit="window.location.href=this.querySelector('select').value; return false;">
     <div class="form-row">
         <select class="form-select" name="travel">

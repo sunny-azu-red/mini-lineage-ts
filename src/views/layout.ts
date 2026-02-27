@@ -49,7 +49,21 @@ export function renderStatus(player: PlayerState): string {
         ? `👤 <span class="gold">${player.race} level ${level}</span>`
         : `👤 <a href='/exp-table'>${player.race} level ${level}</a>`;
 
-    return render(statusTpl, { hp, expPercent, adena: formatAdena(player.adena), levelDisplay });
+    const MAX_HP = 100;
+    const MAX_LEVEL = 80;
+    const isMaxLevel = level >= MAX_LEVEL;
+    return render(statusTpl, {
+        hp,
+        maxHp: MAX_HP,
+        hpPercent: Math.round((hp / MAX_HP) * 100),
+        expPercent,
+        currentXp: actualExp,
+        nextLevelXp: requiredExp,
+        totalXp: player.experience,
+        isMaxLevel,
+        adena: formatAdena(player.adena),
+        levelDisplay,
+    });
 }
 
 export function renderInventory(player: PlayerState): string {
