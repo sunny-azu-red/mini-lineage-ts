@@ -1,0 +1,76 @@
+/*
+ * ========================================================================
+ * Mini-Lineage — Base
+ * Reset, body background, global typography, links.
+ * ========================================================================
+ */
+
+/* ===== Reset ===== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background-color: var(--bg-deep);
+    background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(74, 85, 128, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(123, 45, 139, 0.06) 0%, transparent 50%);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* ===== Links ===== */
+a:link,
+a:visited,
+a:active {
+    color: var(--gold);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+a:hover {
+    color: var(--gold-hover);
+    text-decoration: underline;
+}
+
+/* ===== Typography ===== */
+strong {
+    color: var(--text-secondary);
+}
+
+p {
+    margin-bottom: 12px;
+}
+
+p.last {
+    margin-bottom: 0;
+}
+
+/* ===== Utility Classes ===== */
+.muted {
+    color: var(--text-muted) !important;
+}
+
+.gold {
+    color: var(--gold) !important;
+}
+
+.hp {
+    color: var(--hp-glow) !important;
+}
+
+.xp {
+    color: var(--xp-glow) !important;
+}

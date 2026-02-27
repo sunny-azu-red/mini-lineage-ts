@@ -13,7 +13,7 @@
                         <td class="center">
                             <%= row.level %>
                         </td>
-                        <td>
+                        <td class="xp">
                             <%= row.expReq %>
                         </td>
                     </tr>
@@ -23,10 +23,10 @@
     <% }); %>
 </div>
 <p class="last">
-    Your currently have <span class="xp-glow"><%= currentExp %> xp</span>
+    Your currently have <span class="xp"><%= currentExp %> xp</span>
     <% if (currentLevel < 80) { %>
         <span class="muted">|</span>
-        You need <span class="xp-glow"><%= xpNeeded %> xp</span> to level up
+        You need <span class="xp"><%= xpNeeded %> xp</span> to level up
     <% } %>
     <span class="muted">|</span> <a href="/">Go back</a>
 </p>

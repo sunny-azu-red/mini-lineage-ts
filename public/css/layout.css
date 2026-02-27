@@ -1,0 +1,146 @@
+/*
+ * ========================================================================
+ * Mini-Lineage — Layout
+ * App shell, header banner, two-column content area, responsive.
+ * ========================================================================
+ */
+
+/* ===== App Shell ===== */
+#app {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 12px;
+}
+
+#wrapper {
+    width: 100%;
+    max-width: 680px;
+}
+
+/* ===== Header Banner ===== */
+#header {
+    margin-bottom: 12px;
+}
+
+#header-link {
+    display: block;
+    text-decoration: none;
+}
+
+#site-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 24px 15px 24px;
+    background: linear-gradient(135deg,
+            #0a0f1e 0%,
+            #111830 30%,
+            #1a2550 60%,
+            #0f1a38 100%);
+    border: 1px solid var(--border);
+    border-bottom: 2px solid var(--gold-dim);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle shimmer line across the top */
+#site-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 40%, var(--gold) 60%, transparent 100%);
+    opacity: 0.4;
+}
+
+/* Radial glow in the background */
+#site-header::after {
+    content: '';
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 340px;
+    height: 140px;
+    background: radial-gradient(ellipse, rgba(201, 168, 76, 0.07) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.header-emblem {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    opacity: 0.85;
+    filter: drop-shadow(0 0 6px rgba(201, 168, 76, 0.5));
+}
+
+.header-title {
+    font-family: var(--font-heading);
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    background: linear-gradient(180deg, #e8d5a0 0%, var(--gold) 50%, #8a6a28 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    line-height: 1;
+}
+
+#header-link:hover #site-header {
+    border-bottom-color: var(--gold);
+    background: linear-gradient(135deg,
+            #0d1428 0%,
+            #162040 30%,
+            #1e2c60 60%,
+            #111e44 100%);
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+/* ===== Two-column content ===== */
+#content {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+#sidebar {
+    flex: 0 0 195px;
+    min-width: 0;
+}
+
+#main {
+    flex: 1;
+    min-width: 0;
+}
+
+#main-simple {
+    width: 100%;
+}
+
+/* ===== Copyright ===== */
+#copyright {
+    text-align: center;
+    margin-top: 12px;
+    color: var(--text-muted);
+    font-size: 11px;
+    opacity: 0.5;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 520px) {
+    #content {
+        flex-direction: column;
+    }
+
+    #sidebar {
+        flex: none;
+        width: 100%;
+    }
+}

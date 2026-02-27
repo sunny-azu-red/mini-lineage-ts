@@ -1,0 +1,70 @@
+/*
+ * ========================================================================
+ * Mini-Lineage — Tables
+ * .data-table, utility span/td classes, .exp-table-grid
+ * ========================================================================
+ */
+
+/* ===== Data Table ===== */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--border-dark);
+    font-size: 12px;
+    margin: 0px 0px 12px 0px;
+}
+
+.data-table thead tr {
+    background: linear-gradient(180deg, #0d2a50 0%, #0a1e38 100%);
+    border-bottom: 1px solid var(--border-dark);
+}
+
+.data-table th {
+    color: var(--gold);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    padding: 8px 10px 7px 10px;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.data-table td {
+    padding: 7px 10px;
+    color: var(--text-primary);
+}
+
+.data-table tbody tr:nth-child(odd) {
+    background: rgba(26, 26, 46, 0.6);
+}
+
+.data-table tbody tr:nth-child(even) {
+    background: rgba(22, 33, 62, 0.5);
+}
+
+.row-current {
+    background: rgba(123, 45, 139, 0.25) !important;
+}
+
+.row-current td {
+    color: #c39bd3;
+}
+
+td.center,
+th.center {
+    text-align: center;
+}
+
+/* ===== EXP Table Grid ===== */
+.exp-table-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+@media (max-width: 580px) {
+    .exp-table-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
