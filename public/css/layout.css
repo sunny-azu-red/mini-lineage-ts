@@ -33,7 +33,7 @@
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 20px 24px 15px 24px;
+    padding: 12px 24px 12px 24px;
     background: linear-gradient(135deg,
             #0a0f1e 0%,
             #111830 30%,
@@ -73,11 +73,9 @@
 }
 
 .header-emblem {
-    width: 36px;
-    height: 36px;
+    width: auto;
+    height: 60px;
     flex-shrink: 0;
-    opacity: 0.85;
-    filter: drop-shadow(0 0 6px rgba(201, 168, 76, 0.5));
 }
 
 .header-title {
@@ -91,6 +89,7 @@
     background-clip: text;
     text-shadow: none;
     line-height: 1;
+    padding-top: 6px;
 }
 
 #header-link:hover #site-header {
