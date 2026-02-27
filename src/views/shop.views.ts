@@ -17,6 +17,7 @@ function render(template: string, locals: Record<string, any>): string {
 
 export function renderWeaponsShopView(player: PlayerState, alertHtml: string): string {
     const weapons = WEAPONS.slice(1).map(w => ({
+        emoji: w.emoji,
         name: w.name,
         stat: w.stat,
         costFormatted: formatAdena(w.cost),
@@ -28,6 +29,7 @@ export function renderWeaponsShopView(player: PlayerState, alertHtml: string): s
 
 export function renderArmorsShopView(player: PlayerState, alertHtml: string): string {
     const armors = ARMORS.slice(1).map(a => ({
+        emoji: a.emoji,
         name: a.name,
         stat: a.stat,
         costFormatted: formatAdena(a.cost),
@@ -39,6 +41,7 @@ export function renderArmorsShopView(player: PlayerState, alertHtml: string): st
 
 export function renderInnView(player: PlayerState, alertHtml: string): string {
     const foods = FOODS.map(f => ({
+        emoji: f.emoji,
         name: f.name,
         stat: f.stat,
         costFormatted: formatAdena(f.cost),

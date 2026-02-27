@@ -18,7 +18,7 @@
     <tbody>
         <% weapons.forEach(function(weapon) { %>
             <tr>
-                <td><%= weapon.name %></td>
+                <td><%= weapon.emoji %> <%= weapon.name %></td>
                 <td><%= weapon.stat %></td>
                 <td class="gold"><%= weapon.costFormatted %></td>
             </tr>
