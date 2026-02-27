@@ -18,14 +18,14 @@ export function renderGameStartView(): string {
 }
 
 export function renderHomeView(player: PlayerState, isNewPlayer: boolean): string {
-    let helloMsg = `Welcome to <a href="/highscores">City of Aden</a>.<br><br>`;
+    let helloMsg = '';
 
     if (isNewPlayer) {
         const age = randomInt(10, 70);
-        let definition = 'boy';
+        let definition = 'kid';
         if (age > 18 && age <= 50) definition = 'man';
-        else if (age > 50) definition = 'old timer';
-        helloMsg = `You have selected to be Human. Congratulations!<br>Welcome to <a href="/highscores">City of Aden</a>. You are an average ${definition}, aged ${age}, and you came here with ${formatAdena(player.adena)} adena.<br><br>`;
+        else if (age > 50) definition = 'old fart';
+        helloMsg = `You have selected to be Human. Congratulations!<br>You are an average ${definition}, aged ${age}, and you came here with ${formatAdena(player.adena)} adena.`;
     }
 
     const content = render(homeTpl, { helloMsg });

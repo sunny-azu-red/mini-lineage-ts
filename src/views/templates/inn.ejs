@@ -1,44 +1,39 @@
 <% if (alertHtml) { %>
-    <div class="alert alert-info"><%- alertHtml %></div>
-    <% } %>
+    <div class="alert alert-success"><%- alertHtml %></div>
+<% } %>
 
-        You have arrived at the Inn.<br>
-        The old lady greets you and sets you at a table.<br>
-        You see a menu and you open it. Inside you read:<br><br>
+<p>
+    You have arrived at the Inn.<br>
+    The young lady greets you and sets you at a table.
+</p>
 
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Healing</th>
-                    <th>Adena</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% foods.forEach(function(food, i) { %>
-                    <tr class="<%= i % 2 === 0 ? 'row-even' : 'row-odd' %>">
-                        <td>
-                            <%= food.name %>
-                        </td>
-                        <td>+<%= food.stat %> HP</td>
-                        <td class="gold">
-                            <%= food.costFormatted %>
-                        </td>
-                    </tr>
-                    <% }); %>
-            </tbody>
-        </table>
-        <br>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Healing</th>
+            <th>Adena</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% foods.forEach(function(food, i) { %>
+            <tr>
+                <td><%= food.name %></td>
+                <td>+<%= food.stat %> HP</td>
+                <td class="gold"><%= food.costFormatted %></td>
+            </tr>
+        <% }); %>
+    </tbody>
+</table>
 
-        <form method="POST" action="/inn">
-            <div class="form-row">
-                <select class="form-select" name="select_food">
-                    <option value="">🚪 Leave Inn</option>
-                    <% foods.forEach(function(food, i) { %>
-                        <option value="<%= i %>">Buy <%= food.name %>
-                        </option>
-                        <% }); %>
-                </select>
-                <button type="submit" class="btn">Submit</button>
-            </div>
-        </form>
+<form method="POST" action="/inn">
+    <div class="form-row">
+        <select class="form-select" name="select_food">
+            <option value="">🚪 Leave Inn</option>
+            <% selectFoods.forEach(function(f) { %>
+                <option value="<%= f.id %>"><%= f.emoji %> <%= f.name %></option>
+            <% }); %>
+        </select>
+        <button type="submit" class="btn">Submit</button>
+    </div>
+</form>

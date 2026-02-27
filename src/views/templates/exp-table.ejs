@@ -3,13 +3,13 @@
         <table class="data-table exp-col">
             <thead>
                 <tr>
-                    <th>Level</th>
-                    <th>Experience</th>
+                    <th class="center">Level</th>
+                    <th>XP</th>
                 </tr>
             </thead>
             <tbody>
                 <% col.forEach(function(row) { %>
-                    <tr class="<%= row.rowClass %>">
+                    <tr<% if (row.rowClass === 'row-current') { %> class="row-current"<% } %>>
                         <td class="center">
                             <%= row.level %>
                         </td>
@@ -17,18 +17,16 @@
                             <%= row.expReq %>
                         </td>
                     </tr>
-                    <% }); %>
+                <% }); %>
             </tbody>
         </table>
-        <% }); %>
+    <% }); %>
 </div>
-<br>
-Your current XP is <strong>
-    <%= currentExp %>
-</strong>
-<% if (currentLevel < 80) { %>
-    | <span class="gold">
-        <%= xpNeeded %> XP needed to level up
-    </span>
+<p class="last">
+    Your currently have <span class="xp-glow"><%= currentExp %> xp</span>
+    <% if (currentLevel < 80) { %>
+        <span class="muted">|</span>
+        You need <span class="xp-glow"><%= xpNeeded %> xp</span> to level up
     <% } %>
-        | <a href="/">Go back</a>
+    <span class="muted">|</span> <a href="/">Go back</a>
+</p>

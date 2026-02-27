@@ -2,26 +2,32 @@
   <div class="panel-header">Status</div>
   <div class="panel-body">
     <div class="stat-row">
-      <span class="stat-label">Character</span>
+      <span class="stat-label">Race</span>
       <span class="stat-value"><%- levelDisplay %></span>
     </div>
     <div class="stat-row <% if (hp < 25) { %>danger<% } %>">
       <span class="stat-label">HP</span>
       <div class="bar-track">
         <div class="bar hp-bar" style="width: <%= Math.min(hp, 100) %>%"></div>
-        <span class="bar-text"><%= hp %></span>
+        <span class="bar-text">
+          <%= hp %>
+        </span>
       </div>
     </div>
     <div class="stat-row">
       <span class="stat-label">XP</span>
       <div class="bar-track">
         <div class="bar xp-bar" style="width: <%= expPercent %>%"></div>
-        <span class="bar-text"><%= expPercent %>%</span>
+        <span class="bar-text">
+          <%= expPercent %>%
+        </span>
       </div>
     </div>
     <div class="stat-row">
       <span class="stat-label">Adena</span>
-      <span class="stat-value gold"><%= adena %></span>
+      <span class="stat-value gold">
+        <%= adena %>
+      </span>
     </div>
   </div>
 </div>

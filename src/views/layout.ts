@@ -18,6 +18,16 @@ const simpleTpl = readTemplate('simple.ejs');
 const statusTpl = readTemplate('partials/status.ejs');
 const inventoryTpl = readTemplate('partials/inventory.ejs');
 
+const HEADER_BANNER = `
+<div id="site-header">
+  <svg class="header-emblem" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M16 2 L18 12 L28 10 L20 16 L26 26 L16 20 L6 26 L12 16 L4 10 L14 12 Z" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
+    <circle cx="16" cy="16" r="3" fill="#c9a84c" opacity="0.7"/>
+  </svg>
+  <span class="header-title">Mini Lineage</span>
+</div>
+`;
+
 function render(template: string, locals: Record<string, any>): string {
     return ejs.render(template, locals, { rmWhitespace: false });
 }
@@ -36,16 +46,21 @@ export function renderStatus(player: PlayerState): string {
     expPercent = Math.round(expPercent * 10) / 10;
 
     const levelDisplay = player.caught
-        ? `${player.race} lvl ${level}`
-        : `<a href='/exp-table'>${player.race} lvl ${level}</a>`;
+        ? `👤 <span class="gold">${player.race} level ${level}</span>`
+        : `👤 <a href='/exp-table'>${player.race} level ${level}</a>`;
 
     return render(statusTpl, { hp, expPercent, adena: formatAdena(player.adena), levelDisplay });
 }
 
 export function renderInventory(player: PlayerState): string {
-    const weaponStr = player.weaponId > 0 ? WEAPONS[player.weaponId]?.name : 'No Weapon';
-    const armorStr = player.armorId > 0 ? ARMORS[player.armorId]?.name : 'No Armor';
-    return render(inventoryTpl, { weaponStr, armorStr });
+    const weapon = WEAPONS[player.weaponId];
+    const armor = ARMORS[player.armorId];
+    return render(inventoryTpl, {
+        weaponStr: weapon.name,
+        armorStr: armor.name,
+        weaponEmoji: weapon.emoji,
+        armorEmoji: armor.emoji,
+    });
 }
 
 export function renderPage(title: string, player: PlayerState, mainContent: string): string {
@@ -55,8 +70,8 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
     let lowHealthAlert = '';
     if (player.health < 25 && player.health > 0) {
         lowHealthAlert = player.caught
-            ? `Your HP is dangerously low [${player.health}] !!`
-            : `Your HP is dangerously low [${player.health}] !! You should buy some food to rejuvenate yourself.`;
+            ? `Your HP is dangerously low!`
+            : `Your HP is dangerously low!<br>You should buy some food to rejuvenate yourself.`;
     }
 
     return render(layoutTpl, {
@@ -66,6 +81,7 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
         inventoryHtml,
         lowHealthAlert,
         headerClickable: !player.caught,
+        headerBanner: HEADER_BANNER,
         year: new Date().getFullYear(),
     });
 }
@@ -74,6 +90,7 @@ export function renderSimplePage(title: string, mainContent: string): string {
     return render(simpleTpl, {
         title,
         mainContent,
+        headerBanner: HEADER_BANNER,
         year: new Date().getFullYear(),
     });
 }

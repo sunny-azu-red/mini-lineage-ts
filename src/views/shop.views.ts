@@ -21,7 +21,8 @@ export function renderWeaponsShopView(player: PlayerState, alertHtml: string): s
         stat: w.stat,
         costFormatted: formatAdena(w.cost),
     }));
-    const content = render(weaponsShopTpl, { alertHtml, weapons });
+    const selectWeapons = WEAPONS.slice(1).map(w => ({ id: w.id, emoji: w.emoji, name: w.name }));
+    const content = render(weaponsShopTpl, { alertHtml, weapons, selectWeapons });
     return renderPage('Weapons Shop', player, content);
 }
 
@@ -31,7 +32,8 @@ export function renderArmorsShopView(player: PlayerState, alertHtml: string): st
         stat: a.stat,
         costFormatted: formatAdena(a.cost),
     }));
-    const content = render(armorsShopTpl, { alertHtml, armors });
+    const selectArmors = ARMORS.slice(1).map(a => ({ id: a.id, emoji: a.emoji, name: a.name }));
+    const content = render(armorsShopTpl, { alertHtml, armors, selectArmors });
     return renderPage('Armor Shop', player, content);
 }
 
@@ -41,6 +43,7 @@ export function renderInnView(player: PlayerState, alertHtml: string): string {
         stat: f.stat,
         costFormatted: formatAdena(f.cost),
     }));
-    const content = render(innTpl, { alertHtml, foods });
+    const selectFoods = FOODS.map(f => ({ id: f.id, emoji: f.emoji, name: f.name }));
+    const content = render(innTpl, { alertHtml, foods, selectFoods });
     return renderPage('Inn', player, content);
 }

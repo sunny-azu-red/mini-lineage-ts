@@ -37,7 +37,7 @@ export const getHuman = (req: Request, res: Response) => {
 
 export const getOrc = (req: Request, res: Response) => {
     res.send(renderSimplePage('Hmmm', `
-        Module not yet finished 🥹<br><br>
+        <p>Module not yet finished 🥹</p>
         <a href="/">Go back</a>
     `));
 };

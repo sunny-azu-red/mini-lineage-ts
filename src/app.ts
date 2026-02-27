@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import session from 'express-session';
-import { antiCheatMiddleware } from './middlewares/antiCheat';
+import { cheatMiddleware } from './middlewares/cheat.middleware';
 import router from './routes';
 
 const app = express();
@@ -13,7 +13,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
 }));
-app.use(antiCheatMiddleware);
+app.use(cheatMiddleware);
 app.use('/', router);
 
 export default app;

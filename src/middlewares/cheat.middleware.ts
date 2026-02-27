@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { PlayerState } from '../common/types';
 import { isGameStarted } from '../common/utils';
 
-export const antiCheatMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const cheatMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const player = req.session as PlayerState;
 
     // checking dead players

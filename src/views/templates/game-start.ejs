@@ -1,12 +1,13 @@
-Hello!<br>
-You can start a new game or check the <a href="/highscores">Highscores</a>!<br><br>
-What race do you want to be?<br><br>
-
+<p>
+    Hello!<br>
+    You can start a new game or check the <a href="/highscores">Highscores</a>!
+</p>
+<p>What race do you want to be?</p>
 <form onsubmit="window.location.href=this.querySelector('select').value; return false;">
     <div class="form-row">
         <select class="form-select" name="start">
-            <option value="/human">Human</option>
-            <option value="/orc">Orc</option>
+            <option value="/human">👤 Human</option>
+            <option value="/orc">👹 Orc</option>
         </select>
         <button type="submit" class="btn">Begin</button>
     </div>

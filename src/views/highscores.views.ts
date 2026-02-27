@@ -19,7 +19,7 @@ export function renderHighscoresSubmitView(): string {
 
 export function renderHighscoresView(highscores: any[]): string {
     let headerMessage = '';
-    let footerMessage = 'You could also be in this list';
+    let footerMessage = 'You could also be in this list 😊';
 
     if (highscores.length === 0) {
         headerMessage = 'No highscores yet...<br>';

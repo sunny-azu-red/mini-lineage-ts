@@ -27,7 +27,7 @@ export function renderExpTableView(currentExp: number, currentLevel: number): st
         const rows = [];
         for (let i = start; i <= end; i++) {
             const expReq = calculateExpForLevel(i);
-            const rowClass = currentLevel === i ? 'row-current' : (i % 2 === 0 ? 'row-even' : 'row-odd');
+            const rowClass = currentLevel === i ? 'row-current' : '';
             rows.push({ level: i, expReq, rowClass });
         }
         return rows;

@@ -3,6 +3,7 @@ import 'express-session';
 export interface Item {
     id: number;
     name: string;
+    emoji: string;
     stat: number;
     cost: number;
 }
@@ -13,8 +14,9 @@ export enum Race {
 }
 
 export interface BattleResult {
-    orcsKilled: number;
+    enemiesKilled: number;
     hpLost: number;
+    damageBlocked: number;
     expGained: number;
     adenaGained: number;
 }
