@@ -10,7 +10,7 @@ export const getHighscoresSubmit = (req: Request, res: Response) => {
 
 export const postHighscores = async (req: Request, res: Response) => {
     const player = req.session as PlayerState;
-    if (player.dead && !player.coward && !player.inscribed) {
+    if (player.dead && !player.coward && !player.cheater && !player.inscribed) {
         const name = req.body.name || 'Anonymous';
         const level = calculateLevel(player.experience);
 

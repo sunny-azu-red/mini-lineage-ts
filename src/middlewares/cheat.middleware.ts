@@ -10,7 +10,7 @@ export const cheatMiddleware = (req: Request, res: Response, next: NextFunction)
     const cowardBlockedPaths = ['/highscores/submit'];
     if (player.dead) {
         const isBlocked = !safePaths.includes(req.path) &&
-            (player.coward || !cowardBlockedPaths.includes(req.path));
+            (player.coward || player.cheater || !cowardBlockedPaths.includes(req.path));
         if (isBlocked)
             return res.redirect('/death');
     }
@@ -20,11 +20,12 @@ export const cheatMiddleware = (req: Request, res: Response, next: NextFunction)
     if (!player.dead && deathPaths.includes(req.path))
         return res.redirect('/');
 
-    // prevent escaping from ambushes, die as a coward instead
+    // prevent escaping from ambushes — die as a cheater
     if (player.ambushed && req.path !== '/battle') {
         player.dead = true;
+        player.cheater = true;
         player.ambushed = false;
-        return res.redirect('/death?reason=coward');
+        return res.redirect('/death');
     }
 
     // prevent already initialized players from accessing start routes

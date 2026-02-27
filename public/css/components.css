@@ -49,11 +49,24 @@
     border-bottom: none;
 }
 
+@keyframes danger-pulse {
+
+    0%,
+    100% {
+        background: rgba(146, 43, 33, 0.15);
+    }
+
+    50% {
+        background: rgba(192, 57, 43, 0.25);
+    }
+}
+
 .stat-row.danger {
     background: rgba(146, 43, 33, 0.2);
     border-radius: 6px;
     padding: 7px 6px;
     margin: -1px -6px;
+    animation: danger-pulse .5s ease-in-out infinite;
 }
 
 .stat-label {

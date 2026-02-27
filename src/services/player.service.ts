@@ -22,12 +22,9 @@ export function applyBattleResult(player: PlayerState, hpLost: number, expGained
     // player.health = 100; // DEBUG: respawn on death
 }
 
-// TODO: if ur caught cheating, you shouldnt be able to write your name in the highscores
-
 // TODO: the same way we have an Item interface for weapon and armor and food, we need to make one for Human and Orc so that we can sepcify the emoji for each there
 // TODO: make it that if we dont have enough money, it shows a red flash message, not a separate page with go back
 // TODO: make it so that you cant buy armor or weapon if you already have the exact one, the option should be disabled in the list
-// TODO: animate .stat-row.danger to indicate health is super low
 // TODO: can we animate the health bar and xp bar? perhaps save the previous hp or xp in session and when you refresh the page, show the previous hp and xp but then animate to the actual hp and xp
 // TODO: and on that note maybe the bar labels should be animated too?
 // TODO: <div class="alert alert-success">🎉 Congratulations! You have reached level <%= newLevel %>.</div> should not be green but golden, simulate the lineage level up
