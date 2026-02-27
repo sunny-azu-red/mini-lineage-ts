@@ -20,7 +20,7 @@ export const postSuicide = (req: Request, res: Response) => {
 
 export const getDeath = (req: Request, res: Response) => {
     const reason = req.query.reason === 'coward'
-        ? "You were caught trying to flee an ambush! Game Over !!"
+        ? "You were caught trying to flee an ambush! Game Over."
         : "Your health dropped to 0 and you died.";
 
     res.send(renderDeathView(reason));
