@@ -10,7 +10,7 @@ export const getHome = (req: Request, res: Response) => {
         return res.send(renderGameStartView());
 
     const player = req.session as PlayerState;
-    if (player.caught)
+    if (player.ambushed)
         return res.redirect('/battle');
 
     const isNewPlayer = !player.welcomed;

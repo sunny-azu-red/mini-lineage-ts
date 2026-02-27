@@ -23,13 +23,14 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
     const blocked = results.damageBlocked;
     const enemies = results.enemiesKilled;
     const enemyEmoji = player.race === Race.Human ? '👹' : '👤';
+    const enemyName = player.race === Race.Human ? (enemies === 1 ? 'Orc' : 'Orcs') : (enemies === 1 ? 'Human' : 'Humans');
 
     // Weapon / kill line
     const killLines = [
-        `Wielding your ${weaponEmoji} ${weaponName} with fury, you cut down ${enemies} ${enemyEmoji}.`,
-        `Your ${weaponEmoji} ${weaponName} cleaves through the battlefield, slaying ${enemies} ${enemyEmoji}.`,
-        `With a fierce war cry you lunge forward, striking down ${enemies} ${enemyEmoji} with your ${weaponEmoji} ${weaponName}.`,
-        `The ${enemyEmoji} stood no chance, your ${weaponEmoji} ${weaponName} ended ${enemies === 1 ? 'its' : 'their'} life${enemies === 1 ? '' : 's'} swiftly.`,
+        `Wielding your ${weaponEmoji} ${weaponName} with fury, you cut down ${enemies} ${enemyEmoji} ${enemyName}.`,
+        `Your ${weaponEmoji} ${weaponName} cleaves through the battlefield, slaying ${enemies} ${enemyEmoji} ${enemyName}.`,
+        `With a fierce war cry you lunge forward, striking down ${enemies} ${enemyEmoji} ${enemyName} with your ${weaponEmoji} ${weaponName}.`,
+        `The ${enemyEmoji} ${enemyName} stood no chance, your ${weaponEmoji} ${weaponName} ended ${enemies === 1 ? 'its' : 'their'} life${enemies === 1 ? '' : 's'} swiftly.`,
     ];
     const killLine = killLines[randomInt(0, killLines.length - 1)];
 
@@ -53,11 +54,11 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
     const outcomeLine = outcomeLines[randomInt(0, outcomeLines.length - 1)];
 
     const surprises = [
-        `Out of the blue 3 ${enemyEmoji} surrounded you and you can't escape.`,
-        `You forgot to check your back and you get stormed by 6 ${enemyEmoji}.`,
-        `You find yourself in a delicate position, the ${enemyEmoji} leader has come with reinforcements.`,
-        `As you were walking along 4 ${enemyEmoji} jumped out of the bushes.`,
-        `You reached a dead-end and you find yourself cornered by 3 ${enemyEmoji}.`,
+        `Out of the blue 3 ${enemyEmoji} ${enemyName} surrounded you and you can't escape.`,
+        `You forgot to check your back and you get stormed by 6 ${enemyEmoji} ${enemyName}.`,
+        `You find yourself in a delicate position, the ${enemyEmoji} ${enemyName} leader has come with reinforcements.`,
+        `As you were walking along 4 ${enemyEmoji} ${enemyName} jumped out of the bushes.`,
+        `You reached a dead-end and you find yourself cornered by 3 ${enemyEmoji} ${enemyName}.`,
     ];
     const moves = [
         'Look behind the tree',
@@ -66,10 +67,9 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
         'Jump in the bushes',
         'Look behind',
         'Run up the hill',
-        'Go and look behind the big rock',
         'Enter the old house',
         'Enter the abandoned town',
-        'Scream I want more action',
+        'Scream you want more action',
         'Check out the ruins',
         'Open the locked tower'
     ];
@@ -79,8 +79,8 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
         outcomeLine,
         leveledUp,
         newLevel,
-        caught: player.caught,
-        caughtMessage: surprises[randomInt(0, surprises.length - 1)],
+        ambushed: player.ambushed,
+        ambushedMessage: surprises[randomInt(0, surprises.length - 1)],
         nextMove: moves[randomInt(0, moves.length - 1)],
     });
 

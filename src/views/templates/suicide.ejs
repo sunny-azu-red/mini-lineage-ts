@@ -2,10 +2,25 @@
 
 <form method="POST" action="/suicide">
     <div class="form-row">
-        <select class="form-select" name="suicide">
-            <option value="no">No, my bad</option>
+        <select class="form-select" name="suicide" id="suicide-select">
+            <option value="no">No, I changed my mind</option>
             <option value="yes">Yes, stab yourself in the heart</option>
         </select>
-        <button type="submit" class="btn btn-danger">Submit</button>
+        <button type="submit" class="btn" id="suicide-btn">Phew 😅</button>
     </div>
 </form>
+<script>
+    (function () {
+        var sel = document.getElementById('suicide-select');
+        var btn = document.getElementById('suicide-btn');
+        sel.addEventListener('change', function () {
+            if (sel.value === 'yes') {
+                btn.textContent = '🪦 Die';
+                btn.className = 'btn btn-danger';
+            } else {
+                btn.textContent = 'Phew 😅';
+                btn.className = 'btn';
+            }
+        });
+    })();
+</script>

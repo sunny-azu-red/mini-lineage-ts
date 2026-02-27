@@ -18,8 +18,8 @@ export function renderSuicideView(player: PlayerState): string {
     return renderPage('Commit Suicide', player, render(suicideTpl, {}));
 }
 
-export function renderDeathView(reason: string): string {
-    return renderSimplePage('Oops...', render(deathTpl, { reason }));
+export function renderDeathView(reason: string, coward: boolean = false): string {
+    return renderSimplePage('Oops...', render(deathTpl, { reason, coward }));
 }
 
 export function renderExpTableView(currentExp: number, currentLevel: number): string {

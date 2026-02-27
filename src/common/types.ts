@@ -29,9 +29,10 @@ export interface PlayerState {
     weaponId: number;
     armorId: number;
     dead?: boolean;
-    caught?: boolean;
+    ambushed?: boolean;
+    coward?: boolean;
     welcomed?: boolean;
-    wrote_highscore?: boolean;
+    inscribed?: boolean;
     weapon_buy?: boolean;
     armor_buy?: boolean;
     inn_buy?: boolean;

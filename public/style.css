@@ -385,65 +385,7 @@ a:hover {
   background-position: right 10px top 11px;
 }
 
-/* ===== Buttons ===== */
-.btn {
-  display: inline-block;
-  background: linear-gradient(180deg, #2a354e 0%, #1e2840 100%);
-  border: 1px solid var(--border-bright);
-  border-radius: var(--radius);
-  color: var(--gold);
-  cursor: pointer;
-  font-family: var(--font-body);
-  font-size: 12px;
-  font-weight: 500;
-  padding: 6px 14px;
-  text-decoration: none;
-  transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
-  white-space: nowrap;
-}
-
-.btn:hover {
-  background: linear-gradient(180deg, #344060 0%, #28324e 100%);
-  border-color: var(--gold-dim);
-  color: var(--gold-hover);
-  transform: translateY(-1px);
-  text-decoration: none;
-}
-
-.btn:active {
-  transform: translateY(0);
-}
-
-.btn-danger {
-  background: linear-gradient(180deg, #5a1a14 0%, #3d0f0a 100%);
-  border-color: var(--danger-border);
-  color: #e8786e;
-}
-
-.btn-danger:hover {
-  background: linear-gradient(180deg, #6f211a 0%, #4d1510 100%);
-  border-color: #e74c3c;
-  color: #f0a899;
-}
-
-.btn-secondary {
-  background: linear-gradient(180deg, #222233 0%, #181828 100%);
-  border-color: var(--border);
-  color: var(--text-secondary);
-}
-
-.btn-secondary:hover {
-  color: var(--text-primary);
-  border-color: var(--border-bright);
-}
-
-/* ===== Action Links ===== */
-.action-links {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 12px;
-}
+/* ===== Buttons — see buttons.css ===== */
 
 /* ===== Tables ===== */
 .data-table {

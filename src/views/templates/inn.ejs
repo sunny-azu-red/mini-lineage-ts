@@ -28,12 +28,21 @@
 
 <form method="POST" action="/inn">
     <div class="form-row">
-        <select class="form-select" name="select_food">
-            <option value="">🚪 Leave Inn</option>
+        <select class="form-select" name="select_food" id="inn-select">
+            <option value="">🚪 Home Town</option>
             <% selectFoods.forEach(function(f) { %>
-                <option value="<%= f.id %>"><%= f.emoji %> <%= f.name %></option>
+                <option value="<%= f.id %>">Pick <%= f.emoji %> <%= f.name %></option>
             <% }); %>
         </select>
-        <button type="submit" class="btn">Submit</button>
+        <button type="submit" class="btn" id="inn-btn">Travel</button>
     </div>
 </form>
+<script>
+    (function () {
+        var sel = document.getElementById('inn-select');
+        var btn = document.getElementById('inn-btn');
+        sel.addEventListener('change', function () {
+            btn.textContent = sel.value === '' ? 'Travel' : '🪙 Order';
+        });
+    })();
+</script>

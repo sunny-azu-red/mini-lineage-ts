@@ -45,7 +45,7 @@ export function renderStatus(player: PlayerState): string {
     if (expPercent < 0) expPercent = 0;
     expPercent = Math.round(expPercent * 10) / 10;
 
-    const levelDisplay = player.caught
+    const levelDisplay = player.ambushed
         ? `👤 <span class="gold">${player.race} level ${level}</span>`
         : `👤 <a href='/exp-table'>${player.race} level ${level}</a>`;
 
@@ -83,7 +83,7 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
 
     let lowHealthAlert = '';
     if (player.health < 25 && player.health > 0) {
-        lowHealthAlert = player.caught
+        lowHealthAlert = player.ambushed
             ? `Your HP is dangerously low!<br>You fell into a trap and can't do anything... good luck hero 🥲`
             : `Your HP is dangerously low!<br>You should buy some food from the <a href='/inn'>Inn</a> to rejuvenate yourself.`;
     }
@@ -94,7 +94,7 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
         statusHtml,
         inventoryHtml,
         lowHealthAlert,
-        headerClickable: !player.caught,
+        headerClickable: !player.ambushed,
         headerBanner: HEADER_BANNER,
         year: new Date().getFullYear(),
     });

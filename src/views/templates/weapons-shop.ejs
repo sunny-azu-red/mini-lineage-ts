@@ -28,12 +28,21 @@
 
 <form method="POST" action="/shop/weapons">
     <div class="form-row">
-        <select class="form-select" name="select_weapon">
-            <option value="">🚪 Leave Weapons Shop</option>
+        <select class="form-select" name="select_weapon" id="weapon-select">
+            <option value="">🚪 Home Town</option>
             <% selectWeapons.forEach(function(w) { %>
-                <option value="<%= w.id %>"><%= w.emoji %> <%= w.name %></option>
+                <option value="<%= w.id %>">Pick <%= w.emoji %> <%= w.name %></option>
             <% }); %>
         </select>
-        <button type="submit" class="btn">Submit</button>
+        <button type="submit" class="btn" id="weapon-btn">Travel</button>
     </div>
 </form>
+<script>
+    (function () {
+        var sel = document.getElementById('weapon-select');
+        var btn = document.getElementById('weapon-btn');
+        sel.addEventListener('change', function () {
+            btn.textContent = sel.value === '' ? 'Travel' : '🪙 Purchase';
+        });
+    })();
+</script>

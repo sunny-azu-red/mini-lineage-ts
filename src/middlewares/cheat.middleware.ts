@@ -5,10 +5,15 @@ import { isGameStarted } from '../common/utils';
 export const cheatMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const player = req.session as PlayerState;
 
-    // checking dead players
-    const safePaths = ['/death', '/restart', '/highscores', '/highscores/submit'];
-    if (player.dead && !safePaths.includes(req.path))
-        return res.redirect('/death');
+    // checking dead players — cowards cannot access the highscores submit form
+    const safePaths = ['/death', '/restart', '/highscores'];
+    const cowardBlockedPaths = ['/highscores/submit'];
+    if (player.dead) {
+        const isBlocked = !safePaths.includes(req.path) &&
+            (player.coward || !cowardBlockedPaths.includes(req.path));
+        if (isBlocked)
+            return res.redirect('/death');
+    }
 
     // checking alive players
     const deathPaths = ['/death', '/restart', '/highscores/submit'];
@@ -16,9 +21,9 @@ export const cheatMiddleware = (req: Request, res: Response, next: NextFunction)
         return res.redirect('/');
 
     // prevent escaping from ambushes, die as a coward instead
-    if (player.caught && req.path !== '/battle') {
+    if (player.ambushed && req.path !== '/battle') {
         player.dead = true;
-        player.caught = false;
+        player.ambushed = false;
         return res.redirect('/death?reason=coward');
     }
 

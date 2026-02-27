@@ -10,7 +10,7 @@ export const getHighscoresSubmit = (req: Request, res: Response) => {
 
 export const postHighscores = async (req: Request, res: Response) => {
     const player = req.session as PlayerState;
-    if (player.dead && !player.wrote_highscore) {
+    if (player.dead && !player.coward && !player.inscribed) {
         const name = req.body.name || 'Anonymous';
         const level = calculateLevel(player.experience);
 
@@ -18,7 +18,7 @@ export const postHighscores = async (req: Request, res: Response) => {
             'INSERT INTO highscores (total_exp, name, race, adena, level, created) VALUES (?, ?, ?, ?, ?, NOW())',
             [player.experience, name, player.race, player.adena, level]
         );
-        player.wrote_highscore = true;
+        player.inscribed = true;
     }
 
     res.redirect('/highscores');

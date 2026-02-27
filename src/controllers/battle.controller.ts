@@ -8,8 +8,8 @@ import { applyBattleResult } from '../services/player.service';
 
 export const getBattle = (req: Request, res: Response) => {
     const player = req.session as PlayerState;
-    if (player.caught)
-        player.caught = false;
+    if (player.ambushed)
+        player.ambushed = false;
 
     const level = calculateLevel(player.experience);
     const results = simulateBattle(player.weaponId, player.armorId);
@@ -27,7 +27,7 @@ export const getBattle = (req: Request, res: Response) => {
     const luck = randomInt(1, 15);
     let isAmbushed = luck === 5;
     if (isAmbushed)
-        player.caught = true;
+        player.ambushed = true;
 
     res.send(renderBattlegroundView(player, results, leveledUp, newLevel));
 };
