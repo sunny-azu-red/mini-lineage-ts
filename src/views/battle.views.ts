@@ -30,7 +30,7 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
         `Wielding your ${weaponEmoji} ${weaponName} with fury, you cut down ${enemies} ${enemyEmoji} ${enemyName}.`,
         `Your ${weaponEmoji} ${weaponName} cleaves through the battlefield, slaying ${enemies} ${enemyEmoji} ${enemyName}.`,
         `With a fierce war cry you lunge forward, striking down ${enemies} ${enemyEmoji} ${enemyName} with your ${weaponEmoji} ${weaponName}.`,
-        `The ${enemyEmoji} ${enemyName} stood no chance, your ${weaponEmoji} ${weaponName} ended ${enemies === 1 ? 'its' : 'their'} life${enemies === 1 ? '' : 's'} swiftly.`,
+        `The ${enemies} ${enemyEmoji} ${enemyName} stood no chance, your ${weaponEmoji} ${weaponName} ended ${enemies === 1 ? 'its' : 'their'} life${enemies === 1 ? '' : 's'} swiftly.`,
     ];
     const killLine = killLines[randomInt(0, killLines.length - 1)];
 
