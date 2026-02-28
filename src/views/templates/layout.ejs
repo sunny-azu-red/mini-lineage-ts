@@ -41,13 +41,16 @@
                             <div class="panel-header">
                                 <%= title %>
                             </div>
+
                             <div class="panel-body">
                                 <% if (lowHealthAlert) { %>
                                     <div class="alert alert-danger">
                                         <%- lowHealthAlert %>
                                     </div>
                                 <% } %>
+
                                 <%- include('partials/alert', { flash }) %>
+
                                 <%- mainContent %>
                             </div>
                         </div>

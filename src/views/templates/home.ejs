@@ -1,4 +1,8 @@
-<p>Welcome to <a href="/highscores">City of Aden</a>.<br>Where do you want to go next, or what do you want to do?</p>
+<p>
+    Welcome to <a href="/highscores">City of Aden</a>.<br>
+    Where do you want to go next, or what do you want to do?
+</p>
+
 <form onsubmit="window.location.href=this.querySelector('select').value; return false;" id="home-form">
     <div class="form-row">
         <select class="form-select" name="travel" id="home-select">
@@ -11,6 +15,7 @@
         <button type="submit" class="btn" id="home-btn">Travel</button>
     </div>
 </form>
+
 <script>
     (function () {
         var sel = document.getElementById('home-select');

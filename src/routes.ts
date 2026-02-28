@@ -7,7 +7,7 @@ import { getHighscoresSubmit, postHighscores, getHighscores } from './controller
 
 const router = Router();
 
-// home & hero
+// home & start
 router.get('/', getHome);
 router.post('/start', postGameStart);
 

@@ -15,9 +15,8 @@ async function initDb() {
     }
 
     const sql = fs.readFileSync(sqlPath, 'utf8');
-    // Simple split by semicolon, can be improved for complex dumps
     const statements = sql
-        .split(';')
+        .split(';') // simple split by semicolon, can be improved for complex dumps
         .map(s => s.trim())
         .filter(s => s.length > 0);
 
@@ -26,7 +25,8 @@ async function initDb() {
 
         if (fresh) {
             console.log('🧹 Fresh mode: Scanning for tables to drop...');
-            // Match table names in CREATE TABLE statements
+
+            // match table names in CREATE TABLE statements
             const tableMatches = sql.matchAll(/CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?[`"]?(\w+)[`"]?/gi);
             const tablesToDrop = [...new Set([...tableMatches].map(m => m[1]))];
 

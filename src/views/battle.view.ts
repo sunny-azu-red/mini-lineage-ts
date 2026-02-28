@@ -16,13 +16,13 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
     const blocked = results.damageBlocked;
     const enemies = results.enemiesKilled;
 
-    // Determine opponent based on hero's configured enemy
+    // determine opponent based on hero's configured enemy
     const hero = HEROES[player.heroId];
     const opponentHero = HEROES[hero.enemyHeroId];
     const enemyEmoji = opponentHero.emoji;
     const enemyName = enemies === 1 ? opponentHero.label : `${opponentHero.label}s`;
 
-    // Weapon / kill line
+    // weapon / kill line
     const killLines = [
         `Wielding your ${weaponEmoji} ${weaponName} with fury, you cut down ${enemies} ${enemyEmoji} ${enemyName}.`,
         `Your ${weaponEmoji} ${weaponName} cleaves through the battlefield, slaying ${enemies} ${enemyEmoji} ${enemyName}.`,
@@ -31,7 +31,7 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
     ];
     const killLine = killLines[randomInt(0, killLines.length - 1)];
 
-    // Armor deflection line (only meaningful if armor blocked something)
+    // armor deflection line (only meaningful if armor blocked something)
     const armorLines = [
         `Your ${armorEmoji} ${armorName} absorbed a total of <span class="muted">${blocked} dmg</span> but you still learned from the clash, earning <span class="xp">${results.expGained} xp</span>.`,
         `The ${armorEmoji} ${armorName} held firm, deflecting <span class="muted">${blocked} dmg</span> and the narrow escape nets you <span class="xp">${results.expGained} xp</span>.`,
@@ -42,7 +42,7 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
 
     const battleText = [killLine, armorLine].filter(Boolean).join(' ');
 
-    // HP outcome line
+    // hp outcome line
     const outcomeLines = [
         `You limp away with <span class="hp">${player.health} hp</span> remaining and <span class="gold">${formatAdena(results.adenaGained)} adena</span> to show for it.`,
         `The skirmish leaves you at <span class="hp">${player.health} hp</span>, but richer by <span class="gold">${formatAdena(results.adenaGained)} adena</span>.`,
