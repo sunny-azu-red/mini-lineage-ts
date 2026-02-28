@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { isGameStarted, formatAdena, randomInt } from '../common/utils';
+import { isGameStarted } from '../common/utils';
 import { renderGameStartView, renderHomeView } from '../views/game.view';
 import { HEROES } from '../common/data';
 import { initializePlayer } from '../services/player.service';
@@ -22,21 +22,7 @@ export const postGameStart = (req: Request, res: Response) => {
         return res.redirect('/');
 
     const player = res.locals.player;
-    initializePlayer(player, hero);
-
-    const builds = ['a slim', 'a lean', 'an average', 'a fit', 'a stocky', 'a broad', 'a round'];
-    const build = builds[randomInt(0, builds.length - 1)];
-    const age = randomInt(9, 69);
-
-    let definition = 'youth';
-    if (age > 23 && age <= 54) {
-        definition = 'adult';
-    } else if (age > 54) {
-        definition = 'elder';
-    }
-
-    const message = `You have selected to be ${hero.emoji} ${hero.label}. Congratulations!<br>You are ${build} ${definition}, aged ${age}, and you came here with ${formatAdena(player.adena)} adena.`;
-    player.flash = { text: message, type: 'info' };
+    player.flash = initializePlayer(player, hero);
 
     res.redirect('/');
 };

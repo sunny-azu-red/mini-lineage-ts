@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { calculateLevel } from '../services/math.service';
 import { renderSuicideView, renderDeathView, renderExpTableView } from '../views/player.view';
+import { commitSuicide } from '../services/player.service';
 
 export const getSuicide = (req: Request, res: Response) => {
     res.send(renderSuicideView(res.locals.player, res.locals.flash));
@@ -9,8 +10,7 @@ export const getSuicide = (req: Request, res: Response) => {
 export const postSuicide = (req: Request, res: Response) => {
     const player = res.locals.player;
     if (req.body.suicide === 'yes') {
-        player.dead = true;
-        player.coward = true;
+        commitSuicide(player);
         res.redirect('/death');
     } else {
         res.redirect('/');

@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { calculateLevel } from '../services/math.service';
 import { randomInt } from '../common/utils';
 import { renderBattlegroundView } from '../views/battle.view';
 import { simulateBattle } from '../services/battle.service';
@@ -11,24 +10,12 @@ export const getBattle = (req: Request, res: Response) => {
     if (player.ambushed)
         player.ambushed = false;
 
-    const level = calculateLevel(player.experience);
     const results = simulateBattle(player.weaponId, player.armorId);
-    applyBattleResult(player, results.hpLost, results.expGained, results.adenaGained);
-    if (player.health <= 0) {
-        player.dead = true;
+    const levelUpFlash = applyBattleResult(player, results.hpLost, results.expGained, results.adenaGained);
+    if (player.dead)
         return res.redirect('/death');
-    }
 
     const hero = HEROES[player.heroId];
-    const newLevel = calculateLevel(player.experience);
-    let leveledUp = newLevel > level;
-    let levelUpFlash = null;
-
-    if (leveledUp) {
-        player.health = hero.startHealth;
-        levelUpFlash = { text: `🎉 Congratulations! You have reached level ${newLevel}.`, type: 'warning' };
-    }
-
     let isAmbushed = randomInt(1, hero.ambushOdds) === 1;
     if (isAmbushed)
         player.ambushed = true;
