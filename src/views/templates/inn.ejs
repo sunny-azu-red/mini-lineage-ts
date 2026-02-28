@@ -1,4 +1,3 @@
-
 <p>
     You have arrived at the Inn.<br>
     The young lady greets you and sets you at a table.
@@ -13,7 +12,7 @@
         </tr>
     </thead>
     <tbody>
-        <% foods.forEach(function(food, i) { %>
+        <% items.forEach(function(food) { %>
             <tr>
                 <td><%= food.emoji %> <%= food.name %></td>
                 <td><%= food.stat %></td>
@@ -27,7 +26,7 @@
     <div class="form-row">
         <select class="form-select" name="select_food" id="inn-select">
             <option value="">🚪 Home Town</option>
-            <% selectFoods.forEach(function(f) { %>
+            <% items.forEach(function(f) { %>
                 <option value="<%= f.id %>">Pick <%= f.emoji %> <%= f.name %></option>
             <% }); %>
         </select>

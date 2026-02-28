@@ -134,12 +134,15 @@
     margin-bottom: 12px;
     font-size: 12px;
     border-left: 3px solid;
+    position: relative;
+    overflow: hidden;
+    transform: translateZ(0);
 }
 
-.alert-danger {
-    background: rgba(146, 43, 33, 0.2);
-    border-color: var(--danger-border);
-    color: #e8785e;
+.alert-info {
+    background: rgba(26, 74, 110, 0.3);
+    border-color: var(--info-border);
+    color: #85c1e9;
 }
 
 .alert-success {
@@ -148,8 +151,41 @@
     color: #58d68d;
 }
 
-.alert-info {
-    background: rgba(26, 74, 110, 0.3);
-    border-color: var(--info-border);
-    color: #85c1e9;
+.alert-warning {
+    background: linear-gradient(135deg, rgba(201, 168, 76, 0.25) 0%, rgba(122, 98, 48, 0.35) 100%);
+    border-color: var(--gold);
+    color: #ffd760;
+}
+
+.alert-danger {
+    background: rgba(146, 43, 33, 0.2);
+    border-color: var(--danger-border);
+    color: #e8785e;
+}
+
+/* ===== Level Up Shine ===== */
+.alert-warning::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150%;
+    height: 100%;
+    background: linear-gradient(45deg,
+            transparent 45%,
+            rgba(255, 255, 255, 0.15) 50%,
+            transparent 55%);
+    animation: alert-shine 3s infinite linear;
+    pointer-events: none;
+    will-change: transform;
+}
+
+@keyframes alert-shine {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(100%);
+    }
 }

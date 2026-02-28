@@ -6,7 +6,7 @@ import { formatAdena, randomInt } from '../common/utils';
 
 const battlegroundTpl = readTemplate('battleground.ejs');
 
-export function renderBattlegroundView(player: PlayerState, results: BattleResult, leveledUp: boolean, newLevel: number, flash: FlashMessage | null = null): string {
+export function renderBattlegroundView(player: PlayerState, results: BattleResult, flash: FlashMessage | null = null): string {
     const weapon = WEAPONS[player.weaponId];
     const armor = ARMORS[player.armorId];
     const weaponName = weapon.name;
@@ -74,8 +74,6 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
     const content = render(battlegroundTpl, {
         battleText,
         outcomeLine,
-        leveledUp,
-        newLevel,
         ambushed: player.ambushed,
         ambushedMessage: surprises[randomInt(0, surprises.length - 1)],
         nextMove: moves[randomInt(0, moves.length - 1)],

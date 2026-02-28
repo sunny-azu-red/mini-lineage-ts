@@ -28,7 +28,7 @@ export interface BattleResult {
 
 export interface FlashMessage {
     text: string;
-    type: 'success' | 'danger' | 'info';
+    type: 'success' | 'danger' | 'info' | 'warning';
 }
 
 export interface PlayerState {
