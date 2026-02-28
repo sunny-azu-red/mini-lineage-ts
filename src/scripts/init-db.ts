@@ -35,7 +35,7 @@ async function initDb() {
                 await connection.query(`DROP TABLE IF EXISTS \`${table}\`;`);
             }
         } else {
-            console.info('💡 Note: Running in safe mode. Existing data will be preserved. Use "-- --fresh" for a full reset.');
+            console.info('💡 Safe mode: Existing data will be preserved...');
         }
 
         console.log(`📜 Executing ${statements.length} SQL statements...`);

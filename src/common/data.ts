@@ -1,6 +1,9 @@
 import { Item, Hero } from './types';
+import { getVersion } from './utils';
 
-export const GAME_VERSION = '1.6';
+export const GAME_VERSION = getVersion();
+export const REPO_COMMIT_URL = 'https://github.com/sunny-azu-red/mini-lineage-ts/commit/';
+
 export const MAX_LEVEL = 80;
 
 export const HEROES: Hero[] = [

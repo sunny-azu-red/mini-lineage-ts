@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+import * as path from 'path';
 import { Request } from 'express';
 import { PlayerState } from './types';
 
@@ -16,3 +18,14 @@ export const isGameStarted = (req: Request): boolean => {
     const player = req.session as PlayerState;
     return !!(player.heroId !== undefined && player.health !== undefined && player.adena !== undefined);
 };
+
+export function getVersion(): string {
+    try {
+        const versionPath = path.join(__dirname, '../version.txt');
+        if (fs.existsSync(versionPath)) {
+            return fs.readFileSync(versionPath, 'utf8').trim();
+        }
+    } catch (err) {
+    }
+    return 'Bleeding Edge';
+}

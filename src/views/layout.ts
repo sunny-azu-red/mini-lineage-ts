@@ -1,7 +1,7 @@
 import * as ejs from 'ejs';
 import * as fs from 'fs';
 import * as path from 'path';
-import { WEAPONS, ARMORS, HEROES, GAME_VERSION, MAX_LEVEL } from '../common/data';
+import { WEAPONS, ARMORS, HEROES, GAME_VERSION, MAX_LEVEL, REPO_COMMIT_URL } from '../common/data';
 import { calculateLevel, calculateExpForLevel } from '../services/math.service';
 import { formatAdena } from '../common/utils';
 import { PlayerState } from '../common/types';
@@ -26,11 +26,18 @@ const HEADER_BANNER = `
     </g>
   </svg>
   <span class="header-title">Mini Lineage</span>
+  <span class="header-subtitle">Remastered</span>
 </div>
 `;
 
 function render(template: string, locals: Record<string, any>): string {
     return ejs.render(template, locals, { rmWhitespace: false });
+}
+
+function getVersionHtml(): string {
+    return GAME_VERSION.length === 7 && /^[0-9a-f]+$/i.test(GAME_VERSION)
+        ? `<a href="${REPO_COMMIT_URL}${GAME_VERSION}" target="_blank" class="version-link">${GAME_VERSION}</a>`
+        : GAME_VERSION;
 }
 
 export function renderStatus(player: PlayerState): string {
@@ -99,7 +106,7 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
         headerClickable: !player.ambushed,
         headerBanner: HEADER_BANNER,
         year: new Date().getFullYear(),
-        version: GAME_VERSION,
+        version: getVersionHtml(),
     });
 }
 
@@ -109,6 +116,6 @@ export function renderSimplePage(title: string, mainContent: string): string {
         mainContent,
         headerBanner: HEADER_BANNER,
         year: new Date().getFullYear(),
-        version: GAME_VERSION,
+        version: getVersionHtml(),
     });
 }
