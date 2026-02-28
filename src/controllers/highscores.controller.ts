@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { PlayerState } from '../common/types';
 import { calculateLevel } from '../services/math.service';
-import { renderHighscoresSubmitView, renderHighscoresView, renderHighscoresErrorView } from '../views/highscores.views';
+import { renderHighscoresSubmitView, renderHighscoresView, renderHighscoresErrorView } from '../views/highscores.view';
 import { db } from '../config/db.config';
 
 export const getHighscoresSubmit = (req: Request, res: Response) => {

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { PlayerState } from '../common/types';
 import { isGameStarted } from '../common/utils';
-import { renderGameStartView, renderHomeView } from '../views/game.views';
+import { renderGameStartView, renderHomeView } from '../views/game.view';
 import { HEROES } from '../common/data';
 import { initializePlayer } from '../services/player.service';
 

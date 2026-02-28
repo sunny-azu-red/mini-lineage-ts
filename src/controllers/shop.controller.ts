@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { renderPage } from '../views/layout';
-import { renderWeaponsShopView, renderArmorsShopView, renderInnView } from '../views/shop.views';
+import { renderPage } from '../views/layout.view';
+import { renderWeaponsShopView, renderArmorsShopView, renderInnView } from '../views/shop.view';
 import { WEAPONS, ARMORS, FOODS } from '../common/data';
 import { deductCost, restoreHealth } from '../services/player.service';
 import { PlayerState } from '../common/types';

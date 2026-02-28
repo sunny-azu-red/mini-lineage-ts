@@ -1,5 +1,5 @@
 import { readTemplate, render } from './base.view';
-import { renderSimplePage } from './layout';
+import { renderSimplePage } from './layout.view';
 import { formatAdena } from '../common/utils';
 import { HEROES } from '../common/data';
 

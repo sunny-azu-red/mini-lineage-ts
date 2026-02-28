@@ -7,6 +7,5 @@
 - <div class="alert alert-success">🎉 Congratulations! You have reached level <%= newLevel %>.</div> should not be green but golden, simulate the lineage level up
 - the surprises should be 25% of enemies you previously killed (enemiesKilled / 4)
 - generate more text versions for the battleground
-- i dont like the *.views.ts files, that logic can go in the controller and the controller should call .ejs or should that logic go into .ejs?
-- the render function is repeating alot of times
+- i dont like the *.view.ts files, that logic can go in the controller and the controller should call .ejs or should that logic go into .ejs?
 - dry the code and ask for improvements

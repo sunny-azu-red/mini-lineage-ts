@@ -1,5 +1,5 @@
 import { readTemplate, render } from './base.view';
-import { renderPage, renderSimplePage } from './layout';
+import { renderPage, renderSimplePage } from './layout.view';
 import { PlayerState } from '../common/types';
 import { calculateExpForLevel } from '../services/math.service';
 

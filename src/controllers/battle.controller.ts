@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { PlayerState } from '../common/types';
 import { calculateLevel } from '../services/math.service';
 import { randomInt } from '../common/utils';
-import { renderBattlegroundView } from '../views/battle.views';
+import { renderBattlegroundView } from '../views/battle.view';
 import { simulateBattle } from '../services/battle.service';
 import { applyBattleResult } from '../services/player.service';
 import { HEROES } from '../common/data';

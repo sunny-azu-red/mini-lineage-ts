@@ -1,6 +1,6 @@
 import { readTemplate, render } from './base.view';
 import { formatAdena, randomInt } from '../common/utils';
-import { renderPage, renderSimplePage } from './layout';
+import { renderPage, renderSimplePage } from './layout.view';
 import { PlayerState } from '../common/types';
 import { HEROES } from '../common/data';
 

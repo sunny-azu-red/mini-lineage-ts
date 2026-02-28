@@ -1,5 +1,5 @@
 import { readTemplate, render } from './base.view';
-import { renderPage } from './layout';
+import { renderPage } from './layout.view';
 import { PlayerState, BattleResult } from '../common/types';
 import { WEAPONS, ARMORS, HEROES } from '../common/data';
 import { formatAdena, randomInt } from '../common/utils';

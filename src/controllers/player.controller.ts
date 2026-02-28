@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { PlayerState } from '../common/types';
 import { calculateLevel } from '../services/math.service';
-import { renderSuicideView, renderDeathView, renderExpTableView } from '../views/player.views';
+import { renderSuicideView, renderDeathView, renderExpTableView } from '../views/player.view';
 
 export const getSuicide = (req: Request, res: Response) => {
     const player = req.session as PlayerState;

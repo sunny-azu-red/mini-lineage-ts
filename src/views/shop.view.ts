@@ -1,5 +1,5 @@
 import { readTemplate, render } from './base.view';
-import { renderPage } from './layout';
+import { renderPage } from './layout.view';
 import { PlayerState } from '../common/types';
 import { WEAPONS, ARMORS, FOODS } from '../common/data';
 import { formatAdena } from '../common/utils';
