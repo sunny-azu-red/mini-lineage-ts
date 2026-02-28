@@ -1,17 +1,10 @@
-import * as ejs from 'ejs';
-import * as fs from 'fs';
-import * as path from 'path';
+import { readTemplate, render } from './base.view';
 import { renderPage } from './layout';
 import { PlayerState, BattleResult } from '../common/types';
 import { WEAPONS, ARMORS, HEROES } from '../common/data';
 import { formatAdena, randomInt } from '../common/utils';
 
-const TEMPLATES_DIR = path.join(__dirname, 'templates');
-const battlegroundTpl = fs.readFileSync(path.join(TEMPLATES_DIR, 'battleground.ejs'), 'utf8');
-
-function render(template: string, locals: Record<string, any>): string {
-    return ejs.render(template, locals);
-}
+const battlegroundTpl = readTemplate('battleground.ejs');
 
 export function renderBattlegroundView(player: PlayerState, results: BattleResult, leveledUp: boolean, newLevel: number): string {
     const weapon = WEAPONS[player.weaponId];

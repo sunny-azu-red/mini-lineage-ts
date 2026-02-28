@@ -1,18 +1,11 @@
-import * as ejs from 'ejs';
-import * as fs from 'fs';
-import * as path from 'path';
+import { readTemplate, render } from './base.view';
 import { renderSimplePage } from './layout';
 import { formatAdena } from '../common/utils';
 import { HEROES } from '../common/data';
 
-const TEMPLATES_DIR = path.join(__dirname, 'templates');
-const highscoresTpl = fs.readFileSync(path.join(TEMPLATES_DIR, 'highscores.ejs'), 'utf8');
-const highscoresSubmitTpl = fs.readFileSync(path.join(TEMPLATES_DIR, 'highscores-submit.ejs'), 'utf8');
-const highscoresErrorTpl = fs.readFileSync(path.join(TEMPLATES_DIR, 'highscores-error.ejs'), 'utf8');
-
-function render(template: string, locals: Record<string, any>): string {
-    return ejs.render(template, locals);
-}
+const highscoresTpl = readTemplate('highscores.ejs');
+const highscoresSubmitTpl = readTemplate('highscores-submit.ejs');
+const highscoresErrorTpl = readTemplate('highscores-error.ejs');
 
 export function renderHighscoresSubmitView(): string {
     return renderSimplePage('Highscores', render(highscoresSubmitTpl, {}));

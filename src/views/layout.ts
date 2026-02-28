@@ -1,18 +1,9 @@
-import * as ejs from 'ejs';
-import * as fs from 'fs';
-import * as path from 'path';
+import { readTemplate, render } from './base.view';
 import { WEAPONS, ARMORS, HEROES, GAME_VERSION, MAX_LEVEL, REPO_COMMIT_URL } from '../common/data';
 import { calculateLevel, calculateExpForLevel } from '../services/math.service';
 import { formatAdena } from '../common/utils';
-import { PlayerState } from '../common/types';
+import { PlayerState, RenderOptions } from '../common/types';
 
-const TEMPLATES_DIR = path.join(__dirname, 'templates');
-
-function readTemplate(name: string): string {
-    return fs.readFileSync(path.join(TEMPLATES_DIR, name), 'utf8');
-}
-
-// Pre-load all templates at startup (synchronous, happens once)
 const layoutTpl = readTemplate('layout.ejs');
 const simpleTpl = readTemplate('simple.ejs');
 const statusTpl = readTemplate('partials/status.ejs');
@@ -29,10 +20,6 @@ const HEADER_BANNER = `
   <span class="header-subtitle">Remastered</span>
 </div>
 `;
-
-function render(template: string, locals: Record<string, any>): string {
-    return ejs.render(template, locals, { rmWhitespace: false });
-}
 
 function getVersionHtml(): string {
     return GAME_VERSION.length === 7 && /^[0-9a-f]+$/i.test(GAME_VERSION)
@@ -85,13 +72,13 @@ export function renderInventory(player: PlayerState): string {
     });
 }
 
-export function renderPage(title: string, player: PlayerState, mainContent: string): string {
+export function renderPage(title: string, player: PlayerState, mainContent: string, options: RenderOptions = {}): string {
     const statusHtml = renderStatus(player);
     const inventoryHtml = renderInventory(player);
 
     const maxHp = HEROES[player.heroId].startHealth;
     let lowHealthAlert = '';
-    if (player.health < (maxHp * 0.25) && player.health > 0) {
+    if (player.health < (maxHp * 0.25) && player.health > 0 && !options.hideLowHealthAlert) {
         lowHealthAlert = player.ambushed
             ? `Your HP is dangerously low!<br>You fell into a trap and can't do anything... good luck hero 🥲`
             : `Your HP is dangerously low!<br>You should buy some food from the 🍺 <a href='/inn'>Inn</a> to regain your strength.`;

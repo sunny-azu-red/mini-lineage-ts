@@ -1,21 +1,14 @@
-import * as ejs from 'ejs';
-import * as fs from 'fs';
-import * as path from 'path';
+import { readTemplate, render } from './base.view';
 import { renderPage, renderSimplePage } from './layout';
 import { PlayerState } from '../common/types';
 import { calculateExpForLevel } from '../services/math.service';
 
-const TEMPLATES_DIR = path.join(__dirname, 'templates');
-const suicideTpl = fs.readFileSync(path.join(TEMPLATES_DIR, 'suicide.ejs'), 'utf8');
-const deathTpl = fs.readFileSync(path.join(TEMPLATES_DIR, 'death.ejs'), 'utf8');
-const expTableTpl = fs.readFileSync(path.join(TEMPLATES_DIR, 'exp-table.ejs'), 'utf8');
-
-function render(template: string, locals: Record<string, any>): string {
-    return ejs.render(template, locals);
-}
+const suicideTpl = readTemplate('suicide.ejs');
+const deathTpl = readTemplate('death.ejs');
+const expTableTpl = readTemplate('exp-table.ejs');
 
 export function renderSuicideView(player: PlayerState): string {
-    return renderPage('Commit Suicide', player, render(suicideTpl, {}));
+    return renderPage('Commit Suicide', player, render(suicideTpl, {}), { hideLowHealthAlert: true });
 }
 
 export function renderDeathView(reason: string, coward: boolean = false): string {

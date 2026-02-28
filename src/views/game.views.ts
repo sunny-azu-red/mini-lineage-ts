@@ -1,18 +1,11 @@
-import * as ejs from 'ejs';
-import * as fs from 'fs';
-import * as path from 'path';
+import { readTemplate, render } from './base.view';
 import { formatAdena, randomInt } from '../common/utils';
 import { renderPage, renderSimplePage } from './layout';
 import { PlayerState } from '../common/types';
 import { HEROES } from '../common/data';
 
-const TEMPLATES_DIR = path.join(__dirname, 'templates');
-const gameStartTpl = fs.readFileSync(path.join(TEMPLATES_DIR, 'game-start.ejs'), 'utf8');
-const homeTpl = fs.readFileSync(path.join(TEMPLATES_DIR, 'home.ejs'), 'utf8');
-
-function render(template: string, locals: Record<string, any>): string {
-    return ejs.render(template, locals);
-}
+const gameStartTpl = readTemplate('game-start.ejs');
+const homeTpl = readTemplate('home.ejs');
 
 export function renderGameStartView(): string {
     return renderSimplePage('Game Start', render(gameStartTpl, { heroes: HEROES }));

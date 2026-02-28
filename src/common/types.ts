@@ -42,6 +42,10 @@ export interface PlayerState {
     inn_buy?: boolean;
 }
 
+export interface RenderOptions {
+    hideLowHealthAlert?: boolean;
+}
+
 declare module 'express-session' {
     interface SessionData extends PlayerState { }
 }

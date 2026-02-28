@@ -13,8 +13,8 @@ export function simulateBattle(weaponId: number, armorId: number): BattleResult 
 
     // hp lost: danger scales linearly, but armor scales sub-linearly to prevent invincibility
     const dangerLevel = Math.floor(weapon * 0.6);
-    const protection = Math.floor(Math.pow(armor, 0.95) * 0.8);
-    const hpLost = Math.max(1, randomInt(10, 25) + dangerLevel - protection);
+    const damageBlocked = Math.floor(Math.pow(armor, 0.95) * 0.8);
+    const hpLost = Math.max(1, randomInt(10, 25) + dangerLevel - damageBlocked);
 
     // experience gained: scales nicely with weapon
     const expGained = (enemiesKilled * randomInt(10, 18)) + Math.floor(Math.pow(weapon, 1.5) * 0.8);
@@ -25,7 +25,7 @@ export function simulateBattle(weaponId: number, armorId: number): BattleResult 
     return {
         enemiesKilled,
         hpLost,
-        damageBlocked: protection,
+        damageBlocked,
         expGained,
         adenaGained
     };

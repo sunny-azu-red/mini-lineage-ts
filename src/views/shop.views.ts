@@ -1,19 +1,12 @@
-import * as ejs from 'ejs';
-import * as fs from 'fs';
-import * as path from 'path';
+import { readTemplate, render } from './base.view';
 import { renderPage } from './layout';
 import { PlayerState } from '../common/types';
 import { WEAPONS, ARMORS, FOODS } from '../common/data';
 import { formatAdena } from '../common/utils';
 
-const TEMPLATES_DIR = path.join(__dirname, 'templates');
-const weaponsShopTpl = fs.readFileSync(path.join(TEMPLATES_DIR, 'weapons-shop.ejs'), 'utf8');
-const armorsShopTpl = fs.readFileSync(path.join(TEMPLATES_DIR, 'armors-shop.ejs'), 'utf8');
-const innTpl = fs.readFileSync(path.join(TEMPLATES_DIR, 'inn.ejs'), 'utf8');
-
-function render(template: string, locals: Record<string, any>): string {
-    return ejs.render(template, locals);
-}
+const weaponsShopTpl = readTemplate('weapons-shop.ejs');
+const armorsShopTpl = readTemplate('armors-shop.ejs');
+const innTpl = readTemplate('inn.ejs');
 
 export function renderWeaponsShopView(player: PlayerState, alertHtml: string): string {
     const weapons = WEAPONS.slice(1).map(w => ({
@@ -48,5 +41,5 @@ export function renderInnView(player: PlayerState, alertHtml: string): string {
     }));
     const selectFoods = FOODS.map(f => ({ id: f.id, emoji: f.emoji, name: f.name }));
     const content = render(innTpl, { alertHtml, foods, selectFoods });
-    return renderPage('Inn', player, content);
+    return renderPage('Inn', player, content, { hideLowHealthAlert: true });
 }
