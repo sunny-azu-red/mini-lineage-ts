@@ -1,0 +1,8 @@
+<div class="alert alert-danger"><%- reason %></div>
+<p>Unfortunately your story ends here hero.</p>
+<div class="action-links">
+    <% if (!coward) { %>
+        <a href="/highscores/submit" class="btn">📜 Write your Legacy!</a>
+    <% } %>
+    <a href="/restart" class="btn btn-secondary">Play Again?</a>
+</div>

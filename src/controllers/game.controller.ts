@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 import { PlayerState } from '../common/types';
 import { isGameStarted } from '../common/utils';
-import { renderSimplePage } from '../views/layout';
 import { renderGameStartView, renderHomeView } from '../views/game.views';
-import { Race } from '../common/types';
+import { HEROES } from '../common/data';
+import { initializePlayer } from '../services/player.service';
 
 export const getHome = (req: Request, res: Response) => {
     if (!isGameStarted(req))
         return res.send(renderGameStartView());
 
     const player = req.session as PlayerState;
-    if (player.caught)
+    if (player.ambushed)
         return res.redirect('/battle');
 
     const isNewPlayer = !player.welcomed;
@@ -21,23 +21,13 @@ export const getHome = (req: Request, res: Response) => {
     res.send(html);
 };
 
-export const getHuman = (req: Request, res: Response) => {
+export const postGameStart = (req: Request, res: Response) => {
+    const heroId = parseInt(req.body.select_hero);
+    const hero = HEROES[heroId];
+    if (!hero)
+        return res.redirect('/');
+
     const player = req.session as PlayerState;
-
-    player.race = Race.Human;
-    player.health = 100;
-    player.adena = 300;
-    player.experience = 0;
-    player.weaponId = 0;
-    player.armorId = 0;
-    player.welcomed = false;
-
+    initializePlayer(player, hero);
     res.redirect('/');
-};
-
-export const getOrc = (req: Request, res: Response) => {
-    res.send(renderSimplePage('Hmmm', `
-        Module not yet finished 🥹<br><br>
-        <a href="/">Go back</a>
-    `));
 };

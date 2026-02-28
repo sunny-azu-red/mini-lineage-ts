@@ -1,0 +1,49 @@
+<% if (alertHtml) { %>
+    <div class="alert alert-success"><%- alertHtml %></div>
+<% } %>
+
+<p>
+    You have arrived at the Armor Shop.<br>
+    The old man greets you and lets you look through his armors.
+</p>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Physical Defense</th>
+            <th>Adena</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% armors.forEach(function(armor) { %>
+            <tr>
+                <td><%= armor.emoji %> <%= armor.name %></td>
+                <td><%= armor.stat %></td>
+                <td class="gold"><%= armor.costFormatted %></td>
+            </tr>
+        <% }); %>
+    </tbody>
+</table>
+
+<form method="POST" action="/shop/armors">
+    <div class="form-row">
+        <select class="form-select" name="select_armor" id="armor-select">
+            <option value="">🚪 Home Town</option>
+            <% selectArmors.forEach(function(a) { %>
+                <option value="<%= a.id %>">Pick <%= a.emoji %> <%= a.name %></option>
+            <% }); %>
+        </select>
+        <button type="submit" class="btn btn-secondary" id="armor-btn">Return</button>
+    </div>
+</form>
+<script>
+    (function () {
+        var sel = document.getElementById('armor-select');
+        var btn = document.getElementById('armor-btn');
+        sel.addEventListener('change', function () {
+            btn.textContent = sel.value === '' ? 'Return' : '🪙 Purchase';
+            btn.className = sel.value === '' ? 'btn btn-secondary' : 'btn';
+        });
+    })();
+</script>

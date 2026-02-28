@@ -1,46 +1,42 @@
+import * as ejs from 'ejs';
+import * as fs from 'fs';
+import * as path from 'path';
 import { formatAdena, randomInt } from '../common/utils';
 import { renderPage, renderSimplePage } from './layout';
 import { PlayerState } from '../common/types';
+import { HEROES } from '../common/data';
+
+const TEMPLATES_DIR = path.join(__dirname, 'templates');
+const gameStartTpl = fs.readFileSync(path.join(TEMPLATES_DIR, 'game-start.ejs'), 'utf8');
+const homeTpl = fs.readFileSync(path.join(TEMPLATES_DIR, 'home.ejs'), 'utf8');
+
+function render(template: string, locals: Record<string, any>): string {
+    return ejs.render(template, locals);
+}
 
 export function renderGameStartView(): string {
-    return renderSimplePage('Game Start', `
-        Hello!<br>
-        You can start a new game or check the <a href="/highscores">Highscores</a>!<br><br>
-        What race do you want to be?<br><table><tr><td></td></tr></table>
-        <form onsubmit="window.location.href=this.querySelector('select').value; return false;">
-            <select class="box" name="start">
-                <option value="/human">Human</option>
-                <option value="/orc">Orc</option>
-            </select>
-            <input type="submit" class="box" value="Submit">
-        </form>
-    `);
+    return renderSimplePage('Game Start', render(gameStartTpl, { heroes: HEROES }));
 }
 
 export function renderHomeView(player: PlayerState, isNewPlayer: boolean): string {
-    let helloMsg = `Welcome to <a href="/highscores">City of Aden</a>.<br><br>`;
+    let helloMsg = '';
 
     if (isNewPlayer) {
-        const age = randomInt(10, 70);
+        const builds = ['a slim', 'a lean', 'an average', 'a fit', 'a stocky', 'a broad', 'a round'];
+        const build = builds[randomInt(0, builds.length - 1)];
+        const age = randomInt(9, 69);
 
-        let definition = "boy";
-        if (age > 18 && age <= 50) definition = "man";
-        else if (age > 50) definition = "old timer";
+        let definition = 'youth';
+        if (age > 23 && age <= 54) {
+            definition = 'adult';
+        } else if (age > 54) {
+            definition = 'elder';
+        }
 
-        helloMsg = `You have selected to be Human. Congratulations!<br>Welcome to <a href="/highscores">City of Aden</a>. You are an average ${definition}, aged ${age}, and you came here with ${formatAdena(player.adena)} adena.<br><br>`;
+        const hero = HEROES[player.heroId];
+        helloMsg = `You have selected to be ${hero.emoji} ${hero.label}. Congratulations!<br>You are ${build} ${definition}, aged ${age}, and you came here with ${formatAdena(player.adena)} adena.`;
     }
 
-    return renderPage("Home Town", player, `
-        ${helloMsg}
-        <form onsubmit="window.location.href=this.querySelector('select').value; return false;">
-            <select class="box" name="travel">
-                <option value="/shop/armors">Go to Armor Shop</option>
-                <option value="/shop/weapons">Go to Weapon Shop</option>
-                <option value="/inn">Go to Inn</option>
-                <option value="/battle">Fight on the Battlefield</option>
-                <option value="/suicide">Commit Suicide</option>
-            </select>
-            <input type="submit" class="box" value="Submit">
-        </form>
-    `);
+    const content = render(homeTpl, { helloMsg });
+    return renderPage('Home Town', player, content);
 }

@@ -1,0 +1,39 @@
+<% if (headerMessage) { %>
+    <p><%- headerMessage %></p>
+<% } %>
+
+<% if (rows.length> 0) { %>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Level</th>
+                <th>Total XP</th>
+                <th>Wealth</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% rows.forEach(function(row) { %>
+                <tr>
+                    <td>
+                        <%= row.name %>
+                    </td>
+                    <td class="center">
+                        <%= row.level %>
+                    </td>
+                    <td class="xp">
+                        <%= row.totalExp %>
+                    </td>
+                    <td class="gold">
+                        <%= row.adena %>
+                    </td>
+                    <td class="muted">
+                        <%= row.date %>
+                    </td>
+                </tr>
+                <% }); %>
+        </tbody>
+    </table>
+<% } %>
+<p class="last"><%= footerMessage %><span class="muted"> | </span><a href="/">Go back</a></p>

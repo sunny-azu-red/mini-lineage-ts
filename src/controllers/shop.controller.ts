@@ -9,7 +9,7 @@ export const getWeaponsShop = (req: Request, res: Response) => {
     const player = req.session as PlayerState;
     let alertHtml = "";
     if (player.weapon_buy) {
-        alertHtml = `<font color='green'>You have bought a weapon. [${WEAPONS[player.weaponId as number]?.name}]</font><br><br>`;
+        alertHtml = `You have bought a weapon.<br>You are now wielding the swift ${WEAPONS[player.weaponId as number]?.name}!`;
         player.weapon_buy = false; // reset flash
     }
 
@@ -25,7 +25,7 @@ export const postWeaponsShop = (req: Request, res: Response) => {
     const cost = WEAPONS[weaponId]?.cost;
 
     if (!deductCost(player, cost))
-        return res.send(renderPage("Error", player, `Sorry, you need more money.<br><br><a href="/shop/weapons">Go back</a>`));
+        return res.send(renderPage("Error", player, `<p>Sorry, you need more money.</p><a href="/shop/weapons">Go back</a>`));
 
     player.weaponId = weaponId;
     player.weapon_buy = true;
@@ -36,7 +36,7 @@ export const getArmorsShop = (req: Request, res: Response) => {
     const player = req.session as PlayerState;
     let alertHtml = "";
     if (player.armor_buy) {
-        alertHtml = `<font color='green'>You have bought an Armor. [${ARMORS[player.armorId as number]?.name}]</font><br><br>`;
+        alertHtml = `You have bought an Armor.<br>You are now wearing the mighty ${ARMORS[player.armorId as number]?.name}!`;
         player.armor_buy = false; // reset flash
     }
 
@@ -52,7 +52,7 @@ export const postArmorsShop = (req: Request, res: Response) => {
     const cost = ARMORS[armorId]?.cost;
 
     if (!deductCost(player, cost))
-        return res.send(renderPage("Error", player, `Sorry, you need more money.<br><br><a href="/shop/armors">Go back</a>`));
+        return res.send(renderPage("Error", player, `<p>Sorry, you need more money.</p><a href="/shop/armors">Go back</a>`));
 
     player.armorId = armorId;
     player.armor_buy = true;
@@ -63,7 +63,7 @@ export const getInn = (req: Request, res: Response) => {
     const player = req.session as PlayerState;
     let alertHtml = "";
     if (player.inn_buy) {
-        alertHtml = `<font color='green'>You have bought food. Your HP has risen to [${player.health}]</font><br><br>`;
+        alertHtml = `You have bought food.<br>Delicious! You feel your strength returning, bringing you to ${player.health} HP.`;
         player.inn_buy = false; // reset flash
     }
 
@@ -78,7 +78,7 @@ export const postInn = (req: Request, res: Response) => {
     const val = parseInt(req.body.select_food);
     const food = FOODS[val];
     if (!food || !deductCost(player, food.cost))
-        return res.send(renderPage("Error", player, `Sorry, you need more money.<br><br><a href="/inn">Go back</a>`));
+        return res.send(renderPage("Error", player, `<p>Sorry, you need more money.</p><a href="/inn">Go back</a>`));
 
     restoreHealth(player, food.stat);
     player.inn_buy = true;

@@ -1,0 +1,25 @@
+<% if (helloMsg) { %>
+    <div class="alert alert-info"><%- helloMsg %></div>
+<% } %>
+<p>Welcome to <a href="/highscores">City of Aden</a>.<br>Where do you want to go next, or what do you want to do?</p>
+<form onsubmit="window.location.href=this.querySelector('select').value; return false;" id="home-form">
+    <div class="form-row">
+        <select class="form-select" name="travel" id="home-select">
+            <option value="/inn">🍺 Inn</option>
+            <option value="/shop/armors">🛡️ Armor Shop</option>
+            <option value="/shop/weapons">🗡️ Weapon Shop</option>
+            <option value="/battle">💀 Battlefield</option>
+            <option value="/suicide">💅 Commit Suicide</option>
+        </select>
+        <button type="submit" class="btn" id="home-btn">Travel</button>
+    </div>
+</form>
+<script>
+    (function () {
+        var sel = document.getElementById('home-select');
+        var btn = document.getElementById('home-btn');
+        sel.addEventListener('change', function () {
+            btn.textContent = sel.value === '/suicide' ? '🪦 Die' : 'Travel';
+        });
+    })();
+</script>

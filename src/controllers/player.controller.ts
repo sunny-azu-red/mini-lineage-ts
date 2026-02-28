@@ -12,6 +12,7 @@ export const postSuicide = (req: Request, res: Response) => {
     const player = req.session as PlayerState;
     if (req.body.suicide === 'yes') {
         player.dead = true;
+        player.coward = true;
         res.redirect('/death');
     } else {
         res.redirect('/');
@@ -19,11 +20,14 @@ export const postSuicide = (req: Request, res: Response) => {
 };
 
 export const getDeath = (req: Request, res: Response) => {
-    const reason = req.query.reason === 'coward'
-        ? "You were caught trying to flee an ambush! Game Over !!"
-        : "Your health dropped to 0 and you died.";
+    const player = req.session as PlayerState;
+    const reason = player.coward
+        ? "🤡 You took the cowardly way out."
+        : player.ambushed
+            ? "🪤 You were caught trying to flee an ambush! Game Over."
+            : "☠️ Your health dropped to 0 and you died.";
 
-    res.send(renderDeathView(reason));
+    res.send(renderDeathView(reason, !!(player.coward || player.ambushed)));
 };
 
 export const getRestart = (req: Request, res: Response) => {
