@@ -22,14 +22,17 @@ export const getBattle = (req: Request, res: Response) => {
     const hero = HEROES[player.heroId];
     const newLevel = calculateLevel(player.experience);
     let leveledUp = newLevel > level;
+    let levelUpFlash = null;
+
     if (leveledUp) {
         player.health = hero.startHealth;
-        player.flash = { text: `Congratulations! You have reached level ${newLevel}.`, type: 'warning' };
+        levelUpFlash = { text: `🎉 Congratulations! You have reached level ${newLevel}.`, type: 'warning' };
     }
 
     let isAmbushed = randomInt(1, hero.ambushOdds) === 1;
     if (isAmbushed)
         player.ambushed = true;
 
-    res.send(renderBattlegroundView(player, results, res.locals.flash));
+    const flashToRender = levelUpFlash || res.locals.flash;
+    res.send(renderBattlegroundView(player, results, flashToRender));
 };

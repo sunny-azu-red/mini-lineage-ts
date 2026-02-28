@@ -44,11 +44,11 @@
 }
 
 .row-current {
-    background: rgba(123, 45, 139, 0.25) !important;
+    background: rgba(255, 188, 0, 0.1) !important;
 }
 
 .row-current td {
-    color: #c39bd3;
+    font-weight: 600;
 }
 
 td.center,
