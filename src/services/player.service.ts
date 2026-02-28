@@ -8,7 +8,6 @@ export function initializePlayer(player: PlayerState, hero: Hero): void {
     player.experience = 0;
     player.weaponId = 0;
     player.armorId = 0;
-    player.welcomed = false;
 }
 
 export function deductCost(player: PlayerState, cost: number): boolean {

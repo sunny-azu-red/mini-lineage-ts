@@ -1,12 +1,12 @@
 import { readTemplate, render } from './base.view';
 import { renderPage } from './layout.view';
-import { PlayerState, BattleResult } from '../common/types';
+import { PlayerState, BattleResult, FlashMessage } from '../common/types';
 import { WEAPONS, ARMORS, HEROES } from '../common/data';
 import { formatAdena, randomInt } from '../common/utils';
 
 const battlegroundTpl = readTemplate('battleground.ejs');
 
-export function renderBattlegroundView(player: PlayerState, results: BattleResult, leveledUp: boolean, newLevel: number): string {
+export function renderBattlegroundView(player: PlayerState, results: BattleResult, leveledUp: boolean, newLevel: number, flash: FlashMessage | null = null): string {
     const weapon = WEAPONS[player.weaponId];
     const armor = ARMORS[player.armorId];
     const weaponName = weapon.name;
@@ -79,7 +79,7 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
         ambushed: player.ambushed,
         ambushedMessage: surprises[randomInt(0, surprises.length - 1)],
         nextMove: moves[randomInt(0, moves.length - 1)],
-    });
+    }, 'battleground.ejs');
 
-    return renderPage('Battleground', player, content);
+    return renderPage('Battleground', player, content, flash);
 }

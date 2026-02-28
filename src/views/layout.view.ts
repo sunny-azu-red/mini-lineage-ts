@@ -2,7 +2,7 @@ import { readTemplate, render } from './base.view';
 import { WEAPONS, ARMORS, HEROES, GAME_VERSION, MAX_LEVEL, REPO_COMMIT_URL } from '../common/data';
 import { calculateLevel, calculateExpForLevel } from '../services/math.service';
 import { formatAdena } from '../common/utils';
-import { PlayerState, RenderOptions } from '../common/types';
+import { PlayerState, RenderOptions, FlashMessage } from '../common/types';
 
 const layoutTpl = readTemplate('layout.ejs');
 const simpleTpl = readTemplate('simple.ejs');
@@ -58,7 +58,7 @@ export function renderStatus(player: PlayerState): string {
         isMaxLevel,
         adena: formatAdena(player.adena),
         levelDisplay,
-    });
+    }, 'partials/status.ejs');
 }
 
 export function renderInventory(player: PlayerState): string {
@@ -69,10 +69,10 @@ export function renderInventory(player: PlayerState): string {
         armorStr: armor.name,
         weaponEmoji: weapon.emoji,
         armorEmoji: armor.emoji,
-    });
+    }, 'partials/inventory.ejs');
 }
 
-export function renderPage(title: string, player: PlayerState, mainContent: string, options: RenderOptions = {}): string {
+export function renderPage(title: string, player: PlayerState, mainContent: string, flash: FlashMessage | null = null, options: RenderOptions = {}): string {
     const statusHtml = renderStatus(player);
     const inventoryHtml = renderInventory(player);
 
@@ -90,19 +90,21 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
         statusHtml,
         inventoryHtml,
         lowHealthAlert,
+        flash,
         headerClickable: !player.ambushed,
         headerBanner: HEADER_BANNER,
         year: new Date().getFullYear(),
         version: getVersionHtml(),
-    });
+    }, 'layout.ejs');
 }
 
-export function renderSimplePage(title: string, mainContent: string): string {
+export function renderSimplePage(title: string, mainContent: string, flash: FlashMessage | null = null): string {
     return render(simpleTpl, {
         title,
         mainContent,
+        flash,
         headerBanner: HEADER_BANNER,
         year: new Date().getFullYear(),
         version: getVersionHtml(),
-    });
+    }, 'simple.ejs');
 }

@@ -1,15 +1,13 @@
 import { Request, Response } from 'express';
-import { PlayerState } from '../common/types';
 import { calculateLevel } from '../services/math.service';
 import { renderSuicideView, renderDeathView, renderExpTableView } from '../views/player.view';
 
 export const getSuicide = (req: Request, res: Response) => {
-    const player = req.session as PlayerState;
-    res.send(renderSuicideView(player));
+    res.send(renderSuicideView(res.locals.player, res.locals.flash));
 };
 
 export const postSuicide = (req: Request, res: Response) => {
-    const player = req.session as PlayerState;
+    const player = res.locals.player;
     if (req.body.suicide === 'yes') {
         player.dead = true;
         player.coward = true;
@@ -20,7 +18,7 @@ export const postSuicide = (req: Request, res: Response) => {
 };
 
 export const getDeath = (req: Request, res: Response) => {
-    const player = req.session as PlayerState;
+    const player = res.locals.player;
     const reason = player.coward
         ? "🤡 You took the cowardly way out."
         : player.ambushed
@@ -37,9 +35,9 @@ export const getRestart = (req: Request, res: Response) => {
 };
 
 export const getExpTable = (req: Request, res: Response) => {
-    const player = req.session as PlayerState;
+    const player = res.locals.player;
     const currentExp = player.experience || 0;
     const currentLevel = calculateLevel(currentExp);
 
-    res.send(renderExpTableView(currentExp, currentLevel));
+    res.send(renderExpTableView(currentExp, currentLevel, res.locals.flash));
 };

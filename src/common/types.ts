@@ -26,6 +26,11 @@ export interface BattleResult {
     adenaGained: number;
 }
 
+export interface FlashMessage {
+    text: string;
+    type: 'success' | 'danger' | 'info';
+}
+
 export interface PlayerState {
     heroId: number;
     health: number;
@@ -36,14 +41,20 @@ export interface PlayerState {
     dead?: boolean;
     ambushed?: boolean;
     coward?: boolean;
-    welcomed?: boolean;
-    weapon_buy?: boolean;
-    armor_buy?: boolean;
-    inn_buy?: boolean;
+    flash?: FlashMessage;
 }
 
 export interface RenderOptions {
     hideLowHealthAlert?: boolean;
+}
+
+export interface HighscoreEntry {
+    name: string | null;
+    hero_id: number;
+    total_exp: number;
+    adena: number;
+    level: number;
+    created: string;
 }
 
 declare module 'express-session' {

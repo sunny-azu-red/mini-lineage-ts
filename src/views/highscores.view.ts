@@ -2,16 +2,17 @@ import { readTemplate, render } from './base.view';
 import { renderSimplePage } from './layout.view';
 import { formatAdena } from '../common/utils';
 import { HEROES } from '../common/data';
+import { HighscoreEntry } from '../common/types';
 
 const highscoresTpl = readTemplate('highscores.ejs');
 const highscoresSubmitTpl = readTemplate('highscores-submit.ejs');
 const highscoresErrorTpl = readTemplate('highscores-error.ejs');
 
 export function renderHighscoresSubmitView(): string {
-    return renderSimplePage('Highscores', render(highscoresSubmitTpl, {}));
+    return renderSimplePage('Highscores', render(highscoresSubmitTpl, {}, 'highscores-submit.ejs'));
 }
 
-export function renderHighscoresView(highscores: any[]): string {
+export function renderHighscoresView(highscores: HighscoreEntry[]): string {
     let headerMessage = '';
     let footerMessage = 'Your name could be here too 😊';
 
@@ -20,7 +21,7 @@ export function renderHighscoresView(highscores: any[]): string {
         footerMessage = 'You could be the first one';
     }
 
-    const rows = highscores.map((score, idx) => {
+    const rows = highscores.map((score) => {
         const d = new Date(score.created);
         const pad = (n: number) => n.toString().padStart(2, '0');
         const date = `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear().toString().slice(-2)}, ${pad(d.getHours())}:${pad(d.getMinutes())}`;
@@ -34,10 +35,10 @@ export function renderHighscoresView(highscores: any[]): string {
         };
     });
 
-    const content = render(highscoresTpl, { headerMessage, footerMessage, rows });
+    const content = render(highscoresTpl, { headerMessage, footerMessage, rows }, 'highscores.ejs');
     return renderSimplePage('Hall of Champions', content);
 }
 
 export function renderHighscoresErrorView(): string {
-    return renderSimplePage('Hall of Champions', render(highscoresErrorTpl, {}));
+    return renderSimplePage('Hall of Champions', render(highscoresErrorTpl, {}, 'highscores-error.ejs'));
 }

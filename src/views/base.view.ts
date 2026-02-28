@@ -8,6 +8,9 @@ export function readTemplate(name: string): string {
     return fs.readFileSync(path.join(TEMPLATES_DIR, name), 'utf8');
 }
 
-export function render(template: string, locals: Record<string, any>): string {
-    return ejs.render(template, locals);
+export function render(template: string, locals: Record<string, any>, filename?: string): string {
+    return ejs.render(template, locals, {
+        filename: filename ? path.join(TEMPLATES_DIR, filename) : undefined,
+        root: TEMPLATES_DIR
+    });
 }

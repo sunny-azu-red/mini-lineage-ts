@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { PlayerState } from '../common/types';
 import { isGameStarted } from '../common/utils';
 
 export const cheatMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const player = req.session as PlayerState;
+    const player = res.locals.player;
 
     // checking dead players — cowards cannot access the highscores submit form
     const safePaths = ['/death', '/restart'];

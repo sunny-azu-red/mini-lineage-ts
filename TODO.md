@@ -1,6 +1,5 @@
 # 🛠️ TODO List
 
-- make it that if we dont have enough money, it shows a red flash message, not a separate page with go back
 - make it so that you cant buy armor or weapon if you already have the exact one, the option should be disabled in the list
 - can we animate the health bar and xp bar? perhaps save the previous hp or xp in session and when you refresh the page, show the previous hp and xp but then animate to the actual hp and xp
 - and on that note maybe the bar labels should be animated too?

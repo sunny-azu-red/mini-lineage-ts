@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import session from 'express-session';
 import { cheatMiddleware } from './middlewares/cheat.middleware';
+import { flashMiddleware } from './middlewares/flash.middleware';
 import router from './routes';
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
 }));
+app.use(flashMiddleware);
 app.use(cheatMiddleware);
 app.use('/', router);
 

@@ -1,21 +1,22 @@
 import { readTemplate, render } from './base.view';
 import { renderPage, renderSimplePage } from './layout.view';
-import { PlayerState } from '../common/types';
+import { PlayerState, FlashMessage } from '../common/types';
 import { calculateExpForLevel } from '../services/math.service';
 
 const suicideTpl = readTemplate('suicide.ejs');
 const deathTpl = readTemplate('death.ejs');
 const expTableTpl = readTemplate('exp-table.ejs');
 
-export function renderSuicideView(player: PlayerState): string {
-    return renderPage('Commit Suicide', player, render(suicideTpl, {}), { hideLowHealthAlert: true });
+export function renderSuicideView(player: PlayerState, flash: FlashMessage | null = null): string {
+    const content = render(suicideTpl, {}, 'suicide.ejs');
+    return renderPage('Commit Suicide', player, content, flash, { hideLowHealthAlert: true });
 }
 
 export function renderDeathView(reason: string, coward: boolean = false): string {
-    return renderSimplePage('Oops...', render(deathTpl, { reason, coward }));
+    return renderSimplePage('Oops...', render(deathTpl, { reason, coward }, 'death.ejs'));
 }
 
-export function renderExpTableView(currentExp: number, currentLevel: number): string {
+export function renderExpTableView(currentExp: number, currentLevel: number, flash: FlashMessage | null = null): string {
     const buildColumn = (start: number, end: number) => {
         const rows = [];
         for (let i = start; i <= end; i++) {
@@ -37,6 +38,6 @@ export function renderExpTableView(currentExp: number, currentLevel: number): st
         ? calculateExpForLevel(currentLevel + 1) - currentExp
         : 0;
 
-    const content = render(expTableTpl, { columns, currentExp, currentLevel, xpNeeded });
-    return renderSimplePage('Experience Table', content);
+    const content = render(expTableTpl, { columns, currentExp, currentLevel, xpNeeded }, 'exp-table.ejs');
+    return renderSimplePage('Experience Table', content, flash);
 }

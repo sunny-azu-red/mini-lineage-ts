@@ -1,15 +1,15 @@
 import { Request, Response } from 'express';
-import { PlayerState } from '../common/types';
 import { calculateLevel } from '../services/math.service';
 import { renderHighscoresSubmitView, renderHighscoresView, renderHighscoresErrorView } from '../views/highscores.view';
 import { db } from '../config/db.config';
+import { HighscoreEntry } from '../common/types';
 
 export const getHighscoresSubmit = (req: Request, res: Response) => {
     res.send(renderHighscoresSubmitView());
 };
 
 export const postHighscores = async (req: Request, res: Response) => {
-    const player = req.session as PlayerState;
+    const player = res.locals.player;
     if (player.dead && !player.coward && !player.ambushed) {
         const name = req.body.name?.trim() || null;
         const level = calculateLevel(player.experience);
@@ -28,13 +28,13 @@ export const postHighscores = async (req: Request, res: Response) => {
 };
 
 export const getHighscores = async (req: Request, res: Response) => {
-    const player = req.session as PlayerState;
+    const player = res.locals.player;
     if (player.dead)
         return res.redirect('/death');
 
     try {
         const [rows] = await db.execute('SELECT * FROM highscores ORDER BY total_exp DESC, adena DESC LIMIT 25');
-        const highscores = rows as any[];
+        const highscores = rows as HighscoreEntry[];
         res.send(renderHighscoresView(highscores));
     } catch (err) {
         console.error(err);

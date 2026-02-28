@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { PlayerState } from '../common/types';
 import { calculateLevel } from '../services/math.service';
 import { randomInt } from '../common/utils';
 import { renderBattlegroundView } from '../views/battle.view';
@@ -8,7 +7,7 @@ import { applyBattleResult } from '../services/player.service';
 import { HEROES } from '../common/data';
 
 export const getBattle = (req: Request, res: Response) => {
-    const player = req.session as PlayerState;
+    const player = res.locals.player;
     if (player.ambushed)
         player.ambushed = false;
 
@@ -30,5 +29,5 @@ export const getBattle = (req: Request, res: Response) => {
     if (isAmbushed)
         player.ambushed = true;
 
-    res.send(renderBattlegroundView(player, results, leveledUp, newLevel));
+    res.send(renderBattlegroundView(player, results, leveledUp, newLevel, res.locals.flash));
 };
