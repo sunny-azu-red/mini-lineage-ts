@@ -5,15 +5,5 @@
 - and on that note maybe the bar labels should be animated too?
 - the surprises should be 25% of enemies you previously killed (enemiesKilled / 4)
 - generate more text versions for the battleground
-- i dont like the *.view.ts files, that logic can go in the controller and the controller should call .ejs or should that logic go into .ejs?
+- i dont like the *.view.ts files, that logic can maybe go in the controller and the controller should render the .ejs files directly
 - dry the code and ask for improvements
-
-whats the point of having both
-```ts
-const weaponsShopTpl = readTemplate('weapons-shop.ejs');
-```
-and
-```ts
-const content = render(weaponsShopTpl, { weapons, selectWeapons }, 'weapons-shop.ejs');
-``` 
-'weapons-shop.ejs' is duplicated

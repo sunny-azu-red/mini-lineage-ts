@@ -58,7 +58,7 @@ export function renderStatus(player: PlayerState): string {
         isMaxLevel,
         adena: formatAdena(player.adena),
         levelDisplay,
-    }, 'partials/status.ejs');
+    });
 }
 
 export function renderInventory(player: PlayerState): string {
@@ -69,7 +69,7 @@ export function renderInventory(player: PlayerState): string {
         armorStr: armor.name,
         weaponEmoji: weapon.emoji,
         armorEmoji: armor.emoji,
-    }, 'partials/inventory.ejs');
+    });
 }
 
 export function renderPage(title: string, player: PlayerState, mainContent: string, flash: FlashMessage | null = null, options: RenderOptions = {}): string {
@@ -95,7 +95,7 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
         headerBanner: HEADER_BANNER,
         year: new Date().getFullYear(),
         version: getVersionHtml(),
-    }, 'layout.ejs');
+    });
 }
 
 export function renderSimplePage(title: string, mainContent: string, flash: FlashMessage | null = null): string {
@@ -106,5 +106,5 @@ export function renderSimplePage(title: string, mainContent: string, flash: Flas
         headerBanner: HEADER_BANNER,
         year: new Date().getFullYear(),
         version: getVersionHtml(),
-    }, 'simple.ejs');
+    });
 }

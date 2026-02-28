@@ -10,6 +10,6 @@ CREATE TABLE IF NOT EXISTS `highscores` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `highscores` (`total_exp`, `name`, `hero_id`, `adena`, `level`, `created`) VALUES
-(1000, 'Sunny', 0, 500, 5, NOW()),
-(1500, 'Orc Slayer', 1, 800, 7, NOW());
+-- INSERT INTO `highscores` (`total_exp`, `name`, `hero_id`, `adena`, `level`, `created`) VALUES
+-- (1000, 'Sunny', 0, 500, 5, NOW()),
+-- (1500, 'Orc Slayer', 1, 800, 7, NOW());

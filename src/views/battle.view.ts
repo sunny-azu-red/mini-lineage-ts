@@ -77,7 +77,7 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
         ambushed: player.ambushed,
         ambushedMessage: surprises[randomInt(0, surprises.length - 1)],
         nextMove: moves[randomInt(0, moves.length - 1)],
-    }, 'battleground.ejs');
+    });
 
     return renderPage('Battleground', player, content, flash);
 }

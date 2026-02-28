@@ -44,6 +44,11 @@ export interface PlayerState {
     flash?: FlashMessage;
 }
 
+export interface Template {
+    content: string;
+    filename: string;
+}
+
 export interface RenderOptions {
     hideLowHealthAlert?: boolean;
 }

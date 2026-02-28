@@ -8,12 +8,11 @@ const deathTpl = readTemplate('death.ejs');
 const expTableTpl = readTemplate('exp-table.ejs');
 
 export function renderSuicideView(player: PlayerState, flash: FlashMessage | null = null): string {
-    const content = render(suicideTpl, {}, 'suicide.ejs');
-    return renderPage('Commit Suicide', player, content, flash, { hideLowHealthAlert: true });
+    return renderPage('Commit Suicide', player, render(suicideTpl), flash, { hideLowHealthAlert: true });
 }
 
 export function renderDeathView(reason: string, coward: boolean = false): string {
-    return renderSimplePage('Oops...', render(deathTpl, { reason, coward }, 'death.ejs'));
+    return renderSimplePage('Oops...', render(deathTpl, { reason, coward }));
 }
 
 export function renderExpTableView(currentExp: number, currentLevel: number, flash: FlashMessage | null = null): string {
@@ -38,6 +37,6 @@ export function renderExpTableView(currentExp: number, currentLevel: number, fla
         ? calculateExpForLevel(currentLevel + 1) - currentExp
         : 0;
 
-    const content = render(expTableTpl, { columns, currentExp, currentLevel, xpNeeded }, 'exp-table.ejs');
+    const content = render(expTableTpl, { columns, currentExp, currentLevel, xpNeeded });
     return renderSimplePage('Experience Table', content, flash);
 }

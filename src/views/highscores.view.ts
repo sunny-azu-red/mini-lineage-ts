@@ -9,7 +9,7 @@ const highscoresSubmitTpl = readTemplate('highscores-submit.ejs');
 const highscoresErrorTpl = readTemplate('highscores-error.ejs');
 
 export function renderHighscoresSubmitView(): string {
-    return renderSimplePage('Highscores', render(highscoresSubmitTpl, {}, 'highscores-submit.ejs'));
+    return renderSimplePage('Highscores', render(highscoresSubmitTpl));
 }
 
 export function renderHighscoresView(highscores: HighscoreEntry[]): string {
@@ -35,10 +35,10 @@ export function renderHighscoresView(highscores: HighscoreEntry[]): string {
         };
     });
 
-    const content = render(highscoresTpl, { headerMessage, footerMessage, rows }, 'highscores.ejs');
+    const content = render(highscoresTpl, { headerMessage, footerMessage, rows });
     return renderSimplePage('Hall of Champions', content);
 }
 
 export function renderHighscoresErrorView(): string {
-    return renderSimplePage('Hall of Champions', render(highscoresErrorTpl, {}, 'highscores-error.ejs'));
+    return renderSimplePage('Hall of Champions', render(highscoresErrorTpl));
 }
