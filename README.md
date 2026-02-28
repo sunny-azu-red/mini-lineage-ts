@@ -20,22 +20,17 @@ Mini-Lineage Remastered is a modern, high-performance rewrite of the classic Min
 ## 📦 Installation
 
 1. **Clone & Install**:
+
    ```bash
    npm install
    ```
 
 2. **Environment Setup**:
-   Create a `.env` file in the root directory:
-   ```env
-   DB_HOST=localhost
-   DB_USER=your_user
-   DB_PASSWORD=your_password
-   DB_NAME=lineage_remastered
-   SESSION_SECRET=a_very_secret_string
-   ```
+   Create a `.env` file in the root directory based on `.env.example`
 
 3. **Database Initialization**:
    Run the automated script to set up your tables and initial seeds:
+
    ```bash
    npm run db:init
    ```
@@ -44,16 +39,18 @@ Mini-Lineage Remastered is a modern, high-performance rewrite of the classic Min
 
 We use a custom, lightweight seeding system for the remastered version.
 
-- **`npm run db:init`**: Safe initialization. Creates tables and seeds data **only if they don't exist**. Useful for standard updates.
-- **`npm run db:fresh`**: Full reset. Drops all managed tables and runs a clean install from `database/dump.sql`. **Use with caution!**
+- `npm run db:init`: Safe initialization. Creates tables and seeds data only if they don't exist. Useful for standard updates.
+- `npm run db:fresh`: Full reset. Drops all managed tables and runs a clean install from `database/dump.sql`. **Use with caution!**
 
 ## 🚀 Execution
 
 - **Development Mode**: runs with `nodemon` and `ts-node` for instant reloading.
+
   ```bash
   npm run dev
   ```
 - **Production Build**: Compiles to pure JavaScript in the `dist` folder.
+
   ```bash
   npm run build
   npm start
