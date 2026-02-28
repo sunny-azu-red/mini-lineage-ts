@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import { PlayerState } from '../common/types';
 import { isGameStarted } from '../common/utils';
-import { renderSimplePage } from '../views/layout';
 import { renderGameStartView, renderHomeView } from '../views/game.views';
 import { Race } from '../common/types';
+import { HEROES } from '../common/data';
+import { initializePlayer } from '../services/player.service';
 
 export const getHome = (req: Request, res: Response) => {
     if (!isGameStarted(req))
@@ -23,21 +24,12 @@ export const getHome = (req: Request, res: Response) => {
 
 export const getHuman = (req: Request, res: Response) => {
     const player = req.session as PlayerState;
-
-    player.race = Race.Human;
-    player.health = 100;
-    player.adena = 300;
-    player.experience = 0;
-    player.weaponId = 0;
-    player.armorId = 0;
-    player.welcomed = false;
-
+    initializePlayer(player, HEROES[Race.Human]);
     res.redirect('/');
 };
 
 export const getOrc = (req: Request, res: Response) => {
-    res.send(renderSimplePage('Hmmm', `
-        <p>Module not yet finished 🥹</p>
-        <a href="/">Go back</a>
-    `));
+    const player = req.session as PlayerState;
+    initializePlayer(player, HEROES[Race.Orc]);
+    res.redirect('/');
 };

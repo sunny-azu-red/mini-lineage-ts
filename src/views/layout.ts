@@ -1,7 +1,7 @@
 import * as ejs from 'ejs';
 import * as fs from 'fs';
 import * as path from 'path';
-import { WEAPONS, ARMORS } from '../common/data';
+import { WEAPONS, ARMORS, HEROES, GAME_VERSION, MAX_LEVEL } from '../common/data';
 import { calculateLevel, calculateExpForLevel } from '../services/math.service';
 import { formatAdena } from '../common/utils';
 import { PlayerState } from '../common/types';
@@ -46,17 +46,17 @@ export function renderStatus(player: PlayerState): string {
     if (expPercent < 0) expPercent = 0;
     expPercent = Math.round(expPercent * 10) / 10;
 
+    const hero = HEROES[player.race];
     const levelDisplay = player.ambushed
-        ? `👤 <span class="gold">${player.race} level ${level}</span>`
-        : `👤 <a href='/exp-table'>${player.race} level ${level}</a>`;
+        ? `${hero.emoji} <span class="gold">${hero.label} level ${level}</span>`
+        : `${hero.emoji} <a href='/exp-table'>${hero.label} level ${level}</a>`;
 
-    const MAX_HP = 100;
-    const MAX_LEVEL = 80;
+    const maxHp = hero.startHealth;
     const isMaxLevel = level >= MAX_LEVEL;
     return render(statusTpl, {
         hp,
-        maxHp: MAX_HP,
-        hpPercent: Math.round((hp / MAX_HP) * 100),
+        maxHp,
+        hpPercent: Math.round((hp / maxHp) * 100),
         expPercent,
         currentXp: actualExp,
         nextLevelXp: requiredExp,
@@ -82,11 +82,12 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
     const statusHtml = renderStatus(player);
     const inventoryHtml = renderInventory(player);
 
+    const maxHp = HEROES[player.race].startHealth;
     let lowHealthAlert = '';
-    if (player.health < 25 && player.health > 0) {
+    if (player.health < (maxHp * 0.25) && player.health > 0) {
         lowHealthAlert = player.ambushed
             ? `Your HP is dangerously low!<br>You fell into a trap and can't do anything... good luck hero 🥲`
-            : `Your HP is dangerously low!<br>You should buy some food from the <a href='/inn'>Inn</a> to rejuvenate yourself.`;
+            : `Your HP is dangerously low!<br>You should buy some food from the 🍺 <a href='/inn'>Inn</a> to regain your strength.`;
     }
 
     return render(layoutTpl, {
@@ -98,6 +99,7 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
         headerClickable: !player.ambushed,
         headerBanner: HEADER_BANNER,
         year: new Date().getFullYear(),
+        version: GAME_VERSION,
     });
 }
 
@@ -107,5 +109,6 @@ export function renderSimplePage(title: string, mainContent: string): string {
         mainContent,
         headerBanner: HEADER_BANNER,
         year: new Date().getFullYear(),
+        version: GAME_VERSION,
     });
 }

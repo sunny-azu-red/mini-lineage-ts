@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { renderPage } from './layout';
 import { PlayerState, BattleResult, Race } from '../common/types';
-import { WEAPONS, ARMORS } from '../common/data';
+import { WEAPONS, ARMORS, HEROES } from '../common/data';
 import { formatAdena, randomInt } from '../common/utils';
 
 const TEMPLATES_DIR = path.join(__dirname, 'templates');
@@ -22,8 +22,12 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
     const armorEmoji = armor.emoji;
     const blocked = results.damageBlocked;
     const enemies = results.enemiesKilled;
-    const enemyEmoji = player.race === Race.Human ? '👹' : '👤';
-    const enemyName = player.race === Race.Human ? (enemies === 1 ? 'Orc' : 'Orcs') : (enemies === 1 ? 'Human' : 'Humans');
+
+    // Determine opponent based on player's race (for 2 races, it's just the other one)
+    const opponentRace = player.race === Race.Human ? Race.Orc : Race.Human;
+    const opponentHero = HEROES[opponentRace];
+    const enemyEmoji = opponentHero.emoji;
+    const enemyName = enemies === 1 ? opponentHero.label : `${opponentHero.label}s`;
 
     // Weapon / kill line
     const killLines = [

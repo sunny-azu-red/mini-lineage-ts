@@ -1,4 +1,26 @@
-import { Item } from './types';
+import { Item, Race, Hero } from './types';
+
+export const GAME_VERSION = '1.6';
+export const MAX_LEVEL = 80;
+
+export const HEROES: Record<Race, Hero> = {
+    [Race.Human]: {
+        race: Race.Human,
+        label: 'Human',
+        emoji: '🧑',
+        startHealth: 100,
+        startAdena: 300,
+        ambushOdds: 15
+    },
+    [Race.Orc]: {
+        race: Race.Orc,
+        label: 'Orc',
+        emoji: '👹',
+        startHealth: 150,
+        startAdena: 200,
+        ambushOdds: 10
+    }
+};
 
 /**
  * Item Data Configurations
@@ -28,9 +50,9 @@ export const WEAPONS: Item[] = [
 ];
 
 export const FOODS: Item[] = [
-    { id: 0, name: `Spiced Ale`, emoji: '🍺', stat: 4, cost: 8 },
-    { id: 1, name: `Forest Apple`, emoji: '🍎', stat: 6, cost: 11 },
-    { id: 2, name: `Smoked Sausage`, emoji: '🌭', stat: 15, cost: 30 },
-    { id: 3, name: `Hearty Mash`, emoji: '🥔', stat: 25, cost: 80 },
-    { id: 4, name: `Roasted Pheasant`, emoji: '🍗', stat: 50, cost: 180 },
+    { id: 0, name: 'Spiced Ale', emoji: '🍺', stat: 4, cost: 7 },
+    { id: 1, name: 'Forest Apple', emoji: '🍎', stat: 6, cost: 11 },
+    { id: 2, name: 'Smoked Sausage', emoji: '🌭', stat: 15, cost: 29 },
+    { id: 3, name: 'Hearty Mash', emoji: '🥔', stat: 25, cost: 57 },
+    { id: 4, name: 'Roasted Pheasant', emoji: '🍗', stat: 50, cost: 137 },
 ];

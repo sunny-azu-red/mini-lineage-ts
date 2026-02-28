@@ -4,6 +4,7 @@ import * as path from 'path';
 import { formatAdena, randomInt } from '../common/utils';
 import { renderPage, renderSimplePage } from './layout';
 import { PlayerState } from '../common/types';
+import { HEROES } from '../common/data';
 
 const TEMPLATES_DIR = path.join(__dirname, 'templates');
 const gameStartTpl = fs.readFileSync(path.join(TEMPLATES_DIR, 'game-start.ejs'), 'utf8');
@@ -14,7 +15,8 @@ function render(template: string, locals: Record<string, any>): string {
 }
 
 export function renderGameStartView(): string {
-    return renderSimplePage('Game Start', render(gameStartTpl, {}));
+    const heroes = Object.values(HEROES);
+    return renderSimplePage('Game Start', render(gameStartTpl, { heroes }));
 }
 
 export function renderHomeView(player: PlayerState, isNewPlayer: boolean): string {
@@ -32,7 +34,7 @@ export function renderHomeView(player: PlayerState, isNewPlayer: boolean): strin
             definition = 'elder';
         }
 
-        helloMsg = `You have selected to be 👤 ${player.race}. Congratulations!<br>You are ${build} ${definition}, aged ${age}, and you came here with ${formatAdena(player.adena)} adena.`;
+        helloMsg = `You have selected to be ${HEROES[player.race].emoji} ${player.race}. Congratulations!<br>You are ${build} ${definition}, aged ${age}, and you came here with ${formatAdena(player.adena)} adena.`;
     }
 
     const content = render(homeTpl, { helloMsg });

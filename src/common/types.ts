@@ -13,6 +13,15 @@ export enum Race {
     Orc = 'Orc'
 }
 
+export interface Hero {
+    race: Race;
+    label: string;
+    emoji: string;
+    startHealth: number;
+    startAdena: number;
+    ambushOdds: number;
+}
+
 export interface BattleResult {
     enemiesKilled: number;
     hpLost: number;
@@ -22,7 +31,7 @@ export interface BattleResult {
 }
 
 export interface PlayerState {
-    race?: Race;
+    race: Race;
     health: number;
     adena: number;
     experience: number;

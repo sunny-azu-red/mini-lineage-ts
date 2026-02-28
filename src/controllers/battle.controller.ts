@@ -5,6 +5,7 @@ import { randomInt } from '../common/utils';
 import { renderBattlegroundView } from '../views/battle.views';
 import { simulateBattle } from '../services/battle.service';
 import { applyBattleResult } from '../services/player.service';
+import { HEROES } from '../common/data';
 
 export const getBattle = (req: Request, res: Response) => {
     const player = req.session as PlayerState;
@@ -19,13 +20,13 @@ export const getBattle = (req: Request, res: Response) => {
         return res.redirect('/death');
     }
 
+    const hero = HEROES[player.race];
     const newLevel = calculateLevel(player.experience);
     let leveledUp = newLevel > level;
     if (leveledUp)
-        player.health = 100;
+        player.health = hero.startHealth;
 
-    const luck = randomInt(1, 15);
-    let isAmbushed = luck === 5;
+    let isAmbushed = randomInt(1, hero.ambushOdds) === 1;
     if (isAmbushed)
         player.ambushed = true;
 

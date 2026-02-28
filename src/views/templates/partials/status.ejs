@@ -5,7 +5,7 @@
       <span class="stat-label">Race</span>
       <span class="stat-value"><%- levelDisplay %></span>
     </div>
-    <div class="stat-row <% if (hp < 25) { %>danger<% } %>">
+    <div class="stat-row <% if (hp <= maxHp * 0.25) { %>danger<% } %>">
       <span class="stat-label">HP</span>
       <div class="bar-track">
         <div class="bar hp-bar" style="width: <%= hpPercent %>%"></div>

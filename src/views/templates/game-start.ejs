@@ -6,8 +6,9 @@
 <form onsubmit="window.location.href=this.querySelector('select').value; return false;">
     <div class="form-row">
         <select class="form-select" name="start">
-            <option value="/human">👤 Human</option>
-            <option value="/orc">👹 Orc</option>
+            <% heroes.forEach(hero => { %>
+                <option value="/<%= hero.race.toLowerCase() %>"><%= hero.emoji %> <%= hero.label %></option>
+            <% }) %>
         </select>
         <button type="submit" class="btn">🚩 Begin</button>
     </div>
