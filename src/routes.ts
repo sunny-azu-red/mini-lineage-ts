@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getHome, getHuman, getOrc } from './controllers/game.controller';
+import { getHome, postGameStart } from './controllers/game.controller';
 import { getWeaponsShop, postWeaponsShop, getArmorsShop, postArmorsShop, getInn, postInn } from './controllers/shop.controller';
 import { getBattle } from './controllers/battle.controller';
 import { getSuicide, postSuicide, getDeath, getRestart, getExpTable } from './controllers/player.controller';
@@ -7,10 +7,9 @@ import { getHighscoresSubmit, postHighscores, getHighscores } from './controller
 
 const router = Router();
 
-// home & character
+// home & hero
 router.get('/', getHome);
-router.get('/human', getHuman);
-router.get('/orc', getOrc);
+router.post('/start', postGameStart);
 
 // battle
 router.get('/battle', getBattle);

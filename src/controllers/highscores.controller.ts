@@ -11,12 +11,12 @@ export const getHighscoresSubmit = (req: Request, res: Response) => {
 export const postHighscores = async (req: Request, res: Response) => {
     const player = req.session as PlayerState;
     if (player.dead && !player.coward && !player.ambushed) {
-        const name = req.body.name || 'Anonymous';
+        const name = req.body.name?.trim() || null;
         const level = calculateLevel(player.experience);
 
         await db.execute(
-            'INSERT INTO highscores (total_exp, name, race, adena, level, created) VALUES (?, ?, ?, ?, ?, NOW())',
-            [player.experience, name, player.race, player.adena, level]
+            'INSERT INTO highscores (total_exp, name, hero_id, adena, level, created) VALUES (?, ?, ?, ?, ?, NOW())',
+            [player.experience, name, player.heroId, player.adena, level]
         );
 
         return req.session.destroy(() => {

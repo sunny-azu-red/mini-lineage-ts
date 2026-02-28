@@ -14,5 +14,5 @@ export function formatAdena(adena: number): string {
 
 export const isGameStarted = (req: Request): boolean => {
     const player = req.session as PlayerState;
-    return !!(player.race && player.health !== undefined && player.adena !== undefined);
+    return !!(player.heroId !== undefined && player.health !== undefined && player.adena !== undefined);
 };

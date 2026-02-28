@@ -20,7 +20,7 @@ export const getBattle = (req: Request, res: Response) => {
         return res.redirect('/death');
     }
 
-    const hero = HEROES[player.race];
+    const hero = HEROES[player.heroId];
     const newLevel = calculateLevel(player.experience);
     let leveledUp = newLevel > level;
     if (leveledUp)

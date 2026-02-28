@@ -3,11 +3,11 @@
     You can start a new game or check the <a href="/highscores">Hall of Champions</a>!
 </p>
 <p>What race do you want to be?</p>
-<form onsubmit="window.location.href=this.querySelector('select').value; return false;">
+<form method="POST" action="/start">
     <div class="form-row">
-        <select class="form-select" name="start">
+        <select class="form-select" name="select_hero">
             <% heroes.forEach(hero => { %>
-                <option value="/<%= hero.race.toLowerCase() %>"><%= hero.emoji %> <%= hero.label %></option>
+                <option value="<%= hero.id %>"><%= hero.emoji %> <%= hero.label %></option>
             <% }) %>
         </select>
         <button type="submit" class="btn">🚩 Begin</button>

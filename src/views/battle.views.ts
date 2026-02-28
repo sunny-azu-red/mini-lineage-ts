@@ -2,7 +2,7 @@ import * as ejs from 'ejs';
 import * as fs from 'fs';
 import * as path from 'path';
 import { renderPage } from './layout';
-import { PlayerState, BattleResult, Race } from '../common/types';
+import { PlayerState, BattleResult } from '../common/types';
 import { WEAPONS, ARMORS, HEROES } from '../common/data';
 import { formatAdena, randomInt } from '../common/utils';
 
@@ -23,9 +23,9 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
     const blocked = results.damageBlocked;
     const enemies = results.enemiesKilled;
 
-    // Determine opponent based on player's race (for 2 races, it's just the other one)
-    const opponentRace = player.race === Race.Human ? Race.Orc : Race.Human;
-    const opponentHero = HEROES[opponentRace];
+    // Determine opponent based on hero's configured enemy
+    const hero = HEROES[player.heroId];
+    const opponentHero = HEROES[hero.enemyHeroId];
     const enemyEmoji = opponentHero.emoji;
     const enemyName = enemies === 1 ? opponentHero.label : `${opponentHero.label}s`;
 

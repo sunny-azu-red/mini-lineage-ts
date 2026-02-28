@@ -4,7 +4,6 @@ import * as path from 'path';
 import { renderSimplePage } from './layout';
 import { formatAdena } from '../common/utils';
 import { HEROES } from '../common/data';
-import { Race } from '../common/types';
 
 const TEMPLATES_DIR = path.join(__dirname, 'templates');
 const highscoresTpl = fs.readFileSync(path.join(TEMPLATES_DIR, 'highscores.ejs'), 'utf8');
@@ -32,10 +31,9 @@ export function renderHighscoresView(highscores: any[]): string {
         const d = new Date(score.created);
         const pad = (n: number) => n.toString().padStart(2, '0');
         const date = `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear().toString().slice(-2)}, ${pad(d.getHours())}:${pad(d.getMinutes())}`;
-        const race = score.race as Race;
-        const emoji = HEROES[race]?.emoji || '❓';
+        const emoji = HEROES[score.hero_id]?.emoji || '❓';
         return {
-            name: `${emoji} ${score.name || 'Anonymous'}`,
+            name: `${emoji} ${score.name || 'Unsung Hero'}`,
             level: score.level,
             totalExp: score.total_exp,
             adena: formatAdena(score.adena),

@@ -8,15 +8,11 @@ export interface Item {
     cost: number;
 }
 
-export enum Race {
-    Human = 'Human',
-    Orc = 'Orc'
-}
-
 export interface Hero {
-    race: Race;
+    id: number;
     label: string;
     emoji: string;
+    enemyHeroId: number;
     startHealth: number;
     startAdena: number;
     ambushOdds: number;
@@ -31,7 +27,7 @@ export interface BattleResult {
 }
 
 export interface PlayerState {
-    race: Race;
+    heroId: number;
     health: number;
     adena: number;
     experience: number;

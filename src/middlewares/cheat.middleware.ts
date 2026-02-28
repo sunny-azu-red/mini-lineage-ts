@@ -27,12 +27,12 @@ export const cheatMiddleware = (req: Request, res: Response, next: NextFunction)
     }
 
     // prevent already initialized players from accessing start routes
-    const startPaths = ['/human', '/orc'];
+    const startPaths = ['/start'];
     if (isGameStarted(req) && startPaths.includes(req.path))
         return res.redirect('/');
 
     // additional sanity checks for routes that require an initialized character
-    const safePathsInit = ['/', '/orc', '/human', '/highscores'];
+    const safePathsInit = ['/', '/start', '/highscores'];
     if (!isGameStarted(req) && !safePathsInit.includes(req.path))
         return res.redirect('/');
 

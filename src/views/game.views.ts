@@ -15,8 +15,7 @@ function render(template: string, locals: Record<string, any>): string {
 }
 
 export function renderGameStartView(): string {
-    const heroes = Object.values(HEROES);
-    return renderSimplePage('Game Start', render(gameStartTpl, { heroes }));
+    return renderSimplePage('Game Start', render(gameStartTpl, { heroes: HEROES }));
 }
 
 export function renderHomeView(player: PlayerState, isNewPlayer: boolean): string {
@@ -34,7 +33,8 @@ export function renderHomeView(player: PlayerState, isNewPlayer: boolean): strin
             definition = 'elder';
         }
 
-        helloMsg = `You have selected to be ${HEROES[player.race].emoji} ${player.race}. Congratulations!<br>You are ${build} ${definition}, aged ${age}, and you came here with ${formatAdena(player.adena)} adena.`;
+        const hero = HEROES[player.heroId];
+        helloMsg = `You have selected to be ${hero.emoji} ${hero.label}. Congratulations!<br>You are ${build} ${definition}, aged ${age}, and you came here with ${formatAdena(player.adena)} adena.`;
     }
 
     const content = render(homeTpl, { helloMsg });

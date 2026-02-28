@@ -46,7 +46,7 @@ export function renderStatus(player: PlayerState): string {
     if (expPercent < 0) expPercent = 0;
     expPercent = Math.round(expPercent * 10) / 10;
 
-    const hero = HEROES[player.race];
+    const hero = HEROES[player.heroId];
     const levelDisplay = player.ambushed
         ? `${hero.emoji} <span class="gold">${hero.label} level ${level}</span>`
         : `${hero.emoji} <a href='/exp-table'>${hero.label} level ${level}</a>`;
@@ -82,7 +82,7 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
     const statusHtml = renderStatus(player);
     const inventoryHtml = renderInventory(player);
 
-    const maxHp = HEROES[player.race].startHealth;
+    const maxHp = HEROES[player.heroId].startHealth;
     let lowHealthAlert = '';
     if (player.health < (maxHp * 0.25) && player.health > 0) {
         lowHealthAlert = player.ambushed

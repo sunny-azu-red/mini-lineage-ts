@@ -1,26 +1,14 @@
-import { Item, Race, Hero } from './types';
+import { Item, Hero } from './types';
 
 export const GAME_VERSION = '1.6';
 export const MAX_LEVEL = 80;
 
-export const HEROES: Record<Race, Hero> = {
-    [Race.Human]: {
-        race: Race.Human,
-        label: 'Human',
-        emoji: '🧑',
-        startHealth: 100,
-        startAdena: 300,
-        ambushOdds: 15
-    },
-    [Race.Orc]: {
-        race: Race.Orc,
-        label: 'Orc',
-        emoji: '👹',
-        startHealth: 150,
-        startAdena: 200,
-        ambushOdds: 10
-    }
-};
+export const HEROES: Hero[] = [
+    { id: 0, label: 'Human', emoji: '🧑', enemyHeroId: 1, startHealth: 100, startAdena: 300, ambushOdds: 12 },
+    { id: 1, label: 'Orc', emoji: '🧟', enemyHeroId: 0, startHealth: 150, startAdena: 250, ambushOdds: 6 },
+    { id: 2, label: 'Elf', emoji: '🧝', enemyHeroId: 3, startHealth: 75, startAdena: 450, ambushOdds: 25 },
+    { id: 3, label: 'Dark Elf', emoji: '🧛', enemyHeroId: 2, startHealth: 85, startAdena: 350, ambushOdds: 20 },
+];
 
 /**
  * Item Data Configurations

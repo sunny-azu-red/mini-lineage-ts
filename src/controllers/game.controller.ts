@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { PlayerState } from '../common/types';
 import { isGameStarted } from '../common/utils';
 import { renderGameStartView, renderHomeView } from '../views/game.views';
-import { Race } from '../common/types';
 import { HEROES } from '../common/data';
 import { initializePlayer } from '../services/player.service';
 
@@ -22,14 +21,13 @@ export const getHome = (req: Request, res: Response) => {
     res.send(html);
 };
 
-export const getHuman = (req: Request, res: Response) => {
-    const player = req.session as PlayerState;
-    initializePlayer(player, HEROES[Race.Human]);
-    res.redirect('/');
-};
+export const postGameStart = (req: Request, res: Response) => {
+    const heroId = parseInt(req.body.select_hero);
+    const hero = HEROES[heroId];
+    if (!hero)
+        return res.redirect('/');
 
-export const getOrc = (req: Request, res: Response) => {
     const player = req.session as PlayerState;
-    initializePlayer(player, HEROES[Race.Orc]);
+    initializePlayer(player, hero);
     res.redirect('/');
 };
