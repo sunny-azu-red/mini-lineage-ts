@@ -23,11 +23,11 @@ export const getDeath = (req: Request, res: Response) => {
     const player = req.session as PlayerState;
     const reason = player.coward
         ? "🤡 You took the cowardly way out."
-        : player.cheater
+        : player.ambushed
             ? "🪤 You were caught trying to flee an ambush! Game Over."
             : "☠️ Your health dropped to 0 and you died.";
 
-    res.send(renderDeathView(reason, !!(player.coward || player.cheater)));
+    res.send(renderDeathView(reason, !!(player.coward || player.ambushed)));
 };
 
 export const getRestart = (req: Request, res: Response) => {

@@ -31,9 +31,7 @@ export interface PlayerState {
     dead?: boolean;
     ambushed?: boolean;
     coward?: boolean;
-    cheater?: boolean;
     welcomed?: boolean;
-    inscribed?: boolean;
     weapon_buy?: boolean;
     armor_buy?: boolean;
     inn_buy?: boolean;
