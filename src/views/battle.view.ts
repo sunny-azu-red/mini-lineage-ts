@@ -2,7 +2,8 @@ import { readTemplate, render } from './base.view';
 import { renderPage } from './layout.view';
 import { PlayerState, BattleResult, FlashMessage } from '../common/types';
 import { WEAPONS, ARMORS, HEROES } from '../common/data';
-import { formatAdena, randomInt } from '../common/utils';
+import { formatAdena, randomElement, pluralize } from '../common/utils';
+import { calculateSurpriseCount } from '../services/math.service';
 
 const battlegroundTpl = readTemplate('battleground.ejs');
 
@@ -16,67 +17,83 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
     const blocked = results.damageBlocked;
     const enemies = results.enemiesKilled;
 
-    // determine opponent based on hero's configured enemy
+    // determine opponent based on the race's configured enemy
     const hero = HEROES[player.heroId];
     const opponentHero = HEROES[hero.enemyHeroId];
     const enemyEmoji = opponentHero.emoji;
-    const enemyName = enemies === 1 ? opponentHero.label : `${opponentHero.label}s`;
+    const enemyName = opponentHero.label;
+    const enemyGroup = pluralize(opponentHero, enemies);
 
-    // weapon / kill line
+    // weapon + kills
     const killLines = [
-        `Wielding your ${weaponEmoji} ${weaponName} with fury, you cut down ${enemies} ${enemyEmoji} ${enemyName}.`,
-        `Your ${weaponEmoji} ${weaponName} cleaves through the battlefield, slaying ${enemies} ${enemyEmoji} ${enemyName}.`,
-        `With a fierce war cry you lunge forward, striking down ${enemies} ${enemyEmoji} ${enemyName} with your ${weaponEmoji} ${weaponName}.`,
-        `The ${enemies} ${enemyEmoji} ${enemyName} stood no chance, your ${weaponEmoji} ${weaponName} ended ${enemies === 1 ? 'its' : 'their'} life${enemies === 1 ? '' : 's'} swiftly.`,
+        `Wielding your ${weaponEmoji} ${weaponName} with fury, you cut down ${enemies} ${enemyEmoji} ${enemyGroup}.`,
+        `Your ${weaponEmoji} ${weaponName} cleaves through the battlefield, slaying ${enemies} ${enemyEmoji} ${enemyGroup}.`,
+        `With a fierce war cry you lunge forward, striking down ${enemies} ${enemyEmoji} ${enemyGroup} with your ${weaponEmoji} ${weaponName}.`,
+        `The ${enemies} ${enemyEmoji} ${enemyGroup} stood no chance, your ${weaponEmoji} ${weaponName} ended ${enemies === 1 ? 'its' : 'their'} ${enemies === 1 ? 'life' : 'lives'} swiftly.`,
+        `A lethal dance of your ${weaponEmoji} ${weaponName} leaves ${enemies} fallen ${enemyEmoji} ${enemyGroup} in your wake.`,
+        `Your strike is true; the ${weaponEmoji} ${weaponName} finds its mark against ${enemies} ${enemyEmoji} ${enemyGroup}.`,
     ];
-    const killLine = killLines[randomInt(0, killLines.length - 1)];
 
-    // armor deflection line (only meaningful if armor blocked something)
-    const armorLines = [
-        `Your ${armorEmoji} ${armorName} absorbed a total of <span class="muted">${blocked} dmg</span> but you still learned from the clash, earning <span class="xp">${results.expGained} xp</span>.`,
-        `The ${armorEmoji} ${armorName} held firm, deflecting <span class="muted">${blocked} dmg</span> and the narrow escape nets you <span class="xp">${results.expGained} xp</span>.`,
-        `Blades glanced off your ${armorEmoji} ${armorName} for <span class="muted">${blocked} dmg</span> and you mastered your defense, granting <span class="xp">${results.expGained} xp</span>.`,
-        `Your ${armorEmoji} ${armorName} took the brunt of <span class="muted">${blocked} dmg</span> yet you grow tougher from the blow, gaining <span class="xp">${results.expGained} xp</span>.`,
+    // armor + deflections + xp
+    const deflectionLines = [
+        `Your ${armorEmoji} ${armorName} absorbed a total of <span class="muted">${blocked} Damage</span> but you still learned from the clash, earning <span class="xp">${results.expGained} XP</span>.`,
+        `The ${armorEmoji} ${armorName} held firm, deflecting <span class="muted">${blocked} Damage</span> and the narrow escape nets you <span class="xp">${results.expGained} XP</span>.`,
+        `Blades glanced off your ${armorEmoji} ${armorName} for <span class="muted">${blocked} Damage</span> and you mastered your defense, granting <span class="xp">${results.expGained} XP</span>.`,
+        `Your ${armorEmoji} ${armorName} took the brunt of <span class="muted">${blocked} Damage</span> yet you grow tougher from the blow, gaining <span class="xp">${results.expGained} XP</span>.`,
+        `Steel rings against your ${armorEmoji} ${armorName}, mitigating <span class="muted">${blocked} Damage</span> as you refine your combat stance for <span class="xp">${results.expGained} XP</span>.`,
     ];
-    const armorLine = armorLines[randomInt(0, armorLines.length - 1)];
 
-    const battleText = [killLine, armorLine].filter(Boolean).join(' ');
-
-    // hp outcome line
+    // outcomes
     const outcomeLines = [
-        `You limp away with <span class="hp">${player.health} hp</span> remaining and <span class="gold">${formatAdena(results.adenaGained)} adena</span> to show for it.`,
-        `The skirmish leaves you at <span class="hp">${player.health} hp</span>, but richer by <span class="gold">${formatAdena(results.adenaGained)} adena</span>.`,
-        `Breathing heavily, you stand with <span class="hp">${player.health} hp</span> left and pocket <span class="gold">${formatAdena(results.adenaGained)} adena</span>.`,
+        `You limp away with <span class="hp">${player.health} HP</span> remaining and <span class="gold">${formatAdena(results.adenaGained)} Adena</span> to show for it.`,
+        `The skirmish leaves you at <span class="hp">${player.health} HP</span>, but richer by <span class="gold">${formatAdena(results.adenaGained)} Adena</span>.`,
+        `Breathing heavily, you stand with <span class="hp">${player.health} HP</span> left and pocket <span class="gold">${formatAdena(results.adenaGained)} Adena</span>.`,
     ];
-    const outcomeLine = outcomeLines[randomInt(0, outcomeLines.length - 1)];
 
+    // surprises
+    const surpriseEnemies = calculateSurpriseCount(enemies, 4);
+    const surpriseEnemyGroup = pluralize(opponentHero, surpriseEnemies);
     const surprises = [
-        `Out of the blue 3 ${enemyEmoji} ${enemyName} surrounded you and you can't escape.`,
-        `You forgot to check your back and you get stormed by 6 ${enemyEmoji} ${enemyName}.`,
+        `Out of the blue ${surpriseEnemies} ${enemyEmoji} ${surpriseEnemyGroup} surrounded you and you can't escape.`,
+        `You forgot to check your back and you get stormed by ${surpriseEnemies} ${enemyEmoji} ${surpriseEnemyGroup}.`,
         `You find yourself in a delicate position, the ${enemyEmoji} ${enemyName} leader has come with reinforcements.`,
-        `As you were walking along 4 ${enemyEmoji} ${enemyName} jumped out of the bushes.`,
-        `You reached a dead-end and you find yourself cornered by 3 ${enemyEmoji} ${enemyName}.`,
+        `As you were walking along ${surpriseEnemies} ${enemyEmoji} ${surpriseEnemyGroup} jumped out of the bushes.`,
+        `You reached a dead-end and you find yourself cornered by ${surpriseEnemies} ${enemyEmoji} ${surpriseEnemyGroup}.`,
+        `The ground trembles as a war-party of ${surpriseEnemies} ${enemyEmoji} ${surpriseEnemyGroup} blocks your path!`,
+        `An arrow whistles past your ear... ambush! The foes are everywhere!`,
     ];
+
+    // moves
     const moves = [
-        'Look behind the tree',
-        'Walk further',
-        'Check the cave',
-        'Jump in the bushes',
-        'Look behind',
-        'Run up the hill',
-        'Enter the old house',
-        'Enter the abandoned town',
-        'Scream you want more action',
-        'Check out the ruins',
-        'Open the locked tower'
+        'Investigate the shimmering lake',
+        'Search the hollow log',
+        'Follow the muddy tracks',
+        'Scale the castle walls',
+        'Descend into the dungeon',
+        'Cross the rickety bridge',
+        'Examine the mossy statue',
+        'Explore the foggy marsh',
+        'Consult the ancient map',
+        'Drink from the stone fountain',
+        'Sharpen your blade',
+        'Prepare for an ambush',
+        'Challenge the wandering guard',
+        `Scout the enemy encampment`,
+        'Rally your strength',
+        'Set a trap in the brush',
+        'Whisper a prayer to the Gods',
+        'Search the fallen soldier',
+        'Rest by the dying embers',
+        'Scribe a note for those to follow'
     ];
 
     const content = render(battlegroundTpl, {
-        battleText,
-        outcomeLine,
+        battleText: [randomElement(killLines), randomElement(deflectionLines)].filter(Boolean).join(' '),
+        outcomeLine: randomElement(outcomeLines),
         ambushed: player.ambushed,
-        ambushedMessage: surprises[randomInt(0, surprises.length - 1)],
-        nextMove: moves[randomInt(0, moves.length - 1)],
+        ambushedMessage: randomElement(surprises),
+        fightText: surpriseEnemies === 1 ? `Face your Foe!` : `Fight them!`,
+        nextMove: randomElement(moves),
     });
 
     return renderPage('Battleground', player, content, flash);

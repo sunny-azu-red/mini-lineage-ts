@@ -1,7 +1,11 @@
 import { PlayerState, Hero, FlashMessage } from '../common/types';
 import { HEROES, ARMORS, WEAPONS, FOODS } from '../common/data';
-import { calculateLevel } from './math.service';
-import { randomInt, formatAdena } from '../common/utils';
+import { calculateLevel, isLevelUp, randomInt } from './math.service';
+import { formatAdena, randomElement } from '../common/utils';
+
+export function isGameStarted(player: PlayerState): boolean {
+    return player.heroId !== undefined && player.health !== undefined && player.adena !== undefined;
+}
 
 export function initializePlayer(player: PlayerState, hero: Hero): FlashMessage {
     player.heroId = hero.id;
@@ -12,12 +16,12 @@ export function initializePlayer(player: PlayerState, hero: Hero): FlashMessage 
     player.armorId = 0;
 
     const builds = ['a slim', 'a lean', 'an average', 'a fit', 'a stocky', 'a broad', 'a round'];
-    const build = builds[randomInt(0, builds.length - 1)];
+    const build = randomElement(builds);
     const age = randomInt(9, 69);
     const definition = age <= 23 ? 'youth' : (age <= 54 ? 'adult' : 'elder');
 
-    const text = `You have selected to be ${hero.emoji} ${hero.label}. Congratulations!<br>` +
-        `You are ${build} ${definition}, aged ${age}, and you came here with ${formatAdena(player.adena)} adena.`;
+    const text = `You have selected to be ${hero.emoji} ${hero.label}, nice choice.<br>` +
+        `You are ${build} ${definition}, aged ${age}, and you came here with ${formatAdena(player.adena)} Adena.`;
 
     return { text, type: 'info' };
 }
@@ -50,11 +54,11 @@ export function applyBattleResult(player: PlayerState, hpLost: number, expGained
     }
 
     player.adena += adenaGained;
-
-    const oldLevel = calculateLevel(player.experience);
+    const oldExp = player.experience;
     player.experience += expGained;
-    const newLevel = calculateLevel(player.experience);
-    if (newLevel > oldLevel) {
+
+    if (isLevelUp(oldExp, player.experience)) {
+        const newLevel = calculateLevel(player.experience);
         player.health = HEROES[player.heroId].startHealth;
         return { text: `🎉 Congratulations! You have reached level ${newLevel}.`, type: 'warning' };
     }
@@ -78,6 +82,6 @@ export function purchaseItem(player: PlayerState, itemType: 'weapon' | 'armor' |
         return { text: `You have bought an Armor.<br>You are now wearing the mighty ${item.name}!`, type: 'success' };
     } else {
         restoreHealth(player, item.stat);
-        return { text: `You have bought Food.<br>Delicious! You feel your strength returning, bringing you to ${player.health} HP.`, type: 'success' };
+        return { text: `You have bought Food.<br>You feel your strength returning, bringing you to ${player.health} HP.`, type: 'success' };
     }
 }

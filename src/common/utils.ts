@@ -1,10 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Request } from 'express';
-import { PlayerState, Item } from './types';
+import { Item, Hero } from './types';
+import { randomInt } from '../services/math.service';
 
-export function randomInt(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+export function randomElement<T>(array: T[]): T {
+    return array[randomInt(0, array.length - 1)];
 }
 
 export function formatAdena(adena: number): string {
@@ -12,6 +12,13 @@ export function formatAdena(adena: number): string {
     if (adena <= 999_000) return (adena / 1_000).toFixed(1).replace('.0', '') + 'k';
     if (adena <= 999_000_000) return (adena / 1_000_000).toFixed(1).replace('.0', '') + 'kk';
     return (adena / 1_000_000_000).toFixed(1).replace('.0', '') + 'kkk';
+}
+
+export function pluralize(item: Hero | string, count: number): string {
+    if (typeof item !== 'string')
+        return count === 1 ? item.label : item.plural;
+
+    return count === 1 ? item : item + 's';
 }
 
 export function formatShopItems(items: Item[]) {
@@ -24,11 +31,6 @@ export function formatShopItems(items: Item[]) {
     }));
 }
 
-export const isGameStarted = (req: Request): boolean => {
-    const player = req.session as PlayerState;
-    return !!(player.heroId !== undefined && player.health !== undefined && player.adena !== undefined);
-};
-
 export function getVersion(): string {
     try {
         const versionPath = path.join(__dirname, '../version.txt');
@@ -37,5 +39,6 @@ export function getVersion(): string {
         }
     } catch (err) {
     }
+
     return 'Bleeding Edge';
 }

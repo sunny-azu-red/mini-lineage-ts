@@ -7,9 +7,13 @@ const gameStartTpl = readTemplate('game-start.ejs');
 const homeTpl = readTemplate('home.ejs');
 
 export function renderGameStartView(): string {
-    return renderSimplePage('Game Start', render(gameStartTpl, { heroes: HEROES }));
+    const content = render(gameStartTpl, { heroes: HEROES });
+
+    return renderSimplePage('Game Start', content);
 }
 
 export function renderHomeView(player: PlayerState, flash: FlashMessage | null = null): string {
-    return renderPage('Home Town', player, render(homeTpl), flash);
+    const content = render(homeTpl);
+
+    return renderPage('Home Town', player, content, flash);
 }

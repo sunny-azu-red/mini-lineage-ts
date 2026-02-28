@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { calculateLevel } from '../services/math.service';
-import { renderHighscoresSubmitView, renderHighscoresView, renderHighscoresErrorView } from '../views/highscores.view';
+import { renderHighscoresSubmitView, renderHighscoresView } from '../views/highscores.view';
 import { db } from '../config/db.config';
 import { HighscoreEntry } from '../common/types';
 
@@ -38,6 +38,6 @@ export const getHighscores = async (req: Request, res: Response) => {
         res.send(renderHighscoresView(highscores));
     } catch (err) {
         console.error(err);
-        res.send(renderHighscoresErrorView());
+        res.redirect('/');
     }
 };

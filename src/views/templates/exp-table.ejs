@@ -1,3 +1,12 @@
+<p>
+    You currently have <span class="xp"><%= currentExp %> XP</span>, 
+    <% if (currentLevel < maxLevel) { %>
+        but you need <span class="xp"><%= xpNeeded %> XP</span> more to reach Level <%= currentLevel + 1 %>.
+    <% } else { %>
+        and you're already max level!
+    <% } %>
+</p>
+
 <div class="exp-table-grid">
     <% columns.forEach(function(col, ci) { %>
         <table class="data-table exp-col">
@@ -23,11 +32,4 @@
     <% }); %>
 </div>
 
-<p class="last">
-    Your currently have <span class="xp"><%= currentExp %> xp</span>
-    <% if (currentLevel < 80) { %>
-        <span class="muted">|</span>
-        You need <span class="xp"><%= xpNeeded %> xp</span> to level up
-    <% } %>
-    <span class="muted">|</span> <a href="/">Go back</a>
-</p>
+<p class="last"><a href="/">Go back</a></p>

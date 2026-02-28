@@ -1,14 +1,13 @@
 import { Request, Response } from 'express';
-import { isGameStarted } from '../common/utils';
 import { renderGameStartView, renderHomeView } from '../views/game.view';
 import { HEROES } from '../common/data';
-import { initializePlayer } from '../services/player.service';
+import { initializePlayer, isGameStarted } from '../services/player.service';
 
 export const getHome = (req: Request, res: Response) => {
-    if (!isGameStarted(req))
+    const player = res.locals.player;
+    if (!isGameStarted(player))
         return res.send(renderGameStartView());
 
-    const player = res.locals.player;
     if (player.ambushed)
         return res.redirect('/battle');
 

@@ -23,7 +23,7 @@ export const getDeath = (req: Request, res: Response) => {
         ? "🤡 You took the cowardly way out."
         : player.ambushed
             ? "🪤 You were caught trying to flee an ambush! Game Over."
-            : "☠️ Your health dropped to 0 and you died.";
+            : "☠️ Your HP dropped to 0 and you died.";
 
     res.send(renderDeathView(reason, !!(player.coward || player.ambushed)));
 };

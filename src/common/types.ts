@@ -11,6 +11,7 @@ export interface Item {
 export interface Hero {
     id: number;
     label: string;
+    plural: string;
     emoji: string;
     enemyHeroId: number;
     startHealth: number;

@@ -6,21 +6,14 @@ import { HighscoreEntry } from '../common/types';
 
 const highscoresTpl = readTemplate('highscores.ejs');
 const highscoresSubmitTpl = readTemplate('highscores-submit.ejs');
-const highscoresErrorTpl = readTemplate('highscores-error.ejs');
 
 export function renderHighscoresSubmitView(): string {
-    return renderSimplePage('Highscores', render(highscoresSubmitTpl));
+    const content = render(highscoresSubmitTpl);
+
+    return renderSimplePage('Highscores', content);
 }
 
-export function renderHighscoresView(highscores: HighscoreEntry[]): string {
-    let headerMessage = '';
-    let footerMessage = 'Your name could be here too 😊';
-
-    if (highscores.length === 0) {
-        headerMessage = 'No heroes here yet...<br>';
-        footerMessage = 'You could be the first one';
-    }
-
+export function renderHighscoresView(highscores: HighscoreEntry[] = []): string {
     const rows = highscores.map((score) => {
         const d = new Date(score.created);
         const pad = (n: number) => n.toString().padStart(2, '0');
@@ -34,11 +27,7 @@ export function renderHighscoresView(highscores: HighscoreEntry[]): string {
             date,
         };
     });
+    const content = render(highscoresTpl, { rows });
 
-    const content = render(highscoresTpl, { headerMessage, footerMessage, rows });
     return renderSimplePage('Hall of Champions', content);
-}
-
-export function renderHighscoresErrorView(): string {
-    return renderSimplePage('Hall of Champions', render(highscoresErrorTpl));
 }

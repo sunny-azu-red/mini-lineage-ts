@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { isGameStarted } from '../common/utils';
+import { isGameStarted } from '../services/player.service';
 
 export const cheatMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const player = res.locals.player;
@@ -27,12 +27,12 @@ export const cheatMiddleware = (req: Request, res: Response, next: NextFunction)
 
     // prevent already initialized players from accessing start routes
     const startPaths = ['/start'];
-    if (isGameStarted(req) && startPaths.includes(req.path))
+    if (isGameStarted(player) && startPaths.includes(req.path))
         return res.redirect('/');
 
     // additional sanity checks for routes that require an initialized character
     const safePathsInit = ['/', '/start', '/highscores'];
-    if (!isGameStarted(req) && !safePathsInit.includes(req.path))
+    if (!isGameStarted(player) && !safePathsInit.includes(req.path))
         return res.redirect('/');
 
     next();

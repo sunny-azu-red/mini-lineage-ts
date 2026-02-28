@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { randomInt } from '../common/utils';
+import { randomInt } from '../services/math.service';
 import { renderBattlegroundView } from '../views/battle.view';
 import { simulateBattle } from '../services/battle.service';
 import { applyBattleResult } from '../services/player.service';

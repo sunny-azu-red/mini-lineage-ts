@@ -1,6 +1,6 @@
 import { readTemplate, render } from './base.view';
-import { WEAPONS, ARMORS, HEROES, GAME_VERSION, MAX_LEVEL, REPO_COMMIT_URL } from '../common/data';
-import { calculateLevel, calculateExpForLevel } from '../services/math.service';
+import { WEAPONS, ARMORS, HEROES, GAME_VERSION, REPO_COMMIT_URL } from '../common/data';
+import { calculateLevel, isLowHealth, calculatePercentage, getExpProgress, isMaxLevel } from '../services/math.service';
 import { formatAdena } from '../common/utils';
 import { PlayerState, RenderOptions, FlashMessage } from '../common/types';
 
@@ -30,15 +30,7 @@ function getVersionHtml(): string {
 export function renderStatus(player: PlayerState): string {
     const level = calculateLevel(player.experience);
     const hp = player.health;
-    const prevLimit = calculateExpForLevel(level);
-    const nextLimit = calculateExpForLevel(level + 1);
-    const actualExp = player.experience - prevLimit;
-    const requiredExp = nextLimit - prevLimit;
-
-    let expPercent = (actualExp / requiredExp) * 100;
-    if (expPercent > 100) expPercent = 100;
-    if (expPercent < 0) expPercent = 0;
-    expPercent = Math.round(expPercent * 10) / 10;
+    const { current: currentXp, required: nextLevelXp, percent: expPercent } = getExpProgress(player.experience);
 
     const hero = HEROES[player.heroId];
     const levelDisplay = player.ambushed
@@ -46,16 +38,17 @@ export function renderStatus(player: PlayerState): string {
         : `${hero.emoji} <a href='/exp-table'>${hero.label} level ${level}</a>`;
 
     const maxHp = hero.startHealth;
-    const isMaxLevel = level >= MAX_LEVEL;
+
     return render(statusTpl, {
         hp,
         maxHp,
-        hpPercent: Math.round((hp / maxHp) * 100),
+        hpPercent: calculatePercentage(hp, maxHp),
         expPercent,
-        currentXp: actualExp,
-        nextLevelXp: requiredExp,
+        currentXp,
+        nextLevelXp,
         totalXp: player.experience,
-        isMaxLevel,
+        isMaxLevel: isMaxLevel(level),
+        isLowHealth: isLowHealth(hp, maxHp),
         adena: formatAdena(player.adena),
         levelDisplay,
     });
@@ -64,6 +57,7 @@ export function renderStatus(player: PlayerState): string {
 export function renderInventory(player: PlayerState): string {
     const weapon = WEAPONS[player.weaponId];
     const armor = ARMORS[player.armorId];
+
     return render(inventoryTpl, {
         weaponStr: weapon.name,
         armorStr: armor.name,
@@ -78,7 +72,7 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
 
     const maxHp = HEROES[player.heroId].startHealth;
     let lowHealthAlert = '';
-    if (player.health < (maxHp * 0.25) && player.health > 0 && !options.hideLowHealthAlert) {
+    if (isLowHealth(player.health, maxHp) && !options.hideLowHealthAlert) {
         lowHealthAlert = player.ambushed
             ? `Your HP is dangerously low!<br>You fell into a trap and can't do anything... good luck hero 🥲`
             : `Your HP is dangerously low!<br>You should buy some food from the 🍺 <a href='/inn'>Inn</a> to regain your strength.`;

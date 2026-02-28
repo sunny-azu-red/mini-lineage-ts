@@ -7,10 +7,10 @@ export const REPO_COMMIT_URL = 'https://github.com/sunny-azu-red/mini-lineage-ts
 export const MAX_LEVEL = 80;
 
 export const HEROES: Hero[] = [
-    { id: 0, label: 'Human', emoji: '🧑', enemyHeroId: 1, startHealth: 100, startAdena: 300, ambushOdds: 12 },
-    { id: 1, label: 'Orc', emoji: '🧟', enemyHeroId: 0, startHealth: 150, startAdena: 250, ambushOdds: 6 },
-    { id: 2, label: 'Elf', emoji: '🧝', enemyHeroId: 3, startHealth: 75, startAdena: 450, ambushOdds: 25 },
-    { id: 3, label: 'Dark Elf', emoji: '🧛', enemyHeroId: 2, startHealth: 85, startAdena: 350, ambushOdds: 20 },
+    { id: 0, label: 'Human', plural: 'Humans', emoji: '🧑', enemyHeroId: 1, startHealth: 100, startAdena: 300, ambushOdds: 12 },
+    { id: 1, label: 'Orc', plural: 'Orcs', emoji: '🧟', enemyHeroId: 0, startHealth: 150, startAdena: 250, ambushOdds: 6 },
+    { id: 2, label: 'Elf', plural: 'Elves', emoji: '🧝', enemyHeroId: 3, startHealth: 75, startAdena: 450, ambushOdds: 25 },
+    { id: 3, label: 'Dark Elf', plural: 'Dark Elves', emoji: '🧛', enemyHeroId: 2, startHealth: 85, startAdena: 350, ambushOdds: 20 },
 ];
 
 /**
@@ -23,7 +23,7 @@ export const HEROES: Hero[] = [
  * the game engine, provided the `stat` roughly follows the established scaling curve.
  */
 export const ARMORS: Item[] = [
-    { id: 0, name: `Peasant's Tunic`, emoji: '🧥', stat: 2, cost: 0 },
+    { id: 0, name: `Peasant's Tunic`, emoji: '🧥', stat: 2, cost: 0 }, // start item
     { id: 1, name: `Brigandine Leathers`, emoji: '🥋', stat: 10, cost: 500 },
     { id: 2, name: `Spirit of the Forest`, emoji: '🪵', stat: 22, cost: 8_000 },
     { id: 3, name: `Knight's Plate`, emoji: '🛡️', stat: 41, cost: 30_000 },
@@ -32,7 +32,7 @@ export const ARMORS: Item[] = [
 ];
 
 export const WEAPONS: Item[] = [
-    { id: 0, name: `Brawler's Fists`, emoji: '👊', stat: 7, cost: 0 },
+    { id: 0, name: `Brawler's Fists`, emoji: '👊', stat: 7, cost: 0 }, // start item
     { id: 1, name: `Elven Needle`, emoji: '🗡️', stat: 16, cost: 300 },
     { id: 2, name: `Stormbringer`, emoji: '⚡', stat: 28, cost: 5_000 },
     { id: 3, name: `Echos of Valhalla`, emoji: '⚔️', stat: 45, cost: 18_000 },

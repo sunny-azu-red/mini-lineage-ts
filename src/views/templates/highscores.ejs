@@ -1,8 +1,4 @@
-<% if (headerMessage) { %>
-    <p><%- headerMessage %></p>
-<% } %>
-
-<% if (rows.length> 0) { %>
+<% if (rows.length > 0) { %>
     <table class="data-table">
         <thead>
             <tr>
@@ -35,6 +31,8 @@
                 <% }); %>
         </tbody>
     </table>
+<% } else { %>
+    <p>No heroes here yet...<br>You could be the first one!</p>
 <% } %>
 
-<p class="last"><%= footerMessage %><span class="muted"> | </span><a href="/">Go back</a></p>
+<p class="last"><a href="/">Go back</a></p>
