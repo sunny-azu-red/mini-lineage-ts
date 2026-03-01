@@ -22,16 +22,16 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
     const opponentHero = HEROES[hero.enemyHeroId];
     const enemyEmoji = opponentHero.emoji;
     const enemyName = opponentHero.label;
-    const enemyGroup = pluralize(opponentHero, enemies);
+    const enemyGroup = pluralize(opponentHero, enemies, enemyEmoji);
 
     // weapon + kills
     const killLines = [
-        `Wielding your ${weaponEmoji} ${weaponName} with fury, you cut down ${enemies} ${enemyEmoji} ${enemyGroup}.`,
-        `Your ${weaponEmoji} ${weaponName} cleaves through the battlefield, slaying ${enemies} ${enemyEmoji} ${enemyGroup}.`,
-        `With a fierce war cry you lunge forward, striking down ${enemies} ${enemyEmoji} ${enemyGroup} with your ${weaponEmoji} ${weaponName}.`,
-        `The ${enemies} ${enemyEmoji} ${enemyGroup} stood no chance, your ${weaponEmoji} ${weaponName} ended ${enemies === 1 ? 'its' : 'their'} ${enemies === 1 ? 'life' : 'lives'} swiftly.`,
-        `A lethal dance of your ${weaponEmoji} ${weaponName} leaves ${enemies} fallen ${enemyEmoji} ${enemyGroup} in your wake.`,
-        `Your strike is true; the ${weaponEmoji} ${weaponName} finds its mark against ${enemies} ${enemyEmoji} ${enemyGroup}.`,
+        `Wielding your ${weaponEmoji} ${weaponName} with fury, you cut down ${enemyGroup}.`,
+        `Your ${weaponEmoji} ${weaponName} cleaves through the battlefield, slaying ${enemyGroup}.`,
+        `With a fierce war cry you lunge forward, striking down ${enemyGroup} with your ${weaponEmoji} ${weaponName}.`,
+        `The ${enemyGroup} stood no chance, your ${weaponEmoji} ${weaponName} ended ${enemies === 1 ? 'its' : 'their'} ${enemies === 1 ? 'life' : 'lives'} swiftly.`,
+        `A lethal dance of your ${weaponEmoji} ${weaponName} leaves fallen ${enemyGroup} in your wake.`,
+        `Your strike is true; the ${weaponEmoji} ${weaponName} finds its mark against ${enemyGroup}.`,
     ];
 
     // armor + deflections + xp
@@ -52,15 +52,15 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
 
     // surprises
     const surpriseEnemies = calculateSurpriseCount(enemies, 4);
-    const surpriseEnemyGroup = pluralize(opponentHero, surpriseEnemies);
+    const surpriseEnemyGroup = pluralize(opponentHero, surpriseEnemies, enemyEmoji);
     const surprises = [
-        `Out of the blue ${surpriseEnemies} ${enemyEmoji} ${surpriseEnemyGroup} surrounded you and you can't escape.`,
-        `You forgot to check your back and you get stormed by ${surpriseEnemies} ${enemyEmoji} ${surpriseEnemyGroup}.`,
+        `Out of the blue ${surpriseEnemyGroup} ${surpriseEnemies === 1 ? 'surrounds' : 'surround'} you and you can't escape.`,
+        `You forgot to check your back and you get stormed by ${surpriseEnemyGroup}.`,
         `You find yourself in a delicate position, the ${enemyEmoji} ${enemyName} leader has come with reinforcements.`,
-        `As you were walking along ${surpriseEnemies} ${enemyEmoji} ${surpriseEnemyGroup} jumped out of the bushes.`,
-        `You reached a dead-end and you find yourself cornered by ${surpriseEnemies} ${enemyEmoji} ${surpriseEnemyGroup}.`,
-        `The ground trembles as a war-party of ${surpriseEnemies} ${enemyEmoji} ${surpriseEnemyGroup} blocks your path!`,
-        `An arrow whistles past your ear... ambush! The foes are everywhere!`,
+        `As you were walking along ${surpriseEnemyGroup} jumped out of the bushes.`,
+        `You reached a dead-end and while turning around, you find yourself cornered by ${surpriseEnemyGroup}.`,
+        `The ground trembles! Suddenly, ${surpriseEnemyGroup} ${surpriseEnemies === 1 ? 'stands' : 'stand'} before you!`,
+        `An arrow whistles past your ear... ambush! ${surpriseEnemyGroup.charAt(0).toUpperCase() + surpriseEnemyGroup.slice(1)} ${surpriseEnemies === 1 ? 'emerges' : 'emerge'} from the shadows!`,
     ];
 
     // moves

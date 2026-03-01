@@ -7,7 +7,7 @@ export const REPO_COMMIT_URL = 'https://github.com/sunny-azu-red/mini-lineage-ts
 export const MAX_LEVEL = 80;
 
 export const HEROES: Hero[] = [
-    { id: 0, label: 'Human', plural: 'Humans', emoji: '🧑', enemyHeroId: 1, startHealth: 100, startAdena: 300, ambushOdds: 12 },
+    { id: 0, label: 'Human', plural: 'Humans', emoji: '🧙', enemyHeroId: 1, startHealth: 100, startAdena: 300, ambushOdds: 12 },
     { id: 1, label: 'Orc', plural: 'Orcs', emoji: '🧟', enemyHeroId: 0, startHealth: 150, startAdena: 250, ambushOdds: 6 },
     { id: 2, label: 'Elf', plural: 'Elves', emoji: '🧝', enemyHeroId: 3, startHealth: 75, startAdena: 450, ambushOdds: 25 },
     { id: 3, label: 'Dark Elf', plural: 'Dark Elves', emoji: '🧛', enemyHeroId: 2, startHealth: 85, startAdena: 350, ambushOdds: 20 },

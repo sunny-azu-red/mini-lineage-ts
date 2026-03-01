@@ -80,7 +80,7 @@ export function calculateDangerLevel(weaponStat: number, multiplier: number = 0.
 }
 
 export function calculateDamageBlocked(armorStat: number, exponent: number = 0.95, multiplier: number = 0.8): number {
-    return Math.floor(Math.pow(armorStat, exponent) * multiplier);
+    return Math.max(1, Math.floor(Math.pow(armorStat, exponent) * multiplier));
 }
 
 export function calculateBaseExpGained(weaponStat: number, exponent: number = 1.5, multiplier: number = 0.8): number {

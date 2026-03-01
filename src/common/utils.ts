@@ -14,11 +14,18 @@ export function formatAdena(adena: number): string {
     return (adena / 1_000_000_000).toFixed(1).replace('.0', '') + 'kkk';
 }
 
-export function pluralize(item: Hero | string, count: number): string {
-    if (typeof item !== 'string')
-        return count === 1 ? item.label : item.plural;
+export function pluralize(item: Hero | string, count: number, emoji?: string): string {
+    const label = typeof item === 'string' ? item : item.label;
+    const plural = typeof item === 'string' ? item + 's' : item.plural;
+    const icon = emoji ? `${emoji} ` : '';
 
-    return count === 1 ? item : item + 's';
+    if (count === 1) {
+        const firstLetter = label.charAt(0).toLowerCase();
+        const article = ['a', 'e', 'i', 'o', 'u'].includes(firstLetter) ? 'an' : 'a';
+        return `${article} ${icon}${label}`;
+    }
+
+    return `${count} ${icon}${plural}`;
 }
 
 export function formatShopItems(items: Item[]) {
