@@ -15,8 +15,8 @@ export const postHighscores = async (req: Request, res: Response) => {
         const level = calculateLevel(player.experience);
 
         await db.execute(
-            'INSERT INTO highscores (total_exp, name, hero_id, adena, level, created) VALUES (?, ?, ?, ?, ?, NOW())',
-            [player.experience, name, player.heroId, player.adena, level]
+            'INSERT INTO highscores (total_exp, name, race_id, adena, level, created) VALUES (?, ?, ?, ?, ?, NOW())',
+            [player.experience, name, player.raceId, player.adena, level]
         );
 
         return req.session.destroy(() => {

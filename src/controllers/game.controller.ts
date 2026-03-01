@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { renderGameStartView, renderHomeView } from '../views/game.view';
-import { HEROES } from '../common/data';
+import { RACES } from '../common/data';
 import { initializePlayer, isGameStarted } from '../services/player.service';
 
 export const getHome = (req: Request, res: Response) => {
@@ -15,13 +15,13 @@ export const getHome = (req: Request, res: Response) => {
 };
 
 export const postGameStart = (req: Request, res: Response) => {
-    const heroId = parseInt(req.body.select_hero);
-    const hero = HEROES[heroId];
-    if (!hero)
+    const raceId = parseInt(req.body.select_race);
+    const race = RACES[raceId];
+    if (!race)
         return res.redirect('/');
 
     const player = res.locals.player;
-    player.flash = initializePlayer(player, hero);
+    player.flash = initializePlayer(player, race);
 
     res.redirect('/');
 };

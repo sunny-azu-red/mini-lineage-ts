@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Item, Hero } from './types';
+import { Item, Race } from './types';
 import { randomInt } from '../services/math.service';
 
 export function randomElement<T>(array: T[]): T {
@@ -14,7 +14,7 @@ export function formatAdena(adena: number): string {
     return (adena / 1_000_000_000).toFixed(1).replace('.0', '') + 'kkk';
 }
 
-export function pluralize(item: Hero | string, count: number, emoji?: string): string {
+export function pluralize(item: Race | string, count: number, emoji?: string): string {
     const label = typeof item === 'string' ? item : item.label;
     const plural = typeof item === 'string' ? item + 's' : item.plural;
     const icon = emoji ? `${emoji} ` : '';

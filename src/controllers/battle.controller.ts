@@ -3,7 +3,7 @@ import { randomInt } from '../services/math.service';
 import { renderBattlegroundView } from '../views/battle.view';
 import { simulateBattle } from '../services/battle.service';
 import { applyBattleResult } from '../services/player.service';
-import { HEROES } from '../common/data';
+import { RACES } from '../common/data';
 
 export const getBattle = (req: Request, res: Response) => {
     const player = res.locals.player;
@@ -15,8 +15,8 @@ export const getBattle = (req: Request, res: Response) => {
     if (player.dead)
         return res.redirect('/death');
 
-    const hero = HEROES[player.heroId];
-    let isAmbushed = randomInt(1, hero.ambushOdds) === 1;
+    const race = RACES[player.raceId];
+    let isAmbushed = randomInt(1, race.ambushOdds) === 1;
     if (isAmbushed)
         player.ambushed = true;
 

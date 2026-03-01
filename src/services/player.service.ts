@@ -1,16 +1,16 @@
-import { PlayerState, Hero, FlashMessage } from '../common/types';
-import { HEROES, ARMORS, WEAPONS, FOODS } from '../common/data';
+import { PlayerState, Race, FlashMessage } from '../common/types';
+import { RACES, ARMORS, WEAPONS, FOODS } from '../common/data';
 import { calculateLevel, isLevelUp, randomInt } from './math.service';
 import { formatAdena, randomElement } from '../common/utils';
 
 export function isGameStarted(player: PlayerState): boolean {
-    return player.heroId !== undefined && player.health !== undefined && player.adena !== undefined;
+    return player.raceId !== undefined && player.health !== undefined && player.adena !== undefined;
 }
 
-export function initializePlayer(player: PlayerState, hero: Hero): FlashMessage {
-    player.heroId = hero.id;
-    player.health = hero.startHealth;
-    player.adena = hero.startAdena;
+export function initializePlayer(player: PlayerState, race: Race): FlashMessage {
+    player.raceId = race.id;
+    player.health = race.startHealth;
+    player.adena = race.startAdena;
     player.experience = 0;
     player.weaponId = 0;
     player.armorId = 0;
@@ -20,7 +20,7 @@ export function initializePlayer(player: PlayerState, hero: Hero): FlashMessage 
     const age = randomInt(9, 69);
     const definition = age <= 23 ? 'youth' : (age <= 54 ? 'adult' : 'elder');
 
-    const text = `You have selected to be ${hero.emoji} ${hero.label}, nice choice.<br>` +
+    const text = `You have selected to be ${race.emoji} ${race.label}, nice choice.<br>` +
         `You are ${build} ${definition}, aged ${age}, and you came here with ${formatAdena(player.adena)} Adena.`;
 
     return { text, type: 'info' };
@@ -40,7 +40,7 @@ export function deductCost(player: PlayerState, cost: number): boolean {
 }
 
 export function restoreHealth(player: PlayerState, amount: number): void {
-    const maxHp = HEROES[player.heroId].startHealth;
+    const maxHp = RACES[player.raceId].startHealth;
     player.health = Math.min(maxHp, player.health + amount);
 }
 
@@ -59,7 +59,7 @@ export function applyBattleResult(player: PlayerState, hpLost: number, expGained
 
     if (isLevelUp(oldExp, player.experience)) {
         const newLevel = calculateLevel(player.experience);
-        player.health = HEROES[player.heroId].startHealth;
+        player.health = RACES[player.raceId].startHealth;
         return { text: `🎉 Congratulations! You have reached level ${newLevel}.`, type: 'warning' };
     }
 

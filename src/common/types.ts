@@ -8,12 +8,12 @@ export interface Item {
     cost: number;
 }
 
-export interface Hero {
+export interface Race {
     id: number;
     label: string;
     plural: string;
     emoji: string;
-    enemyHeroId: number;
+    enemyRaceId: number;
     startHealth: number;
     startAdena: number;
     ambushOdds: number;
@@ -33,7 +33,7 @@ export interface FlashMessage {
 }
 
 export interface PlayerState {
-    heroId: number;
+    raceId: number;
     health: number;
     adena: number;
     experience: number;
@@ -56,7 +56,7 @@ export interface RenderOptions {
 
 export interface HighscoreEntry {
     name: string | null;
-    hero_id: number;
+    race_id: number;
     total_exp: number;
     adena: number;
     level: number;

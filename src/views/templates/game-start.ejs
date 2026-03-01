@@ -6,9 +6,9 @@
 
 <form method="POST" action="/start">
     <div class="form-row">
-        <select class="form-select" name="select_hero">
-            <% heroes.forEach(hero => { %>
-                <option value="<%= hero.id %>"><%= hero.emoji %> <%= hero.label %></option>
+        <select class="form-select" name="select_race">
+            <% races.forEach(race => { %>
+                <option value="<%= race.id %>"><%= race.emoji %> <%= race.label %></option>
             <% }) %>
         </select>
         <button type="submit" class="btn">🚩 Begin</button>

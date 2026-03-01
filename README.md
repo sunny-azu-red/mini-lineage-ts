@@ -4,10 +4,10 @@ Mini-Lineage Remastered is a modern, high-performance rewrite of the classic Min
 
 ## 🌟 Features
 
-- **Dynamic Hero System**: Choose between Humans, Orcs, Elves, and Dark Elves, each with unique stats and enemy behavior.
+- **Dynamic Race System**: Choose between Humans, Orcs, Elves, and Dark Elves, each with unique stats and enemy behavior.
 - **Modern UI/UX**: Dark mode by default with vibrant accents, glassmorphism, and responsive design.
 - **Rebalanced Combat**: Meticulously tuned math for Adena, Experience, and Ambush odds.
-- **Highscores**: Dynamic leaderboard tracking the legendary heroes of the land.
+- **Highscores**: Dynamic leaderboard tracking the legendary champions of the land.
 
 ## 🛠️ Technologies
 

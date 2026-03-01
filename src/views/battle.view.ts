@@ -1,7 +1,7 @@
 import { readTemplate, render } from './base.view';
 import { renderPage } from './layout.view';
 import { PlayerState, BattleResult, FlashMessage } from '../common/types';
-import { WEAPONS, ARMORS, HEROES } from '../common/data';
+import { WEAPONS, ARMORS, RACES } from '../common/data';
 import { formatAdena, randomElement, pluralize } from '../common/utils';
 import { calculateSurpriseCount } from '../services/math.service';
 
@@ -18,11 +18,11 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
     const enemies = results.enemiesKilled;
 
     // determine opponent based on the race's configured enemy
-    const hero = HEROES[player.heroId];
-    const opponentHero = HEROES[hero.enemyHeroId];
-    const enemyEmoji = opponentHero.emoji;
-    const enemyName = opponentHero.label;
-    const enemyGroup = pluralize(opponentHero, enemies, enemyEmoji);
+    const race = RACES[player.raceId];
+    const opponentRace = RACES[race.enemyRaceId];
+    const enemyEmoji = opponentRace.emoji;
+    const enemyName = opponentRace.label;
+    const enemyGroup = pluralize(opponentRace, enemies, enemyEmoji);
 
     // weapon + kills
     const killLines = [
@@ -52,7 +52,7 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
 
     // surprises
     const surpriseEnemies = calculateSurpriseCount(enemies, 4);
-    const surpriseEnemyGroup = pluralize(opponentHero, surpriseEnemies, enemyEmoji);
+    const surpriseEnemyGroup = pluralize(opponentRace, surpriseEnemies, enemyEmoji);
     const surprises = [
         `Out of the blue ${surpriseEnemyGroup} ${surpriseEnemies === 1 ? 'surrounds' : 'surround'} you and you can't escape.`,
         `You forgot to check your back and you get stormed by ${surpriseEnemyGroup}.`,

@@ -1,5 +1,5 @@
 import { readTemplate, render } from './base.view';
-import { WEAPONS, ARMORS, HEROES, GAME_VERSION, REPO_COMMIT_URL } from '../common/data';
+import { WEAPONS, ARMORS, RACES, GAME_VERSION, REPO_COMMIT_URL } from '../common/data';
 import { calculateLevel, isLowHealth, calculatePercentage, getExpProgress, isMaxLevel } from '../services/math.service';
 import { formatAdena } from '../common/utils';
 import { PlayerState, RenderOptions, FlashMessage } from '../common/types';
@@ -32,12 +32,12 @@ export function renderStatus(player: PlayerState): string {
     const hp = player.health;
     const { current: currentXp, required: nextLevelXp, percent: expPercent } = getExpProgress(player.experience);
 
-    const hero = HEROES[player.heroId];
+    const race = RACES[player.raceId];
     const levelDisplay = player.ambushed
-        ? `${hero.emoji} <span class="gold">${hero.label} level ${level}</span>`
-        : `${hero.emoji} <a href='/exp-table'>${hero.label} level ${level}</a>`;
+        ? `${race.emoji} <span class="gold">${race.label} level ${level}</span>`
+        : `${race.emoji} <a href='/exp-table'>${race.label} level ${level}</a>`;
 
-    const maxHp = hero.startHealth;
+    const maxHp = race.startHealth;
 
     return render(statusTpl, {
         hp,
@@ -70,11 +70,11 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
     const statusHtml = renderStatus(player);
     const inventoryHtml = renderInventory(player);
 
-    const maxHp = HEROES[player.heroId].startHealth;
+    const maxHp = RACES[player.raceId].startHealth;
     let lowHealthAlert = '';
     if (isLowHealth(player.health, maxHp) && !options.hideLowHealthAlert) {
         lowHealthAlert = player.ambushed
-            ? `Your HP is dangerously low!<br>You fell into a trap and can't do anything... good luck hero 🥲`
+            ? `Your HP is dangerously low!<br>You fell into a trap and can't do anything... good luck adventurer 🥲`
             : `Your HP is dangerously low!<br>You should buy some food from the 🍺 <a href='/inn'>Inn</a> to regain your strength.`;
     }
 
