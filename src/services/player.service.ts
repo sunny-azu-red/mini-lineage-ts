@@ -45,7 +45,7 @@ export function restoreHealth(player: PlayerState, amount: number): void {
 }
 
 export function applyBattleResult(player: PlayerState, hpLost: number, expGained: number, adenaGained: number): FlashMessage | null {
-    hpLost = 0; // DEBUG: never die
+    // hpLost = 0; // DEBUG: never die
 
     player.health -= hpLost;
     if (player.health <= 0) {
