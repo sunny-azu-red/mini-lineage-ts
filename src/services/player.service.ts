@@ -1,7 +1,8 @@
 import { PlayerState, Race, FlashMessage } from '../common/types';
 import { RACES, ARMORS, WEAPONS, FOODS } from '../common/data';
 import { calculateLevel, isLevelUp, randomInt } from './math.service';
-import { formatAdena, randomElement } from '../common/utils';
+import { formatAdena, randomElement, fillTemplate } from '../common/utils';
+import { WELCOME_MESSAGES } from '../common/text_data';
 
 export function isGameStarted(player: PlayerState): boolean {
     return player.raceId !== undefined && player.health !== undefined && player.adena !== undefined;
@@ -10,9 +11,9 @@ export function isGameStarted(player: PlayerState): boolean {
 export function initializePlayer(player: PlayerState, race: Race): FlashMessage {
     player.raceId = race.id;
     player.health = race.startHealth;
-    player.prevHealth = race.startHealth;
+    player.prevHealth = 0;
     player.adena = race.startAdena;
-    player.prevAdena = race.startAdena;
+    player.prevAdena = 0;
     player.experience = 0;
     player.prevExperience = 0;
     player.weaponId = 0;
@@ -22,15 +23,21 @@ export function initializePlayer(player: PlayerState, race: Race): FlashMessage 
     const build = randomElement(builds);
     const age = randomInt(9, 69);
     const definition = age <= 23 ? 'youth' : (age <= 54 ? 'adult' : 'elder');
+    const welcome = fillTemplate(randomElement(WELCOME_MESSAGES), { raceLabel: race.label });
 
-    const text = `You have selected to be ${race.emoji} ${race.label}, nice choice.<br>` +
+    const text = `You have selected to be ${race.emoji} ${race.label}, ${welcome}<br>` +
         `You are ${build} ${definition}, aged ${age}, and you came here with ${formatAdena(player.adena)} Adena.`;
 
     return { text, type: 'info' };
 }
 
-export function commitSuicide(player: PlayerState): void {
+export function killPlayer(player: PlayerState): void {
+    player.health = 0;
     player.dead = true;
+}
+
+export function commitSuicide(player: PlayerState): void {
+    killPlayer(player);
     player.coward = true;
 }
 
@@ -54,7 +61,7 @@ export function applyBattleResult(player: PlayerState, hpLost: number, expGained
 
     player.health -= hpLost;
     if (player.health <= 0) {
-        player.dead = true;
+        killPlayer(player);
         return null;
     }
 

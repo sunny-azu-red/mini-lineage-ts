@@ -1,6 +1,5 @@
 import { MAX_LEVEL } from '../common/data';
 
-// misc
 export function randomInt(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -9,7 +8,10 @@ export function calculateSurpriseCount(enemiesKilled: number, divisor: number = 
     return Math.max(1, Math.floor(enemiesKilled / divisor));
 }
 
+// -----------
 // hp formulas
+// -----------
+
 export function getLowHealthThreshold(maxHp: number): number {
     return Math.floor(maxHp * 0.25);
 }
@@ -18,7 +20,10 @@ export function isLowHealth(health: number, maxHp: number): boolean {
     return health > 0 && health <= getLowHealthThreshold(maxHp);
 }
 
+// ---------------------
 // xp and level formulas
+// ---------------------
+
 export function calculateExpForLevel(level: number): number {
     return level <= 1 ? 0 : Math.round(130 * Math.pow(level, 2) + 130 * level);
 }
@@ -74,7 +79,10 @@ export function isLevelUp(oldExp: number, newExp: number): boolean {
     return calculateLevel(newExp) > calculateLevel(oldExp);
 }
 
+// -----------------------
 // battle scaling formulas
+// -----------------------
+
 export function getEnemyCountRange(weaponStat: number, minMult: number = 0.3, maxMult: number = 0.6): { min: number, max: number } {
     return {
         min: Math.max(1, Math.floor(weaponStat * minMult)),

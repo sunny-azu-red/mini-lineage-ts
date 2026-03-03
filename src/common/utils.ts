@@ -49,3 +49,19 @@ export function getVersion(): string {
 
     return 'Bleeding Edge';
 }
+
+export function fillTemplate(template: string, data: Record<string, any>): string {
+    if (!template)
+        return '';
+
+    // process ternaries: {condition ? 'trueVal' : 'falseVal'} or {condition ? "trueVal" : "falseVal"}
+    let processed = template.replace(/{(\w+)\s*\?\s*['"](.*?)['"]\s*:\s*['"](.*?)['"]}/g, (_, key, trueVal, falseVal) => {
+        return data[key] ? trueVal : falseVal;
+    });
+
+    // process variables: {variable}
+    return processed.replace(/{(\w+)}/g, (_, key) => {
+        const val = data[key];
+        return val !== undefined && val !== null ? val.toString() : `{${key}}`;
+    });
+}

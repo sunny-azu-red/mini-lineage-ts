@@ -1,16 +1,16 @@
 import { readTemplate, render } from './base.view';
-import { renderSimplePage } from './layout.view';
+import { renderPage, renderSimplePage } from './layout.view';
 import { formatAdena } from '../common/utils';
 import { RACES } from '../common/data';
-import { HighscoreEntry } from '../common/types';
+import { HighscoreEntry, PlayerState } from '../common/types';
 
 const highscoresTpl = readTemplate('highscores.ejs');
 const highscoresSubmitTpl = readTemplate('highscores-submit.ejs');
 
-export function renderHighscoresSubmitView(): string {
+export function renderHighscoresSubmitView(player: PlayerState): string {
     const content = render(highscoresSubmitTpl);
 
-    return renderSimplePage('Highscores', content);
+    return renderPage('Write your Legacy', player, content);
 }
 
 export function renderHighscoresView(highscores: HighscoreEntry[] = []): string {

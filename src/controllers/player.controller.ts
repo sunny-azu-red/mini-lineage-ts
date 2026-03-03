@@ -18,14 +18,7 @@ export const postSuicide = (req: Request, res: Response) => {
 };
 
 export const getDeath = (req: Request, res: Response) => {
-    const player = res.locals.player;
-    const reason = player.coward
-        ? "🤡 You took the cowardly way out."
-        : player.ambushed
-            ? "🪤 You were caught trying to flee an ambush! Game Over."
-            : "☠️ Your HP dropped to 0 and you died.";
-
-    res.send(renderDeathView(reason, !!(player.coward || player.ambushed)));
+    res.send(renderDeathView(res.locals.player));
 };
 
 export const getRestart = (req: Request, res: Response) => {
@@ -36,7 +29,7 @@ export const getRestart = (req: Request, res: Response) => {
 
 export const getExpTable = (req: Request, res: Response) => {
     const player = res.locals.player;
-    const currentExp = player.experience || 0;
+    const currentExp = player.experience;
     const currentLevel = calculateLevel(currentExp);
 
     res.send(renderExpTableView(currentExp, currentLevel, res.locals.flash));

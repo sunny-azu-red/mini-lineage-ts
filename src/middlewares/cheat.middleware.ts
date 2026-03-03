@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import { isGameStarted } from '../services/player.service';
+import { NextFunction, Request, Response } from 'express';
+import { commitSuicide, isGameStarted } from '../services/player.service';
 
 export const cheatMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const player = res.locals.player;
@@ -9,7 +9,7 @@ export const cheatMiddleware = (req: Request, res: Response, next: NextFunction)
     const highscorePaths = ['/highscores/submit', '/highscores'];
     if (player.dead) {
         const isBlocked = !safePaths.includes(req.path) &&
-            (player.coward || player.ambushed || !highscorePaths.includes(req.path));
+            (player.coward || !highscorePaths.includes(req.path));
         if (isBlocked)
             return res.redirect('/death');
     }
@@ -21,7 +21,7 @@ export const cheatMiddleware = (req: Request, res: Response, next: NextFunction)
 
     // prevent escaping from ambushes — die as a cheater
     if (player.ambushed && !player.dead && req.path !== '/battle') {
-        player.dead = true;
+        commitSuicide(player);
         return res.redirect('/death');
     }
 

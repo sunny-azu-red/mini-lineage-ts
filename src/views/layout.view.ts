@@ -1,7 +1,8 @@
 import { readTemplate, render } from './base.view';
 import { WEAPONS, ARMORS, RACES, GAME_VERSION, REPO_COMMIT_URL } from '../common/data';
 import { calculateLevel, isLowHealth, calculatePercentage, getExpProgress, isMaxLevel } from '../services/math.service';
-import { formatAdena } from '../common/utils';
+import { formatAdena, randomElement } from '../common/utils';
+import { AMBUSH_LOW_HEALTH_MESSAGES } from '../common/text_data';
 import { PlayerState, RenderOptions, FlashMessage } from '../common/types';
 
 const layoutTpl = readTemplate('layout.ejs');
@@ -51,9 +52,10 @@ export function renderStatus(player: PlayerState): string {
     player.prevExperience = player.experience;
     player.prevAdena = player.adena;
 
-    const levelDisplay = player.ambushed
-        ? `${race.emoji} <span class="gold">${race.label} level ${level}</span>`
-        : `${race.emoji} <a href='/exp-table'>${race.label} level ${level}</a>`;
+    const statusEmoji = player.dead ? '☠️' : race.emoji;
+    const levelDisplay = (player.ambushed || player.dead)
+        ? `${statusEmoji} <span class="gold">${race.label} level ${level}</span>`
+        : `${statusEmoji} <a href='/exp-table'>${race.label} level ${level}</a>`;
 
     return render(statusTpl, {
         hp,
@@ -95,9 +97,9 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
 
     const maxHp = RACES[player.raceId].startHealth;
     let lowHealthAlert = '';
-    if (isLowHealth(player.health, maxHp) && !options.hideLowHealthAlert) {
+    if (!player.dead && isLowHealth(player.health, maxHp) && !options.hideLowHealthAlert) {
         lowHealthAlert = player.ambushed
-            ? `Your HP is dangerously low!<br>You fell into a trap and can't do anything... good luck adventurer 🥲`
+            ? `Your HP is dangerously low!<br>${randomElement(AMBUSH_LOW_HEALTH_MESSAGES)}`
             : `Your HP is dangerously low!<br>You should buy some food from the 🍺 <a href='/inn'>Inn</a> to regain your strength.`;
     }
 
@@ -108,7 +110,7 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
         inventoryHtml,
         lowHealthAlert,
         flash,
-        headerClickable: !player.ambushed,
+        headerClickable: !player.ambushed && !player.dead,
         headerBanner: HEADER_BANNER,
         year: new Date().getFullYear(),
         version: getVersionHtml(),

@@ -5,12 +5,12 @@ import { db } from '../config/db.config';
 import { HighscoreEntry } from '../common/types';
 
 export const getHighscoresSubmit = (req: Request, res: Response) => {
-    res.send(renderHighscoresSubmitView());
+    res.send(renderHighscoresSubmitView(res.locals.player));
 };
 
 export const postHighscores = async (req: Request, res: Response) => {
     const player = res.locals.player;
-    if (player.dead && !player.coward && !player.ambushed) {
+    if (player.dead && !player.coward) {
         const name = req.body.name?.trim() || null;
         const level = calculateLevel(player.experience);
 

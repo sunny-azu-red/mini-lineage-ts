@@ -1,8 +1,10 @@
-<div class="alert alert-danger">
-    <%- reason %>
-</div>
-
-<p>Unfortunately your story ends here.</p>
+<% if (coward) { %>
+    <div class="alert alert-danger">
+        <%- reason %>
+    </div>
+<% } else { %>
+    <p><%- reason %></p>
+<% } %>
 
 <div class="action-links">
     <% if (!coward) { %>

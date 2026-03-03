@@ -45,6 +45,7 @@ export interface PlayerState {
     dead?: boolean;
     ambushed?: boolean;
     coward?: boolean;
+    deathReason?: string;
     flash?: FlashMessage;
 }
 
