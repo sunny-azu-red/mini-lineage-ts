@@ -27,7 +27,9 @@
         <select class="form-select" name="select_armor" id="armor-select">
             <option value="">🚪 Home Town</option>
             <% items.forEach(function(a) { %>
-                <option value="<%= a.id %>">Pick <%= a.emoji %> <%= a.name %></option>
+                <option value="<%= a.id %>" <%= player.armorId === a.id ? 'disabled' : '' %>>
+                    Pick <%= a.emoji %> <%= a.name %> <%= player.armorId === a.id ? '(Owned)' : '' %>
+                </option>
             <% }); %>
         </select>
         <button type="submit" class="btn btn-secondary" id="armor-btn">Return</button>

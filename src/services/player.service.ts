@@ -71,17 +71,22 @@ export function purchaseItem(player: PlayerState, itemType: 'weapon' | 'armor' |
     if (!item)
         return null;
 
+    if (itemType === 'weapon' && player.weaponId === itemId)
+        return { text: `Sorry, you already own the ${item.emoji} ${item.name}.`, type: 'danger' };
+    if (itemType === 'armor' && player.armorId === itemId)
+        return { text: `Sorry, you already own the ${item.emoji} ${item.name}.`, type: 'danger' };
+
     if (!deductCost(player, item.cost))
-        return { text: 'Sorry, you need more Adena.', type: 'danger' };
+        return { text: 'Sorry, you need more 🪙 Adena.', type: 'danger' };
 
     if (itemType === 'weapon') {
         player.weaponId = itemId;
-        return { text: `You have bought a Weapon.<br>You are now wielding the swift ${item.name}!`, type: 'success' };
+        return { text: `You have bought a Weapon.<br>You are now wielding the swift ${item.emoji} ${item.name}!`, type: 'success' };
     } else if (itemType === 'armor') {
         player.armorId = itemId;
-        return { text: `You have bought an Armor.<br>You are now wearing the mighty ${item.name}!`, type: 'success' };
+        return { text: `You have bought an Armor.<br>You are now wearing the mighty ${item.emoji} ${item.name}!`, type: 'success' };
     } else {
         restoreHealth(player, item.stat);
-        return { text: `You have bought Food.<br>You feel your strength returning, bringing you to ${player.health} HP.`, type: 'success' };
+        return { text: `You have bought ${item.emoji} ${item.name}.<br>You feel your strength returning, bringing you to ${player.health} HP.`, type: 'success' };
     }
 }

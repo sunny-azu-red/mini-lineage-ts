@@ -10,21 +10,21 @@ const innTpl = readTemplate('inn.ejs');
 
 export function renderWeaponsShopView(player: PlayerState, flash: FlashMessage | null): string {
     const items = formatShopItems(WEAPONS.slice(1));
-    const content = render(weaponsShopTpl, { items });
+    const content = render(weaponsShopTpl, { items, player });
 
     return renderPage('Weapons Shop', player, content, flash);
 }
 
 export function renderArmorsShopView(player: PlayerState, flash: FlashMessage | null): string {
     const items = formatShopItems(ARMORS.slice(1));
-    const content = render(armorsShopTpl, { items });
+    const content = render(armorsShopTpl, { items, player });
 
     return renderPage('Armor Shop', player, content, flash);
 }
 
 export function renderInnView(player: PlayerState, flash: FlashMessage | null): string {
     const items = formatShopItems(FOODS);
-    const content = render(innTpl, { items });
+    const content = render(innTpl, { items, player });
 
     return renderPage('Inn', player, content, flash, { hideLowHealthAlert: true });
 }
