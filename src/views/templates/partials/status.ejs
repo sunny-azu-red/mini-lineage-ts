@@ -8,26 +8,60 @@
     <div class="stat-row <% if (isLowHealth) { %>danger<% } %>">
       <span class="stat-label">HP</span>
       <div class="bar-track">
-        <div class="bar hp-bar" style="width: <%= hpPercent %>%"></div>
-        <span class="bar-text"><%= hp %>/<%= maxHp %></span>
+        <div class="bar hp-bar" id="hp-bar" style="width: <%= prevHpPercent %>%" data-width="<%= hpPercent %>"></div>
+        <span class="bar-text">
+          <span class="animate-val" data-val="<%= hp %>" data-prev="<%= prevHp %>"><%= prevHp %></span>/<%= maxHp %>
+        </span>
       </div>
     </div>
     <div class="stat-row">
       <span class="stat-label">XP</span>
       <div class="bar-track">
-        <div class="bar xp-bar" style="width: <%= isMaxLevel ? 100 : expPercent %>%"></div>
+        <div class="bar xp-bar" id="xp-bar" style="width: <%= prevExpPercent %>%" data-width="<%= isMaxLevel ? 100 : expPercent %>"></div>
         <span class="bar-text">
           <% if (isMaxLevel) { %>
-            <%= totalXp %>
+            <span class="animate-val" data-val="<%= totalXp %>" data-prev="<%= prevTotalXp %>"><%= prevTotalXp %></span>
           <% } else { %>
-            <%= currentXp %>/<%= nextLevelXp %>
+            <span class="animate-val" data-val="<%= currentXp %>" data-prev="<%= prevCurrentXp %>"><%= prevCurrentXp %></span>/<%= nextLevelXp %>
           <% } %>
         </span>
       </div>
     </div>
     <div class="stat-row">
       <span class="stat-label">Adena</span>
-      <span class="stat-value gold">🪙 <%= adena %></span>
+      <span class="stat-value gold">🪙 <span class="animate-val" data-val="<%= adena %>" data-prev="<%= prevAdena %>" data-final="<%= adenaFormatted %>"><%= adenaFormatted %></span></span>
     </div>
   </div>
 </div>
+
+<script>
+  (function() {
+    setTimeout(() => {
+      document.querySelectorAll('.bar').forEach(bar => {
+        if (bar.dataset.width)
+          bar.style.width = bar.dataset.width + '%';
+      });
+    }, 100);
+
+    function animateValue(el, start, end, duration) {
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        let progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const easeProgress = 1 - Math.pow(1 - progress, 3); // ease out cubic: 1 - pow(1 - x, 3)
+        if (progress < 1) {
+          el.innerText = Math.round(easeProgress * (end - start) + start);
+          window.requestAnimationFrame(step);
+        } else el.innerText = el.dataset.final || end;
+      };
+      window.requestAnimationFrame(step);
+    }
+
+    document.querySelectorAll('.animate-val').forEach(el => {
+      const start = parseInt(el.dataset.prev);
+      const end = parseInt(el.dataset.val);
+      if (start !== end)
+        animateValue(el, start, end, 600);
+    });
+  })();
+</script>

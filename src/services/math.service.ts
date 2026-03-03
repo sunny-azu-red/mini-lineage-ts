@@ -45,6 +45,13 @@ export function calculatePercentage(value: number, total: number, precision: num
 
 export function getExpProgress(exp: number) {
     const level = calculateLevel(exp);
+    if (isMaxLevel(level))
+        return {
+            current: 0,
+            required: 0,
+            percent: 100
+        };
+
     const prevLimit = calculateExpForLevel(level);
     const nextLimit = calculateExpForLevel(level + 1);
     const current = exp - prevLimit;

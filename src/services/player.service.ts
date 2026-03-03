@@ -10,8 +10,11 @@ export function isGameStarted(player: PlayerState): boolean {
 export function initializePlayer(player: PlayerState, race: Race): FlashMessage {
     player.raceId = race.id;
     player.health = race.startHealth;
+    player.prevHealth = race.startHealth;
     player.adena = race.startAdena;
+    player.prevAdena = race.startAdena;
     player.experience = 0;
+    player.prevExperience = 0;
     player.weaponId = 0;
     player.armorId = 0;
 
@@ -46,6 +49,8 @@ export function restoreHealth(player: PlayerState, amount: number): void {
 
 export function applyBattleResult(player: PlayerState, hpLost: number, expGained: number, adenaGained: number): FlashMessage | null {
     // hpLost = 0; // DEBUG: never die
+    // expGained = expGained * 250; // DEBUG: level up faster
+    // adenaGained = adenaGained * 500; // DEBUG: get adena faster
 
     player.health -= hpLost;
     if (player.health <= 0) {
