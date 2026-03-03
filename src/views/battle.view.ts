@@ -45,9 +45,9 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
 
     // outcomes
     const outcomeLines = [
-        `You limp away with <span class="hp">${player.health} HP</span> remaining and <span class="gold">${formatAdena(results.adenaGained)} Adena</span> to show for it.`,
-        `The skirmish leaves you at <span class="hp">${player.health} HP</span>, but richer by <span class="gold">${formatAdena(results.adenaGained)} Adena</span>.`,
-        `Breathing heavily, you stand with <span class="hp">${player.health} HP</span> left and pocket <span class="gold">${formatAdena(results.adenaGained)} Adena</span>.`,
+        `You limp away with <span class="hp">${player.health} HP</span> remaining and <span class="gold">🪙 ${formatAdena(results.adenaGained)} Adena</span> to show for it.`,
+        `The skirmish leaves you at <span class="hp">${player.health} HP</span>, but richer by <span class="gold">🪙 ${formatAdena(results.adenaGained)} Adena</span>.`,
+        `Breathing heavily, you stand with <span class="hp">${player.health} HP</span> left and pocket <span class="gold">🪙 ${formatAdena(results.adenaGained)} Adena</span>.`,
     ];
 
     // surprises
