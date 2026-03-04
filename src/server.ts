@@ -1,10 +1,7 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
+import 'dotenv/config';
+import { env } from '@/config/env.config';
 import app from './app';
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-    console.log(`Mini-Lineage remastered running on port ${PORT}!`);
+app.listen(env.PORT, () => {
+    console.log(`Mini-Lineage remastered running on port ${env.PORT}!`);
 });

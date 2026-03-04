@@ -1,4 +1,4 @@
-import { PlayerState, Race, FlashMessage } from '@/interface';
+import { PlayerState, Race, FlashMessage, PurchaseResult, ItemType } from '@/interface';
 import { RACES, ARMORS, WEAPONS, FOODS } from '@/constant/game.constant';
 import { calculateLevel, isLevelUp, randomInt } from '@/service/math.service';
 import { formatAdena, randomElement, fillTemplate } from '@/util';
@@ -54,9 +54,9 @@ export function restoreHealth(player: PlayerState, amount: number): void {
     player.health = Math.min(maxHp, player.health + amount);
 }
 
-export function applyBattleResult(player: PlayerState, hpLost: number, expGained: number, adenaGained: number): FlashMessage | null {
+export function applyBattleResult(player: PlayerState, hpLost: number, xpGained: number, adenaGained: number): FlashMessage | null {
     // hpLost = 0; // DEBUG: never die
-    // expGained = expGained * 250; // DEBUG: level up faster
+    // xpGained = xpGained * 250; // DEBUG: level up faster
     // adenaGained = adenaGained * 500; // DEBUG: get adena faster
 
     player.health -= hpLost;
@@ -66,10 +66,10 @@ export function applyBattleResult(player: PlayerState, hpLost: number, expGained
     }
 
     player.adena += adenaGained;
-    const oldExp = player.experience;
-    player.experience += expGained;
+    const oldXp = player.experience;
+    player.experience += xpGained;
 
-    if (isLevelUp(oldExp, player.experience)) {
+    if (isLevelUp(oldXp, player.experience)) {
         const newLevel = calculateLevel(player.experience);
         player.health = RACES[player.raceId].startHealth;
         return { text: `🎉 Congratulations! You have reached level ${newLevel}.`, type: 'warning' };
@@ -78,27 +78,27 @@ export function applyBattleResult(player: PlayerState, hpLost: number, expGained
     return null;
 }
 
-export function purchaseItem(player: PlayerState, itemType: 'weapon' | 'armor' | 'food', itemId: number): FlashMessage | null {
-    const item = itemType === 'weapon' ? WEAPONS[itemId] : (itemType === 'armor' ? ARMORS[itemId] : FOODS[itemId]);
+export function purchaseItem(player: PlayerState, itemType: ItemType, itemId: number): PurchaseResult | null {
+    const item = itemType === ItemType.Weapon ? WEAPONS[itemId] : (itemType === ItemType.Armor ? ARMORS[itemId] : FOODS[itemId]);
     if (!item)
         return null;
 
-    if (itemType === 'weapon' && player.weaponId === itemId)
-        return { text: `Sorry, you already own the ${item.emoji} ${item.name}.`, type: 'danger' };
-    if (itemType === 'armor' && player.armorId === itemId)
-        return { text: `Sorry, you already own the ${item.emoji} ${item.name}.`, type: 'danger' };
+    if (itemType === ItemType.Weapon && player.weaponId === itemId)
+        return { success: false, text: `Sorry, you already own the ${item.emoji} ${item.name}.`, item };
+    if (itemType === ItemType.Armor && player.armorId === itemId)
+        return { success: false, text: `Sorry, you already own the ${item.emoji} ${item.name}.`, item };
 
     if (!deductCost(player, item.cost))
-        return { text: 'Sorry, you need more 🪙 Adena.', type: 'danger' };
+        return { success: false, text: 'Sorry, you need more 🪙 Adena.' };
 
-    if (itemType === 'weapon') {
+    if (itemType === ItemType.Weapon) {
         player.weaponId = itemId;
-        return { text: `You have bought a Weapon.<br>You are now wielding the swift ${item.emoji} ${item.name}!`, type: 'success' };
-    } else if (itemType === 'armor') {
+        return { success: true, text: `You have bought a Weapon.\nYou are now wielding the swift ${item.emoji} ${item.name}!`, item };
+    } else if (itemType === ItemType.Armor) {
         player.armorId = itemId;
-        return { text: `You have bought an Armor.<br>You are now wearing the mighty ${item.emoji} ${item.name}!`, type: 'success' };
+        return { success: true, text: `You have bought an Armor.\nYou are now wearing the mighty ${item.emoji} ${item.name}!`, item };
     } else {
         restoreHealth(player, item.stat);
-        return { text: `You have bought ${item.emoji} ${item.name}.<br>You feel your strength returning, bringing you to ${player.health} HP.`, type: 'success' };
+        return { success: true, text: `You have bought ${item.emoji} ${item.name}.\nYou feel your strength returning, bringing you to ${player.health} HP.`, item };
     }
 }

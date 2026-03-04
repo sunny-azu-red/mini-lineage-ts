@@ -1,6 +1,6 @@
 import { readTemplate, render } from './base.view';
 import { WEAPONS, ARMORS, RACES, GAME_VERSION, REPO_COMMIT_URL } from '@/constant/game.constant';
-import { calculateLevel, isLowHealth, calculatePercentage, getExpProgress, isMaxLevel } from '@/service/math.service';
+import { calculateLevel, isLowHealth, calculatePercentage, getXpProgress, isMaxLevel } from '@/service/math.service';
 import { formatAdena, randomElement, isRelease } from '@/util';
 import { AMBUSH_LOW_HEALTH_MESSAGES } from '@/constant/narratives.constant';
 import { PlayerState, RenderOptions, FlashMessage } from '@/interface';
@@ -31,21 +31,21 @@ function getVersionHtml(): string {
 export function renderStatus(player: PlayerState): string {
     const level = calculateLevel(player.experience);
     const hp = player.health;
-    const { current: currentXp, required: nextLevelXp, percent: expPercent } = getExpProgress(player.experience);
+    const { current: currentXp, required: nextLevelXp, percent: xpPercent } = getXpProgress(player.experience);
 
     const race = RACES[player.raceId];
     const maxHp = race.startHealth;
 
     const prevHp = player.prevHealth ?? hp;
-    const prevExp = player.prevExperience ?? player.experience;
+    const prevXp = player.prevExperience ?? player.experience;
     const prevAdena = player.prevAdena ?? player.adena;
-    const prevLevel = calculateLevel(prevExp);
+    const prevLevel = calculateLevel(prevXp);
 
     const prevHpPercent = calculatePercentage(prevHp, maxHp);
-    const { current: prevCurrentXp, percent: prevExpPercentRaw } = getExpProgress(prevExp);
+    const { current: prevCurrentXp, percent: prevXpPercentRaw } = getXpProgress(prevXp);
 
     // for xp, avoid the "shrinking" effect (start from 0 on level up, unless reaching max level)
-    const prevExpPercent = (level > prevLevel && !isMaxLevel(level)) ? 0 : prevExpPercentRaw;
+    const prevXpPercent = (level > prevLevel && !isMaxLevel(level)) ? 0 : prevXpPercentRaw;
     const prevCurrentXpAnim = (level > prevLevel && !isMaxLevel(level)) ? 0 : prevCurrentXp;
 
     player.prevHealth = hp;
@@ -55,7 +55,7 @@ export function renderStatus(player: PlayerState): string {
     const statusEmoji = player.dead ? '☠️' : race.emoji;
     const levelDisplay = (player.ambushed || player.dead)
         ? `${statusEmoji} <span class="gold">${race.label} level ${level}</span>`
-        : `${statusEmoji} <a href='/exp-table'>${race.label} level ${level}</a>`;
+        : `${statusEmoji} <a href='/xp-table'>${race.label} level ${level}</a>`;
 
     return render(statusTpl, {
         hp,
@@ -63,13 +63,13 @@ export function renderStatus(player: PlayerState): string {
         maxHp,
         hpPercent: calculatePercentage(hp, maxHp),
         prevHpPercent,
-        expPercent,
-        prevExpPercent,
+        xpPercent,
+        prevXpPercent,
         currentXp,
         prevCurrentXp: prevCurrentXpAnim,
         nextLevelXp,
         totalXp: player.experience,
-        prevTotalXp: prevExp,
+        prevTotalXp: prevXp,
         isMaxLevel: isMaxLevel(level),
         isLowHealth: isLowHealth(hp, maxHp),
         adena: player.adena,

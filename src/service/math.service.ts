@@ -24,13 +24,13 @@ export function isLowHealth(health: number, maxHp: number): boolean {
 // xp and level formulas
 // ---------------------
 
-export function calculateExpForLevel(level: number): number {
+export function calculateXpForLevel(level: number): number {
     return level <= 1 ? 0 : Math.round(130 * Math.pow(level, 2) + 130 * level);
 }
 
-export function calculateLevel(exp: number): number {
+export function calculateLevel(xp: number): number {
     let level = 1;
-    while (!isMaxLevel(level) && calculateExpForLevel(level + 1) <= exp)
+    while (!isMaxLevel(level) && calculateXpForLevel(level + 1) <= xp)
         level++;
     return level;
 }
@@ -48,8 +48,8 @@ export function calculatePercentage(value: number, total: number, precision: num
     return Math.round(p * factor) / factor;
 }
 
-export function getExpProgress(exp: number) {
-    const level = calculateLevel(exp);
+export function getXpProgress(xp: number) {
+    const level = calculateLevel(xp);
     if (isMaxLevel(level))
         return {
             current: 0,
@@ -57,9 +57,9 @@ export function getExpProgress(exp: number) {
             percent: 100
         };
 
-    const prevLimit = calculateExpForLevel(level);
-    const nextLimit = calculateExpForLevel(level + 1);
-    const current = exp - prevLimit;
+    const prevLimit = calculateXpForLevel(level);
+    const nextLimit = calculateXpForLevel(level + 1);
+    const current = xp - prevLimit;
     const required = nextLimit - prevLimit;
 
     return {
@@ -69,14 +69,14 @@ export function getExpProgress(exp: number) {
     };
 }
 
-export function getXpNeededToLevelUp(exp: number): number {
-    const level = calculateLevel(exp);
+export function getXpNeededToLevelUp(xp: number): number {
+    const level = calculateLevel(xp);
     if (isMaxLevel(level)) return 0;
-    return calculateExpForLevel(level + 1) - exp;
+    return calculateXpForLevel(level + 1) - xp;
 }
 
-export function isLevelUp(oldExp: number, newExp: number): boolean {
-    return calculateLevel(newExp) > calculateLevel(oldExp);
+export function isLevelUp(oldXp: number, newXp: number): boolean {
+    return calculateLevel(newXp) > calculateLevel(oldXp);
 }
 
 // -----------------------
@@ -98,7 +98,7 @@ export function calculateDamageBlocked(armorStat: number, exponent: number = 0.9
     return Math.max(1, Math.floor(Math.pow(armorStat, exponent) * multiplier));
 }
 
-export function calculateBaseExpGained(weaponStat: number, exponent: number = 1.5, multiplier: number = 0.8): number {
+export function calculateBaseXpGained(weaponStat: number, exponent: number = 1.5, multiplier: number = 0.8): number {
     return Math.floor(Math.pow(weaponStat, exponent) * multiplier);
 }
 

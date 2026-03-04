@@ -1,31 +1,25 @@
 import { BattleResult } from '@/interface';
-import { WEAPONS, ARMORS } from '@/constant/game.constant';
-import { randomInt, getEnemyCountRange, calculateDangerLevel, calculateDamageBlocked, calculateBaseExpGained, calculateBaseAdenaGained } from '@/service/math.service';
+import { WEAPONS, ARMORS, BATTLE_CONFIG } from '@/constant/game.constant';
+import { randomInt, getEnemyCountRange, calculateDangerLevel, calculateDamageBlocked, calculateBaseXpGained, calculateBaseAdenaGained } from '@/service/math.service';
 
 export function simulateBattle(weaponId: number, armorId: number): BattleResult {
     const weapon = WEAPONS[weaponId]?.stat || WEAPONS[0].stat;
     const armor = ARMORS[armorId]?.stat || ARMORS[0].stat;
 
     // enemies killed: scales dynamically with weapon stat
-    const { min: minEnemies, max: maxEnemies } = getEnemyCountRange(weapon, 0.3, 0.6);
+    const { min: minEnemies, max: maxEnemies } = getEnemyCountRange(weapon, BATTLE_CONFIG.enemyCount.minMult, BATTLE_CONFIG.enemyCount.maxMult);
     const enemiesKilled = randomInt(minEnemies, maxEnemies);
 
-    // hp lost: danger scales linearly, but armor scales sub-linearly to prevent invincibility
-    const dangerLevel = calculateDangerLevel(weapon, 0.6);
-    const damageBlocked = calculateDamageBlocked(armor, 0.95, 0.8);
-    const hpLost = Math.max(1, randomInt(10, 25) + dangerLevel - damageBlocked);
+    // hp lost: danger scales linearly, armor scales sub-linearly to prevent invincibility
+    const dangerLevel = calculateDangerLevel(weapon, BATTLE_CONFIG.dangerLevel.scaling);
+    const damageBlocked = calculateDamageBlocked(armor, BATTLE_CONFIG.damageBlocked.exponent, BATTLE_CONFIG.damageBlocked.scaling);
+    const hpLost = Math.max(BATTLE_CONFIG.hpLost.floor, randomInt(BATTLE_CONFIG.hpLost.baseMin, BATTLE_CONFIG.hpLost.baseMax) + dangerLevel - damageBlocked);
 
     // experience gained: scales nicely with weapon
-    const expGained = (enemiesKilled * randomInt(10, 18)) + calculateBaseExpGained(weapon, 1.5, 0.8);
+    const xpGained = (enemiesKilled * randomInt(BATTLE_CONFIG.xpGained.killMin, BATTLE_CONFIG.xpGained.killMax)) + calculateBaseXpGained(weapon, BATTLE_CONFIG.xpGained.exponent, BATTLE_CONFIG.xpGained.scaling);
 
     // adena gained: exponential scaling for smoother economy pacing
-    const adenaGained = (enemiesKilled * randomInt(2, 4)) + calculateBaseAdenaGained(weapon, 2.65, 0.05);
+    const adenaGained = (enemiesKilled * randomInt(BATTLE_CONFIG.adenaGained.killMin, BATTLE_CONFIG.adenaGained.killMax)) + calculateBaseAdenaGained(weapon, BATTLE_CONFIG.adenaGained.exponent, BATTLE_CONFIG.adenaGained.scaling);
 
-    return {
-        enemiesKilled,
-        hpLost,
-        damageBlocked,
-        expGained,
-        adenaGained
-    };
+    return { enemiesKilled, hpLost, damageBlocked, xpGained, adenaGained };
 }

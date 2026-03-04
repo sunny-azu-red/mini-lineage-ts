@@ -22,7 +22,7 @@ export function renderHighscoresView(highscores: HighscoreEntry[] = []): string 
         return {
             name: `${emoji} ${score.name || 'Unsung Champion'}`,
             level: score.level,
-            totalExp: score.total_exp,
+            totalXp: score.total_xp,
             adena: formatAdena(score.adena),
             date,
         };

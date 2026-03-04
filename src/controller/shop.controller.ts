@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { ItemType } from '@/interface';
+import { toFlash } from '@/util';
 import { renderWeaponsShopView, renderArmorsShopView, renderInnView } from '@/view/shop.view';
 import { purchaseItem } from '@/service/player.service';
 
@@ -11,10 +13,9 @@ export const postWeaponsShop = (req: Request, res: Response) => {
         return res.redirect('/');
 
     const player = res.locals.player;
-    const weaponId = parseInt(req.body.select_weapon);
-    const flash = purchaseItem(player, 'weapon', weaponId);
-    if (flash)
-        player.flash = flash;
+    const result = purchaseItem(player, ItemType.Weapon, parseInt(req.body.select_weapon));
+    if (result)
+        player.flash = toFlash(result);
 
     res.redirect('/shop/weapons');
 };
@@ -28,10 +29,9 @@ export const postArmorsShop = (req: Request, res: Response) => {
         return res.redirect('/');
 
     const player = res.locals.player;
-    const armorId = parseInt(req.body.select_armor);
-    const flash = purchaseItem(player, 'armor', armorId);
-    if (flash)
-        player.flash = flash;
+    const result = purchaseItem(player, ItemType.Armor, parseInt(req.body.select_armor));
+    if (result)
+        player.flash = toFlash(result);
 
     res.redirect('/shop/armors');
 };
@@ -45,10 +45,9 @@ export const postInn = (req: Request, res: Response) => {
         return res.redirect('/');
 
     const player = res.locals.player;
-    const foodId = parseInt(req.body.select_food);
-    const flash = purchaseItem(player, 'food', foodId);
-    if (flash)
-        player.flash = flash;
+    const result = purchaseItem(player, ItemType.Food, parseInt(req.body.select_food));
+    if (result)
+        player.flash = toFlash(result);
 
     res.redirect('/inn');
 };

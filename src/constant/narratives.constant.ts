@@ -48,11 +48,11 @@ export const BATTLE_KILL_TEMPLATES: string[] = [
 ];
 
 export const BATTLE_DEFLECTION_TEMPLATES: string[] = [
-    `Your {armorEmoji} {armorName} absorbed a total of <span class="muted">{blocked} Damage</span> but you still learned from the clash, earning <span class="xp">{expGained} XP</span>.`,
-    `The {armorEmoji} {armorName} held firm, deflecting <span class="muted">{blocked} Damage</span> and the narrow escape nets you <span class="xp">{expGained} XP</span>.`,
-    `Blades glanced off your {armorEmoji} {armorName} for <span class="muted">{blocked} Damage</span> and you mastered your defense, granting <span class="xp">{expGained} XP</span>.`,
-    `Your {armorEmoji} {armorName} took the brunt of <span class="muted">{blocked} Damage</span> yet you grow tougher from the blow, gaining <span class="xp">{expGained} XP</span>.`,
-    `Steel rings against your {armorEmoji} {armorName}, mitigating <span class="muted">{blocked} Damage</span> as you refine your combat stance for <span class="xp">{expGained} XP</span>.`
+    `Your {armorEmoji} {armorName} absorbed a total of <span class="muted">{blocked} Damage</span> but you still learned from the clash, earning <span class="xp">{xpGained} XP</span>.`,
+    `The {armorEmoji} {armorName} held firm, deflecting <span class="muted">{blocked} Damage</span> and the narrow escape nets you <span class="xp">{xpGained} XP</span>.`,
+    `Blades glanced off your {armorEmoji} {armorName} for <span class="muted">{blocked} Damage</span> and you mastered your defense, granting <span class="xp">{xpGained} XP</span>.`,
+    `Your {armorEmoji} {armorName} took the brunt of <span class="muted">{blocked} Damage</span> yet you grow tougher from the blow, gaining <span class="xp">{xpGained} XP</span>.`,
+    `Steel rings against your {armorEmoji} {armorName}, mitigating <span class="muted">{blocked} Damage</span> as you refine your combat stance for <span class="xp">{xpGained} XP</span>.`
 ];
 
 export const BATTLE_OUTCOME_TEMPLATES: string[] = [

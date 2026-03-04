@@ -17,7 +17,7 @@
     <div class="stat-row">
       <span class="stat-label">XP</span>
       <div class="bar-track">
-        <div class="bar xp-bar" id="xp-bar" style="width: <%= prevExpPercent %>%" data-width="<%= isMaxLevel ? 100 : expPercent %>"></div>
+        <div class="bar xp-bar" id="xp-bar" style="width: <%= prevXpPercent %>%" data-width="<%= isMaxLevel ? 100 : xpPercent %>"></div>
         <span class="bar-text">
           <% if (isMaxLevel) { %>
             <span class="animate-val" data-val="<%= totalXp %>" data-prev="<%= prevTotalXp %>"><%= prevTotalXp %></span>

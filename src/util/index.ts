@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Item, Race } from '@/interface';
+import { FlashMessage, Item, PurchaseResult } from '@/interface';
 import { randomInt } from '@/service/math.service';
 
 export function randomElement<T>(array: T[]): T {
@@ -14,17 +14,12 @@ export function formatAdena(adena: number): string {
     return (adena / 1_000_000_000).toFixed(1).replace('.0', '') + 'kkk';
 }
 
-export function pluralize(item: Race | string, count: number, emoji?: string): string {
-    const label = typeof item === 'string' ? item : item.label;
-    const plural = typeof item === 'string' ? item + 's' : item.plural;
+export function pluralize(singular: string, plural: string, count: number, emoji?: string): string {
     const icon = emoji ? `${emoji} ` : '';
-
     if (count === 1) {
-        const firstLetter = label.charAt(0).toLowerCase();
-        const article = ['a', 'e', 'i', 'o', 'u'].includes(firstLetter) ? 'an' : 'a';
-        return `${article} ${icon}${label}`;
+        const article = ['a', 'e', 'i', 'o', 'u'].includes(singular.charAt(0).toLowerCase()) ? 'an' : 'a';
+        return `${article} ${icon}${singular}`;
     }
-
     return `${count} ${icon}${plural}`;
 }
 
@@ -36,6 +31,30 @@ export function formatShopItems(items: Item[]) {
         stat: i.stat,
         costFormatted: formatAdena(i.cost),
     }));
+}
+
+export function toFlash(result: PurchaseResult): FlashMessage {
+    return {
+        type: result.success ? 'success' : 'danger',
+        text: result.text.replace(/\n/g, '<br>'),
+    };
+}
+
+export function fillTemplate(template: string, data: Record<string, any>): string {
+    if (!template)
+        return '';
+
+    // process ternaries: {condition ? 'trueVal' : 'falseVal'} or {condition ? "trueVal" : "falseVal"}
+    const ternaryRegex = /\{(\w+)\s*\?\s*['"]([^'"]*)['"]\s*:\s*['"]([^'"]*)['"]\}/g;
+    let processed = template.replace(ternaryRegex, (_, key, trueVal, falseVal) => {
+        return data[key] ? trueVal : falseVal;
+    });
+
+    // process variables: {variable}
+    return processed.replace(/\{(\w+)\}/g, (_, key) => {
+        const val = data[key];
+        return val !== undefined && val !== null ? val.toString() : `{${key}}`;
+    });
 }
 
 export function getVersion(): string {
@@ -52,20 +71,4 @@ export function getVersion(): string {
 
 export function isRelease(version: string): boolean {
     return version.length === 7 && /^[0-9a-f]+$/i.test(version);
-}
-
-export function fillTemplate(template: string, data: Record<string, any>): string {
-    if (!template)
-        return '';
-
-    // process ternaries: {condition ? 'trueVal' : 'falseVal'} or {condition ? "trueVal" : "falseVal"}
-    let processed = template.replace(/{(\w+)\s*\?\s*['"](.*?)['"]\s*:\s*['"](.*?)['"]}/g, (_, key, trueVal, falseVal) => {
-        return data[key] ? trueVal : falseVal;
-    });
-
-    // process variables: {variable}
-    return processed.replace(/{(\w+)}/g, (_, key) => {
-        const val = data[key];
-        return val !== undefined && val !== null ? val.toString() : `{${key}}`;
-    });
 }

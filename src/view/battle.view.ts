@@ -18,7 +18,7 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
     const opponentRace = RACES[race.enemyRaceId];
     const enemyEmoji = opponentRace.emoji;
     const enemyName = opponentRace.label;
-    const enemyGroup = pluralize(opponentRace, enemies, enemyEmoji);
+    const enemyGroup = pluralize(opponentRace.label, opponentRace.plural, enemies, enemyEmoji);
 
     const templateData = {
         weaponEmoji: weapon.emoji,
@@ -29,7 +29,7 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
         enemyEmoji,
         enemyName,
         blocked: results.damageBlocked,
-        expGained: results.expGained,
+        xpGained: results.xpGained,
         adenaGained: formatAdena(results.adenaGained),
         hp: player.health,
         isSingleEnemy: enemies === 1,
@@ -41,7 +41,7 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
 
     // surprises
     const surpriseEnemies = calculateSurpriseCount(enemies, 4);
-    const surpriseEnemyGroup = pluralize(opponentRace, surpriseEnemies, enemyEmoji);
+    const surpriseEnemyGroup = pluralize(opponentRace.label, opponentRace.plural, surpriseEnemies, enemyEmoji);
     const surpriseData = {
         ...templateData,
         surpriseEnemyGroup,

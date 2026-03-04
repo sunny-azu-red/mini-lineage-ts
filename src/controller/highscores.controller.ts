@@ -15,7 +15,7 @@ export const postHighscores = async (req: Request, res: Response) => {
         const level = calculateLevel(player.experience);
 
         await db.execute(
-            'INSERT INTO highscores (total_exp, name, race_id, adena, level, created) VALUES (?, ?, ?, ?, ?, NOW())',
+            'INSERT INTO highscores (total_xp, name, race_id, adena, level, created) VALUES (?, ?, ?, ?, ?, NOW())',
             [player.experience, name, player.raceId, player.adena, level]
         );
 
@@ -33,7 +33,7 @@ export const getHighscores = async (req: Request, res: Response) => {
         return res.redirect('/death');
 
     try {
-        const [rows] = await db.execute('SELECT * FROM highscores ORDER BY total_exp DESC, adena DESC LIMIT 25');
+        const [rows] = await db.execute('SELECT * FROM highscores ORDER BY total_xp DESC, adena DESC LIMIT 25');
         const highscores = rows as HighscoreEntry[];
         res.send(renderHighscoresView(highscores));
     } catch (err) {

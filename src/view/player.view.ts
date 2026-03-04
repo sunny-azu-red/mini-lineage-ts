@@ -1,14 +1,14 @@
 import { readTemplate, render } from './base.view';
 import { renderPage, renderSimplePage } from './layout.view';
 import { PlayerState, FlashMessage } from '@/interface';
-import { calculateExpForLevel, getXpNeededToLevelUp } from '@/service/math.service';
+import { calculateXpForLevel, getXpNeededToLevelUp } from '@/service/math.service';
 import { MAX_LEVEL } from '@/constant/game.constant';
 import { randomElement } from '@/util';
 import { DEATH_MESSAGES } from '@/constant/narratives.constant';
 
 const suicideTpl = readTemplate('suicide.ejs');
 const deathTpl = readTemplate('death.ejs');
-const expTableTpl = readTemplate('exp-table.ejs');
+const xpTableTpl = readTemplate('xp-table.ejs');
 
 export function renderSuicideView(player: PlayerState, flash: FlashMessage | null = null): string {
     const content = render(suicideTpl);
@@ -35,13 +35,13 @@ export function renderDeathView(player: PlayerState): string {
     return renderPage('Game Over', player, content);
 }
 
-export function renderExpTableView(currentExp: number, currentLevel: number, flash: FlashMessage | null = null): string {
+export function renderXpTableView(currentXp: number, currentLevel: number, flash: FlashMessage | null = null): string {
     const buildColumn = (start: number, end: number) => {
         const rows = [];
         for (let i = start; i <= end; i++) {
-            const expReq = calculateExpForLevel(i);
+            const xpReq = calculateXpForLevel(i);
             const rowClass = currentLevel === i ? 'row-current' : '';
-            rows.push({ level: i, expReq, rowClass });
+            rows.push({ level: i, xpReq, rowClass });
         }
         return rows;
     };
@@ -52,8 +52,8 @@ export function renderExpTableView(currentExp: number, currentLevel: number, fla
         buildColumn(41, 60),
         buildColumn(61, 80),
     ];
-    const xpNeeded = getXpNeededToLevelUp(currentExp);
-    const content = render(expTableTpl, { columns, currentExp, currentLevel, xpNeeded, maxLevel: MAX_LEVEL });
+    const xpNeeded = getXpNeededToLevelUp(currentXp);
+    const content = render(xpTableTpl, { columns, currentXp, currentLevel, xpNeeded, maxLevel: MAX_LEVEL });
 
     return renderSimplePage('Experience Table', content, flash);
 }

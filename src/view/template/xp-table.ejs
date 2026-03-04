@@ -1,5 +1,5 @@
 <p>
-    You currently have <span class="xp"><%= currentExp %> XP</span>, 
+    You currently have <span class="xp"><%= currentXp %> XP</span>, 
     <% if (currentLevel < maxLevel) { %>
         but you need <span class="xp"><%= xpNeeded %> XP</span> more to reach Level <%= currentLevel + 1 %>.
     <% } else { %>
@@ -7,9 +7,9 @@
     <% } %>
 </p>
 
-<div class="exp-table-grid">
+<div class="xp-table-grid">
     <% columns.forEach(function(col, ci) { %>
-        <table class="data-table exp-col">
+        <table class="data-table">
             <thead>
                 <tr>
                     <th class="center">Level</th>
@@ -23,7 +23,7 @@
                             <%= row.level %>
                         </td>
                         <td class="xp">
-                            <%= row.expReq %>
+                            <%= row.xpReq %>
                         </td>
                     </tr>
                 <% }); %>

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { getHome, postGameStart } from '@/controller/game.controller';
 import { getWeaponsShop, postWeaponsShop, getArmorsShop, postArmorsShop, getInn, postInn } from '@/controller/shop.controller';
 import { getBattle } from '@/controller/battle.controller';
-import { getSuicide, postSuicide, getDeath, getRestart, getExpTable } from '@/controller/player.controller';
+import { getSuicide, postSuicide, getDeath, getRestart, getXpTable } from '@/controller/player.controller';
 import { getHighscoresSubmit, postHighscores, getHighscores } from '@/controller/highscores.controller';
 
 const router = Router();
@@ -30,8 +30,8 @@ router.post('/suicide', postSuicide);
 router.get('/death', getDeath);
 router.get('/restart', getRestart);
 
-// exp table
-router.get('/exp-table', getExpTable);
+// xp table
+router.get('/xp-table', getXpTable);
 
 // highscores
 router.get('/highscores/submit', getHighscoresSubmit);
