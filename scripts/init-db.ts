@@ -1,13 +1,13 @@
 import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
-import { db } from '../config/db.config';
+import { db } from '../src/config/database.config';
 
 async function initDb() {
     console.log('🚀 Starting database initialization...');
 
     const fresh = process.argv.includes('--fresh');
-    const sqlPath = path.join(__dirname, '../../database/dump.sql');
+    const sqlPath = path.join(__dirname, '../database/dump.sql');
 
     if (!fs.existsSync(sqlPath)) {
         console.error(`❌ Error: ${sqlPath} not found.`);
