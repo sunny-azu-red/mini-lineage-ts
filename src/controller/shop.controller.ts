@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { renderWeaponsShopView, renderArmorsShopView, renderInnView } from '../views/shop.view';
-import { purchaseItem } from '../services/player.service';
+import { renderWeaponsShopView, renderArmorsShopView, renderInnView } from '@/view/shop.view';
+import { purchaseItem } from '@/service/player.service';
 
 export const getWeaponsShop = (req: Request, res: Response) => {
     res.send(renderWeaponsShopView(res.locals.player, res.locals.flash));

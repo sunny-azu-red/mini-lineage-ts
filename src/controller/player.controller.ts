@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { calculateLevel } from '../services/math.service';
-import { renderSuicideView, renderDeathView, renderExpTableView } from '../views/player.view';
-import { commitSuicide } from '../services/player.service';
+import { calculateLevel } from '@/service/math.service';
+import { renderSuicideView, renderDeathView, renderExpTableView } from '@/view/player.view';
+import { commitSuicide } from '@/service/player.service';
 
 export const getSuicide = (req: Request, res: Response) => {
     res.send(renderSuicideView(res.locals.player, res.locals.flash));

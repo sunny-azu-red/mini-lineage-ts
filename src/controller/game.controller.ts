@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { renderGameStartView, renderHomeView } from '../views/game.view';
-import { RACES } from '../common/data';
-import { initializePlayer, isGameStarted } from '../services/player.service';
+import { renderGameStartView, renderHomeView } from '@/view/game.view';
+import { RACES } from '@/constant/game-data';
+import { initializePlayer, isGameStarted } from '@/service/player.service';
 
 export const getHome = (req: Request, res: Response) => {
     const player = res.locals.player;

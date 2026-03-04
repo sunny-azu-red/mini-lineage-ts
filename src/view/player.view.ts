@@ -1,10 +1,10 @@
 import { readTemplate, render } from './base.view';
 import { renderPage, renderSimplePage } from './layout.view';
-import { PlayerState, FlashMessage } from '../common/types';
-import { calculateExpForLevel, getXpNeededToLevelUp } from '../services/math.service';
-import { MAX_LEVEL } from '../common/data';
-import { randomElement } from '../common/utils';
-import { DEATH_MESSAGES } from '../common/text_data';
+import { PlayerState, FlashMessage } from '@/interface';
+import { calculateExpForLevel, getXpNeededToLevelUp } from '@/service/math.service';
+import { MAX_LEVEL } from '@/constant/game-data';
+import { randomElement } from '@/util';
+import { DEATH_MESSAGES } from '@/constant/text-data';
 
 const suicideTpl = readTemplate('suicide.ejs');
 const deathTpl = readTemplate('death.ejs');

@@ -1,8 +1,8 @@
 import { readTemplate, render } from './base.view';
 import { renderPage } from './layout.view';
-import { PlayerState, FlashMessage } from '../common/types';
-import { WEAPONS, ARMORS, FOODS } from '../common/data';
-import { formatShopItems } from '../common/utils';
+import { PlayerState, FlashMessage } from '@/interface';
+import { WEAPONS, ARMORS, FOODS } from '@/constant/game-data';
+import { formatShopItems } from '@/util';
 
 const weaponsShopTpl = readTemplate('weapons-shop.ejs');
 const armorsShopTpl = readTemplate('armors-shop.ejs');

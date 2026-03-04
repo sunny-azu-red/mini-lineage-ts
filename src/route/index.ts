@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { getHome, postGameStart } from './controllers/game.controller';
-import { getWeaponsShop, postWeaponsShop, getArmorsShop, postArmorsShop, getInn, postInn } from './controllers/shop.controller';
-import { getBattle } from './controllers/battle.controller';
-import { getSuicide, postSuicide, getDeath, getRestart, getExpTable } from './controllers/player.controller';
-import { getHighscoresSubmit, postHighscores, getHighscores } from './controllers/highscores.controller';
+import { getHome, postGameStart } from '@/controller/game.controller';
+import { getWeaponsShop, postWeaponsShop, getArmorsShop, postArmorsShop, getInn, postInn } from '@/controller/shop.controller';
+import { getBattle } from '@/controller/battle.controller';
+import { getSuicide, postSuicide, getDeath, getRestart, getExpTable } from '@/controller/player.controller';
+import { getHighscoresSubmit, postHighscores, getHighscores } from '@/controller/highscores.controller';
 
 const router = Router();
 

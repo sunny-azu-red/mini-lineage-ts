@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { commitSuicide, isGameStarted } from '../services/player.service';
+import { commitSuicide, isGameStarted } from '@/service/player.service';
 
 export const cheatMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const player = res.locals.player;

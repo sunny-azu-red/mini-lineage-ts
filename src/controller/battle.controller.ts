@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import { randomInt } from '../services/math.service';
-import { renderBattlegroundView } from '../views/battle.view';
-import { simulateBattle } from '../services/battle.service';
-import { applyBattleResult } from '../services/player.service';
-import { RACES } from '../common/data';
+import { randomInt } from '@/service/math.service';
+import { renderBattlegroundView } from '@/view/battle.view';
+import { simulateBattle } from '@/service/battle.service';
+import { applyBattleResult } from '@/service/player.service';
+import { RACES } from '@/constant/game-data';
 
 export const getBattle = (req: Request, res: Response) => {
     const player = res.locals.player;

@@ -1,8 +1,8 @@
-import { PlayerState, Race, FlashMessage } from '../common/types';
-import { RACES, ARMORS, WEAPONS, FOODS } from '../common/data';
-import { calculateLevel, isLevelUp, randomInt } from './math.service';
-import { formatAdena, randomElement, fillTemplate } from '../common/utils';
-import { WELCOME_MESSAGES } from '../common/text_data';
+import { PlayerState, Race, FlashMessage } from '@/interface';
+import { RACES, ARMORS, WEAPONS, FOODS } from '@/constant/game-data';
+import { calculateLevel, isLevelUp, randomInt } from '@/service/math.service';
+import { formatAdena, randomElement, fillTemplate } from '@/util';
+import { WELCOME_MESSAGES } from '@/constant/text-data';
 
 export function isGameStarted(player: PlayerState): boolean {
     return player.raceId !== undefined && player.health !== undefined && player.adena !== undefined;

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { GAME_VERSION } from '../common/data';
-import { isRelease } from '../common/utils';
+import { GAME_VERSION } from '@/constant/game-data';
+import { isRelease } from '@/util';
 
 export const debugMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const start = Date.now();

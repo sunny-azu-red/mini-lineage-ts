@@ -1,10 +1,10 @@
 import express from 'express';
 import path from 'path';
 import session from 'express-session';
-import { cheatMiddleware } from './middlewares/cheat.middleware';
-import { flashMiddleware } from './middlewares/flash.middleware';
-import { debugMiddleware } from './middlewares/debug.middleware';
-import router from './routes';
+import { cheatMiddleware } from '@/middleware/cheat.middleware';
+import { flashMiddleware } from '@/middleware/flash.middleware';
+import { debugMiddleware } from '@/middleware/debug.middleware';
+import router from '@/route';
 
 const app = express();
 

@@ -1,5 +1,5 @@
-import { Item, Race } from './types';
-import { getVersion } from './utils';
+import { Item, Race } from '@/interface';
+import { getVersion } from '@/util';
 
 export const GAME_VERSION = getVersion();
 export const REPO_COMMIT_URL = 'https://github.com/sunny-azu-red/mini-lineage-ts/commit/';

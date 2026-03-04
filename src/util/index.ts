@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Item, Race } from './types';
-import { randomInt } from '../services/math.service';
+import { Item, Race } from '@/interface';
+import { randomInt } from '@/service/math.service';
 
 export function randomElement<T>(array: T[]): T {
     return array[randomInt(0, array.length - 1)];

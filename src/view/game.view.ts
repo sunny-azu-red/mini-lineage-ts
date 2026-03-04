@@ -1,7 +1,7 @@
 import { readTemplate, render } from './base.view';
 import { renderPage, renderSimplePage } from './layout.view';
-import { PlayerState, FlashMessage } from '../common/types';
-import { RACES } from '../common/data';
+import { PlayerState, FlashMessage } from '@/interface';
+import { RACES } from '@/constant/game-data';
 
 const gameStartTpl = readTemplate('game-start.ejs');
 const homeTpl = readTemplate('home.ejs');

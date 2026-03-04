@@ -1,10 +1,10 @@
 import { readTemplate, render } from './base.view';
 import { renderPage } from './layout.view';
-import { PlayerState, BattleResult, FlashMessage } from '../common/types';
-import { WEAPONS, ARMORS, RACES } from '../common/data';
-import { BATTLE_DEFLECTION_TEMPLATES, BATTLE_KILL_TEMPLATES, BATTLE_MOVES, BATTLE_OUTCOME_TEMPLATES, BATTLE_SURPRISE_TEMPLATES } from '../common/text_data';
-import { fillTemplate, formatAdena, randomElement, pluralize } from '../common/utils';
-import { calculateSurpriseCount } from '../services/math.service';
+import { PlayerState, BattleResult, FlashMessage } from '@/interface';
+import { WEAPONS, ARMORS, RACES } from '@/constant/game-data';
+import { BATTLE_DEFLECTION_TEMPLATES, BATTLE_KILL_TEMPLATES, BATTLE_MOVES, BATTLE_OUTCOME_TEMPLATES, BATTLE_SURPRISE_TEMPLATES } from '@/constant/text-data';
+import { fillTemplate, formatAdena, randomElement, pluralize } from '@/util';
+import { calculateSurpriseCount } from '@/service/math.service';
 
 const battlegroundTpl = readTemplate('battleground.ejs');
 

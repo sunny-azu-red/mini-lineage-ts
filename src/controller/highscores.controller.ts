@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { calculateLevel } from '../services/math.service';
-import { renderHighscoresSubmitView, renderHighscoresView } from '../views/highscores.view';
-import { db } from '../config/db.config';
-import { HighscoreEntry } from '../common/types';
+import { calculateLevel } from '@/service/math.service';
+import { renderHighscoresSubmitView, renderHighscoresView } from '@/view/highscores.view';
+import { db } from '@/config/database.config';
+import { HighscoreEntry } from '@/interface';
 
 export const getHighscoresSubmit = (req: Request, res: Response) => {
     res.send(renderHighscoresSubmitView(res.locals.player));

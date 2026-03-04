@@ -1,9 +1,9 @@
 import * as ejs from 'ejs';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Template } from '../common/types';
+import { Template } from '@/interface';
 
-export const TEMPLATES_DIR = path.join(__dirname, 'templates');
+export const TEMPLATES_DIR = path.join(__dirname, 'template');
 
 export function readTemplate(name: string): Template {
     return {

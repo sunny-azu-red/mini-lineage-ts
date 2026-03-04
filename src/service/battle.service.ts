@@ -1,6 +1,6 @@
-import { BattleResult } from '../common/types';
-import { WEAPONS, ARMORS } from '../common/data';
-import { randomInt, getEnemyCountRange, calculateDangerLevel, calculateDamageBlocked, calculateBaseExpGained, calculateBaseAdenaGained } from './math.service';
+import { BattleResult } from '@/interface';
+import { WEAPONS, ARMORS } from '@/constant/game-data';
+import { randomInt, getEnemyCountRange, calculateDangerLevel, calculateDamageBlocked, calculateBaseExpGained, calculateBaseAdenaGained } from '@/service/math.service';
 
 export function simulateBattle(weaponId: number, armorId: number): BattleResult {
     const weapon = WEAPONS[weaponId]?.stat || WEAPONS[0].stat;

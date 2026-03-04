@@ -1,9 +1,9 @@
 import { readTemplate, render } from './base.view';
-import { WEAPONS, ARMORS, RACES, GAME_VERSION, REPO_COMMIT_URL } from '../common/data';
-import { calculateLevel, isLowHealth, calculatePercentage, getExpProgress, isMaxLevel } from '../services/math.service';
-import { formatAdena, randomElement, isRelease } from '../common/utils';
-import { AMBUSH_LOW_HEALTH_MESSAGES } from '../common/text_data';
-import { PlayerState, RenderOptions, FlashMessage } from '../common/types';
+import { WEAPONS, ARMORS, RACES, GAME_VERSION, REPO_COMMIT_URL } from '@/constant/game-data';
+import { calculateLevel, isLowHealth, calculatePercentage, getExpProgress, isMaxLevel } from '@/service/math.service';
+import { formatAdena, randomElement, isRelease } from '@/util';
+import { AMBUSH_LOW_HEALTH_MESSAGES } from '@/constant/text-data';
+import { PlayerState, RenderOptions, FlashMessage } from '@/interface';
 
 const layoutTpl = readTemplate('layout.ejs');
 const simpleTpl = readTemplate('simple.ejs');

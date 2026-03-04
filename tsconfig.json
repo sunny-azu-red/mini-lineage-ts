@@ -4,6 +4,12 @@
     "module": "commonjs",
     "rootDir": "./src",
     "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -13,6 +19,9 @@
     "src/**/*"
   ],
   "ts-node": {
+    "require": [
+      "tsconfig-paths/register"
+    ],
     "files": true
   }
 }
