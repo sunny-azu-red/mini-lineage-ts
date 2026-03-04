@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { GAME_VERSION } from '@/constant/game-data';
+import { GAME_VERSION } from '@/constant/game.constant';
 import { isRelease } from '@/util';
 
 export const debugMiddleware = (req: Request, res: Response, next: NextFunction) => {

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { renderGameStartView, renderHomeView } from '@/view/game.view';
-import { RACES } from '@/constant/game-data';
+import { RACES } from '@/constant/game.constant';
 import { initializePlayer, isGameStarted } from '@/service/player.service';
 
 export const getHome = (req: Request, res: Response) => {

@@ -1,5 +1,5 @@
 import { BattleResult } from '@/interface';
-import { WEAPONS, ARMORS } from '@/constant/game-data';
+import { WEAPONS, ARMORS } from '@/constant/game.constant';
 import { randomInt, getEnemyCountRange, calculateDangerLevel, calculateDamageBlocked, calculateBaseExpGained, calculateBaseAdenaGained } from '@/service/math.service';
 
 export function simulateBattle(weaponId: number, armorId: number): BattleResult {

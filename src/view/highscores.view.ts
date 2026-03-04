@@ -1,7 +1,7 @@
 import { readTemplate, render } from './base.view';
 import { renderPage, renderSimplePage } from './layout.view';
 import { formatAdena } from '@/util';
-import { RACES } from '@/constant/game-data';
+import { RACES } from '@/constant/game.constant';
 import { HighscoreEntry, PlayerState } from '@/interface';
 
 const highscoresTpl = readTemplate('highscores.ejs');

@@ -2,9 +2,9 @@ import { readTemplate, render } from './base.view';
 import { renderPage, renderSimplePage } from './layout.view';
 import { PlayerState, FlashMessage } from '@/interface';
 import { calculateExpForLevel, getXpNeededToLevelUp } from '@/service/math.service';
-import { MAX_LEVEL } from '@/constant/game-data';
+import { MAX_LEVEL } from '@/constant/game.constant';
 import { randomElement } from '@/util';
-import { DEATH_MESSAGES } from '@/constant/text-data';
+import { DEATH_MESSAGES } from '@/constant/narratives.constant';
 
 const suicideTpl = readTemplate('suicide.ejs');
 const deathTpl = readTemplate('death.ejs');

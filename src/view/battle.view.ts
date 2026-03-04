@@ -1,8 +1,8 @@
 import { readTemplate, render } from './base.view';
 import { renderPage } from './layout.view';
 import { PlayerState, BattleResult, FlashMessage } from '@/interface';
-import { WEAPONS, ARMORS, RACES } from '@/constant/game-data';
-import { BATTLE_DEFLECTION_TEMPLATES, BATTLE_KILL_TEMPLATES, BATTLE_MOVES, BATTLE_OUTCOME_TEMPLATES, BATTLE_SURPRISE_TEMPLATES } from '@/constant/text-data';
+import { WEAPONS, ARMORS, RACES } from '@/constant/game.constant';
+import { BATTLE_DEFLECTION_TEMPLATES, BATTLE_KILL_TEMPLATES, BATTLE_MOVES, BATTLE_OUTCOME_TEMPLATES, BATTLE_SURPRISE_TEMPLATES } from '@/constant/narratives.constant';
 import { fillTemplate, formatAdena, randomElement, pluralize } from '@/util';
 import { calculateSurpriseCount } from '@/service/math.service';
 
