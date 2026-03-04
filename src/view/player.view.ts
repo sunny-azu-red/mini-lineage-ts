@@ -11,9 +11,9 @@ const deathTpl = readTemplate('death.ejs');
 const xpTableTpl = readTemplate('xp-table.ejs');
 
 export function renderSuicideView(player: PlayerState, flash: FlashMessage | null = null): string {
-    const content = render(suicideTpl);
-
-    return renderPage('Commit Suicide', player, content, flash, { hideLowHealthAlert: true });
+    return renderPage('Commit Suicide', player, render(suicideTpl), flash, {
+        hideLowHealthAlert: true
+    });
 }
 
 export function renderDeathView(player: PlayerState): string {

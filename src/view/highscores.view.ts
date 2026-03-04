@@ -19,6 +19,7 @@ export function renderHighscoresView(highscores: HighscoreEntry[] = []): string 
         const pad = (n: number) => n.toString().padStart(2, '0');
         const date = `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear().toString().slice(-2)}, ${pad(d.getHours())}:${pad(d.getMinutes())}`;
         const emoji = RACES[score.race_id]?.emoji || '❓';
+
         return {
             name: `${emoji} ${score.name || 'Unsung Champion'}`,
             level: score.level,

@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { calculateLevel } from '@/service/math.service';
 import { renderHighscoresSubmitView, renderHighscoresView } from '@/view/highscores.view';
 import { db } from '@/config/database.config';
@@ -27,7 +27,7 @@ export const postHighscores = async (req: Request, res: Response) => {
     res.redirect('/highscores');
 };
 
-export const getHighscores = async (req: Request, res: Response) => {
+export const getHighscores = async (req: Request, res: Response, next: NextFunction) => {
     const player = res.locals.player;
     if (player.dead)
         return res.redirect('/death');
@@ -37,7 +37,6 @@ export const getHighscores = async (req: Request, res: Response) => {
         const highscores = rows as HighscoreEntry[];
         res.send(renderHighscoresView(highscores));
     } catch (err) {
-        console.error(err);
-        res.redirect('/');
+        next(err);
     }
 };

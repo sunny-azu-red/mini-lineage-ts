@@ -10,13 +10,14 @@ export const debugMiddleware = (req: Request, res: Response, next: NextFunction)
             return;
 
         const duration = Date.now() - start;
-        console.log(`\n[${req.method}] ${req.url} - ${res.statusCode} (${duration}ms)`);
+        console.log(`\n[${req.method}] \x1b[96m${req.url}\x1b[0m = ${res.statusCode} \x1b[90m(${duration}ms)\x1b[0m \x1b[95m${req.sessionID}\x1b[0m`);
 
         if (req.session) {
             const state = { ...req.session };
             delete (state as any).cookie;
 
-            console.dir({ '📦 Player State:': state }, { colors: true, depth: null });
+            if (state && Object.keys(state).length > 0)
+                console.dir(state, { colors: true, depth: null });
         }
     });
 

@@ -190,3 +190,15 @@
         transform: translateX(100%);
     }
 }
+
+/* ===== Code Block ===== */
+.code-block {
+    background: var(--bg-surface);
+    border-radius: var(--radius-lg);
+    color: var(--hp-color);
+    margin-bottom: 12px;
+    overflow-x: auto;
+    padding: 12px;
+    text-align: left;
+    white-space: pre-wrap;
+}

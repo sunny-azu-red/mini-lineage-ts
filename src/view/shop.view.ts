@@ -9,14 +9,14 @@ const armorsShopTpl = readTemplate('armors-shop.ejs');
 const innTpl = readTemplate('inn.ejs');
 
 export function renderWeaponsShopView(player: PlayerState, flash: FlashMessage | null): string {
-    const items = formatShopItems(WEAPONS.slice(1));
+    const items = formatShopItems(WEAPONS.slice(1)); // you can't buy the first weapon
     const content = render(weaponsShopTpl, { items, player });
 
     return renderPage('Weapons Shop', player, content, flash);
 }
 
 export function renderArmorsShopView(player: PlayerState, flash: FlashMessage | null): string {
-    const items = formatShopItems(ARMORS.slice(1));
+    const items = formatShopItems(ARMORS.slice(1)); // you can't buy the first armor
     const content = render(armorsShopTpl, { items, player });
 
     return renderPage('Armor Shop', player, content, flash);
@@ -26,5 +26,7 @@ export function renderInnView(player: PlayerState, flash: FlashMessage | null): 
     const items = formatShopItems(FOODS);
     const content = render(innTpl, { items, player });
 
-    return renderPage('Inn', player, content, flash, { hideLowHealthAlert: true });
+    return renderPage('Inn', player, content, flash, {
+        hideLowHealthAlert: true
+    });
 }

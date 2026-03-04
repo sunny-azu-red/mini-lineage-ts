@@ -4,6 +4,7 @@ import session from 'express-session';
 import { cheatMiddleware } from '@/middleware/cheat.middleware';
 import { flashMiddleware } from '@/middleware/flash.middleware';
 import { debugMiddleware } from '@/middleware/debug.middleware';
+import { errorMiddleware } from '@/middleware/error.middleware';
 import { env } from '@/config/env.config';
 import router from '@/route';
 
@@ -20,5 +21,6 @@ app.use(debugMiddleware);
 app.use(flashMiddleware);
 app.use(cheatMiddleware);
 app.use('/', router);
+app.use(errorMiddleware);
 
 export default app;
