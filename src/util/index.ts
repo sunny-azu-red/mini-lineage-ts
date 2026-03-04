@@ -33,11 +33,15 @@ export function formatShopItems(items: Item[]) {
     }));
 }
 
-export function toFlash(result: PurchaseResult): FlashMessage {
+export function makeFlash(text: string, type: FlashMessage['type']): FlashMessage {
     return {
-        type: result.success ? 'success' : 'danger',
-        text: result.text.replace(/\n/g, '<br>'),
+        type,
+        text: text.replace(/\n/g, '<br>')
     };
+}
+
+export function makePurchaseFlash(result: PurchaseResult): FlashMessage {
+    return makeFlash(result.text, result.success ? 'success' : 'danger');
 }
 
 export function fillTemplate(template: string, data: Record<string, any>): string {

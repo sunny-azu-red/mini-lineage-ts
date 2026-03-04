@@ -25,7 +25,7 @@ export function initializePlayer(player: PlayerState, race: Race): FlashMessage 
     const definition = age <= 23 ? 'youth' : (age <= 54 ? 'adult' : 'elder');
     const welcome = fillTemplate(randomElement(WELCOME_MESSAGES), { raceLabel: race.label });
 
-    const text = `You have selected to be ${race.emoji} ${race.label}, ${welcome}<br>` +
+    const text = `You have selected to be ${race.emoji} ${race.label}, ${welcome}\n` +
         `You are ${build} ${definition}, aged ${age}, and you came here with ${formatAdena(player.adena)} Adena.`;
 
     return { text, type: 'info' };

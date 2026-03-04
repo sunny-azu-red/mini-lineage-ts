@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { renderGameStartView, renderHomeView } from '@/view/game.view';
 import { RACES } from '@/constant/game.constant';
 import { initializePlayer, isGameStarted } from '@/service/player.service';
+import { makeFlash } from '@/util';
 
 export const getHome = (req: Request, res: Response) => {
     const player = res.locals.player;
@@ -21,7 +22,8 @@ export const postGameStart = (req: Request, res: Response) => {
         return res.redirect('/');
 
     const player = res.locals.player;
-    player.flash = initializePlayer(player, race);
+    const flash = initializePlayer(player, race);
+    player.flash = makeFlash(flash.text, flash.type);
 
     res.redirect('/');
 };
