@@ -50,6 +50,10 @@ export function getVersion(): string {
     return 'Bleeding Edge';
 }
 
+export function isRelease(version: string): boolean {
+    return version.length === 7 && /^[0-9a-f]+$/i.test(version);
+}
+
 export function fillTemplate(template: string, data: Record<string, any>): string {
     if (!template)
         return '';

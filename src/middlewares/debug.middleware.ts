@@ -1,20 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
-import { PlayerState } from '../common/types';
-import { isGameStarted } from '../services/player.service';
 import { GAME_VERSION } from '../common/data';
+import { isRelease } from '../common/utils';
 
 export const debugMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const start = Date.now();
 
-    // sync previous state flags BEFORE the controllers run
-    // if (req.session && isGameStarted(req.session as PlayerState)) {
-    //     req.session.prevHealth = req.session.health;
-    //     req.session.prevAdena = req.session.adena;
-    //     req.session.prevExperience = req.session.experience;
-    // }
-
     res.on('finish', () => {
-        if (GAME_VERSION !== 'Bleeding Edge')
+        if (isRelease(GAME_VERSION))
             return;
 
         const duration = Date.now() - start;
@@ -26,7 +18,6 @@ export const debugMiddleware = (req: Request, res: Response, next: NextFunction)
 
             console.dir({ '📦 Player State:': state }, { colors: true, depth: null });
         }
-        // console.log('------------------------------------------');
     });
 
     next();

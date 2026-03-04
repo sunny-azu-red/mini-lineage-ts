@@ -1,7 +1,7 @@
 import { readTemplate, render } from './base.view';
 import { WEAPONS, ARMORS, RACES, GAME_VERSION, REPO_COMMIT_URL } from '../common/data';
 import { calculateLevel, isLowHealth, calculatePercentage, getExpProgress, isMaxLevel } from '../services/math.service';
-import { formatAdena, randomElement } from '../common/utils';
+import { formatAdena, randomElement, isRelease } from '../common/utils';
 import { AMBUSH_LOW_HEALTH_MESSAGES } from '../common/text_data';
 import { PlayerState, RenderOptions, FlashMessage } from '../common/types';
 
@@ -23,7 +23,7 @@ const HEADER_BANNER = `
 `;
 
 function getVersionHtml(): string {
-    return GAME_VERSION.length === 7 && /^[0-9a-f]+$/i.test(GAME_VERSION)
+    return isRelease(GAME_VERSION)
         ? `<a href="${REPO_COMMIT_URL}${GAME_VERSION}" target="_blank" class="version-link">${GAME_VERSION}</a>`
         : GAME_VERSION;
 }
