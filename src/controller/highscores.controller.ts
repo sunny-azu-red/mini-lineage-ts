@@ -3,6 +3,7 @@ import { calculateLevel } from '@/service/math.service';
 import { renderHighscoresSubmitView, renderHighscoresView } from '@/view/highscores.view';
 import { db } from '@/config/database.config';
 import { HighscoreEntry } from '@/interface';
+import { HighscoreNameSchema } from '@/schema/player.schema';
 
 export const getHighscoresSubmit = (req: Request, res: Response) => {
     res.send(renderHighscoresSubmitView(res.locals.player));
@@ -11,7 +12,8 @@ export const getHighscoresSubmit = (req: Request, res: Response) => {
 export const postHighscores = async (req: Request, res: Response) => {
     const player = res.locals.player;
     if (player.dead && !player.coward) {
-        const name = req.body.name?.trim() || null;
+        const parsed = HighscoreNameSchema.safeParse(req.body);
+        const name = parsed.success ? (parsed.data.name || null) : null;
         const level = calculateLevel(player.experience);
 
         await db.execute(

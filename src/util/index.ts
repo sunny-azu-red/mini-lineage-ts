@@ -70,7 +70,7 @@ export function getVersion(): string {
     } catch (err) {
     }
 
-    return 'Bleeding Edge';
+    return 'Development';
 }
 
 export function isRelease(version: string): boolean {
