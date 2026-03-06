@@ -5,5 +5,5 @@ export const SuicideSchema = z.object({
 });
 
 export const HighscoreNameSchema = z.object({
-    name: z.string().trim().max(32).optional(),
+    name: z.string().trim().max(32).nullish().transform(val => val || null),
 });
