@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node dist/server.js",
     "dev": "nodemon src/server.ts",
-    "build": "rm -rf dist && tsc && tsc-alias && mkdir -p dist/view/template && cp -r src/view/template dist/view/ && git rev-parse --short HEAD > dist/version.txt",
+    "build:css": "ts-node scripts/build-css.ts",
+    "build": "rm -rf dist && tsc && tsc-alias && mkdir -p dist/view/template && cp -r src/view/template dist/view/ && npm run build:css && git rev-parse --short HEAD > dist/version.txt",
     "db:init": "ts-node -r tsconfig-paths/register scripts/init-db.ts",
     "db:fresh": "ts-node -r tsconfig-paths/register scripts/init-db.ts --fresh",
     "test": "echo \"Error: no test specified\" && exit 1"

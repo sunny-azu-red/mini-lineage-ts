@@ -114,6 +114,7 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
         headerBanner: HEADER_BANNER,
         year: new Date().getFullYear(),
         version: getVersionHtml(),
+        isRelease: isRelease(GAME_VERSION),
     });
 }
 
@@ -125,5 +126,6 @@ export function renderSimplePage(title: string, mainContent: string, flash: Flas
         headerBanner: HEADER_BANNER,
         year: new Date().getFullYear(),
         version: getVersionHtml(),
+        isRelease: isRelease(GAME_VERSION),
     });
 }
