@@ -1,0 +1,38 @@
+<% if (rows.length > 0) { %>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Level</th>
+                <th>Total XP</th>
+                <th>Wealth</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% rows.forEach(function(row) { %>
+                <tr>
+                    <td>
+                        <%= row.name %>
+                    </td>
+                    <td class="center">
+                        <%= row.level %>
+                    </td>
+                    <td class="xp">
+                        <%= row.totalXp %>
+                    </td>
+                    <td class="gold">
+                        🪙 <%= row.adena %>
+                    </td>
+                    <td class="muted">
+                        <%= row.date %>
+                    </td>
+                </tr>
+                <% }); %>
+        </tbody>
+    </table>
+<% } else { %>
+    <p>No champions here yet...<br>You could be the first one!</p>
+<% } %>
+
+<p class="last"><a href="/">Go back</a></p>
