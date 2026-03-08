@@ -1,4 +1,5 @@
--- Mini-Lineage Database Dump
+-- Migration 001: Initial schema
+
 CREATE TABLE IF NOT EXISTS `highscores` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,

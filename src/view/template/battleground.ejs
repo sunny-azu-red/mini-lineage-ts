@@ -5,6 +5,9 @@
     <div class="alert alert-danger">💢 <%- ambushedMessage %></div>
     <div class="action-links">
         <a href="/battle" class="btn btn-danger">⚔️ <%- fightText %></a>
+        <form method="POST" action="/battle/escape" style="display:inline">
+            <button type="submit" class="btn btn-secondary">💨 Attempt Escape</button>
+        </form>
     </div>
 <% } else { %>
     <div class="action-links">

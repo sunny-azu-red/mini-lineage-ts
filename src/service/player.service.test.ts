@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { ItemType, PlayerState } from '@/interface';
 import { RACES } from '@/constant/game.constant';
 import {
@@ -9,7 +9,16 @@ import {
     restoreHealth,
     purchaseItem,
     applyBattleResult,
+    attemptEscape,
 } from './player.service';
+
+vi.mock('@/repository/game-stats.repository', () => ({
+    gameStatsRepository: {
+        increment: vi.fn().mockResolvedValue(undefined),
+        getAll: vi.fn(),
+    },
+}));
+
 
 const makePlayer = (overrides: Partial<PlayerState> = {}): PlayerState => ({
     raceId: 0,        // Human — startHealth: 100
@@ -18,6 +27,8 @@ const makePlayer = (overrides: Partial<PlayerState> = {}): PlayerState => ({
     experience: 0,
     weaponId: 0,
     armorId: 0,
+    totalBattles: 0,
+    totalEnemiesKilled: 0,
     ...overrides,
 } as PlayerState);
 
@@ -112,7 +123,7 @@ describe('purchaseItem — food', () => {
 describe('applyBattleResult', () => {
     it('kills the player on lethal damage', () => {
         const p = makePlayer({ health: 5 });
-        const flash = applyBattleResult(p, 10, 100, 50);
+        const flash = applyBattleResult(p, 10, 100, 50, 3);
         expect(p.dead).toBe(true);
         expect(p.health).toBe(0);
         expect(flash).toBeNull();
@@ -120,17 +131,55 @@ describe('applyBattleResult', () => {
     it('returns a level-up flash and restores hp on level-up', () => {
         const p = makePlayer({ health: 90, experience: 0, raceId: 0 });
         // Level 2 threshold is calculateXpForLevel(2) = 780
-        const flash = applyBattleResult(p, 0, 780, 0);
+        const flash = applyBattleResult(p, 0, 780, 0, 0);
         expect(flash).not.toBeNull();
         expect(flash?.type).toBe('warning');
         expect(p.health).toBe(RACES[0].startHealth); // full HP on level up
     });
     it('returns null flash and updates stats on normal battle', () => {
         const p = makePlayer({ health: 80, adena: 100, experience: 0 });
-        const flash = applyBattleResult(p, 10, 50, 25);
+        const flash = applyBattleResult(p, 10, 50, 25, 5);
         expect(flash).toBeNull();
         expect(p.health).toBe(70);
         expect(p.adena).toBe(125);
         expect(p.experience).toBe(50);
+        expect(p.totalBattles).toBe(1);
+        expect(p.totalEnemiesKilled).toBe(5);
+    });
+});
+
+describe('attemptEscape', () => {
+    it('always deducts an HP penalty regardless of success', () => {
+        vi.spyOn(Math, 'random').mockReturnValue(0.99); // guaranteed fail
+        const p = makePlayer({ health: 100, raceId: 0, ambushed: true });
+        attemptEscape(p);
+        expect(p.health).toBeLessThan(100);
+        vi.restoreAllMocks();
+    });
+
+    it('clears ambushed flag on successful escape', () => {
+        vi.spyOn(Math, 'random').mockReturnValue(0); // guaranteed success
+        const p = makePlayer({ health: 100, raceId: 0, ambushed: true });
+        const result = attemptEscape(p);
+        expect(result).toBe(true);
+        expect(p.ambushed).toBe(false);
+        vi.restoreAllMocks();
+    });
+
+    it('keeps ambushed flag on failed escape', () => {
+        vi.spyOn(Math, 'random').mockReturnValue(0.99); // guaranteed fail
+        const p = makePlayer({ health: 100, raceId: 0, ambushed: true });
+        const result = attemptEscape(p);
+        expect(result).toBe(false);
+        expect(p.ambushed).toBe(true);
+        vi.restoreAllMocks();
+    });
+
+    it('HP can reach 0 from the penalty (handled by controller)', () => {
+        vi.spyOn(Math, 'random').mockReturnValue(0.99); // fail
+        const p = makePlayer({ health: 1, raceId: 0, ambushed: true });
+        attemptEscape(p);
+        expect(p.health).toBe(0);
+        vi.restoreAllMocks();
     });
 });

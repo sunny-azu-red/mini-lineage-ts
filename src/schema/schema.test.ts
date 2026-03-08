@@ -54,6 +54,19 @@ describe('GameStartSchema', () => {
     it('rejects race id 4 (out of range)', () => {
         expect(GameStartSchema.safeParse({ select_race: '4' }).success).toBe(false);
     });
+    it('accepts a name within 20 chars', () => {
+        const result = GameStartSchema.safeParse({ select_race: '0', name: 'Hero' });
+        expect(result.success).toBe(true);
+        if (result.success) expect(result.data.name).toBe('Hero');
+    });
+    it('rejects a name exceeding 20 chars', () => {
+        expect(GameStartSchema.safeParse({ select_race: '0', name: 'a'.repeat(21) }).success).toBe(false);
+    });
+    it('coerces missing name to null', () => {
+        const result = GameStartSchema.safeParse({ select_race: '0' });
+        expect(result.success).toBe(true);
+        if (result.success) expect(result.data.name).toBeNull();
+    });
 });
 
 // ---------------------------------------------------------------------------

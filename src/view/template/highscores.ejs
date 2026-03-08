@@ -1,3 +1,12 @@
+<div class="action-links" style="margin-bottom: 1rem; flex-wrap: wrap; gap: 0.35rem;">
+    <a href="/highscores" class="btn btn-secondary btn-sm<% if (activeRaceId === undefined) { %> active<% } %>">All</a>
+    <% races.forEach(function(race) { %>
+        <a href="/highscores?race=<%= race.id %>" class="btn btn-secondary btn-sm<% if (activeRaceId === race.id) { %> active<% } %>">
+            <%= race.emoji %> <%= race.label %>
+        </a>
+    <% }); %>
+</div>
+
 <% if (rows.length > 0) { %>
     <table class="data-table">
         <thead>

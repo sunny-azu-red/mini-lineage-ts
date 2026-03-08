@@ -35,14 +35,3 @@
         <button type="submit" class="btn btn-secondary" id="weapon-btn">Return</button>
     </div>
 </form>
-
-<script>
-    (function () {
-        var sel = document.getElementById('weapon-select');
-        var btn = document.getElementById('weapon-btn');
-        sel.addEventListener('change', function () {
-            btn.textContent = sel.value === '' ? 'Return' : '🪙 Purchase';
-            btn.className = sel.value === '' ? 'btn btn-secondary' : 'btn';
-        });
-    })();
-</script>

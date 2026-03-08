@@ -31,4 +31,5 @@ export const ShopFoodSchema = z.object({
 
 export const GameStartSchema = z.object({
     select_race: itemIdSchema(RACE_IDS),
+    name: z.string().trim().max(20).nullish().transform(val => val || null),
 });

@@ -3,13 +3,15 @@ import { RACES, ARMORS, WEAPONS, FOODS } from '@/constant/game.constant';
 import { calculateLevel, isLevelUp, randomInt } from '@/service/math.service';
 import { formatAdena, randomElement, fillTemplate } from '@/util';
 import { WELCOME_MESSAGES } from '@/constant/narratives.constant';
+import { gameStatsRepository } from '@/repository/game-stats.repository';
 
 export function isGameStarted(player: PlayerState): boolean {
     return player.raceId !== undefined && player.health !== undefined && player.adena !== undefined;
 }
 
-export function initializePlayer(player: PlayerState, race: Race): FlashMessage {
+export function initializePlayer(player: PlayerState, race: Race, name?: string | null): FlashMessage {
     player.raceId = race.id;
+    player.name = name || null;
     player.health = race.startHealth;
     player.prevHealth = 0;
     player.adena = race.startAdena;
@@ -18,6 +20,11 @@ export function initializePlayer(player: PlayerState, race: Race): FlashMessage 
     player.prevExperience = 0;
     player.weaponId = 0;
     player.armorId = 0;
+    player.totalBattles = 0;
+    player.totalEnemiesKilled = 0;
+
+    // fire-and-forget: don't block game flow on DB write
+    void gameStatsRepository.increment('total_players');
 
     const builds = ['a slim', 'a lean', 'an average', 'a fit', 'a stocky', 'a broad', 'a round'];
     const build = randomElement(builds);
@@ -34,11 +41,30 @@ export function initializePlayer(player: PlayerState, race: Race): FlashMessage 
 export function killPlayer(player: PlayerState): void {
     player.health = 0;
     player.dead = true;
+    void gameStatsRepository.increment('total_deaths');
 }
 
 export function commitSuicide(player: PlayerState): void {
     killPlayer(player);
     player.coward = true;
+}
+
+export function attemptEscape(player: PlayerState): boolean {
+    const race = RACES[player.raceId];
+    // Lower ambushOdds = rarer ambushes = harder to escape (aggressive races)
+    // Higher ambushOdds = common ambushes = easier to escape (nimble races)
+    // Escape chance range: ~20% (Orc, odds 6) to ~62% (Elf, odds 25)
+    const escapeChance = Math.min(0.1 + race.ambushOdds / 40, 0.8);
+    const penalty = randomInt(5, 12);
+
+    player.health = Math.max(0, player.health - penalty);
+
+    if (Math.random() < escapeChance) {
+        player.ambushed = false;
+        void gameStatsRepository.increment('total_escapes');
+        return true;
+    }
+    return false;
 }
 
 export function deductCost(player: PlayerState, cost: number): boolean {
@@ -54,7 +80,7 @@ export function restoreHealth(player: PlayerState, amount: number): void {
     player.health = Math.min(maxHp, player.health + amount);
 }
 
-export function applyBattleResult(player: PlayerState, hpLost: number, xpGained: number, adenaGained: number): FlashMessage | null {
+export function applyBattleResult(player: PlayerState, hpLost: number, xpGained: number, adenaGained: number, enemiesKilled: number): FlashMessage | null {
     // hpLost = 0; // DEBUG: never die
     // xpGained = xpGained * 250; // DEBUG: level up faster
     // adenaGained = adenaGained * 500; // DEBUG: get adena faster
@@ -68,6 +94,13 @@ export function applyBattleResult(player: PlayerState, hpLost: number, xpGained:
     player.adena += adenaGained;
     const oldXp = player.experience;
     player.experience += xpGained;
+    player.totalBattles = (player.totalBattles ?? 0) + 1;
+    player.totalEnemiesKilled = (player.totalEnemiesKilled ?? 0) + enemiesKilled;
+
+    // fire-and-forget global stats
+    void gameStatsRepository.increment('total_battles');
+    void gameStatsRepository.increment('total_enemies_killed', enemiesKilled);
+    void gameStatsRepository.increment('total_adena_generated', adenaGained);
 
     if (isLevelUp(oldXp, player.experience)) {
         const newLevel = calculateLevel(player.experience);

@@ -34,7 +34,8 @@
     vertical-align: middle;
 
     /* Geometry — padding matches .form-select so heights align */
-    padding: 8px 16px;
+    padding: 0 16px;
+    height: 31px;
     border-radius: var(--radius);
 
     /* Single uniform border like the select element */

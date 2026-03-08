@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import CleanCSS from 'clean-css';
 
 const CSS_ORDER = [
     'tokens.css',
@@ -27,5 +28,12 @@ for (const file of CSS_ORDER) {
     }
 }
 
-fs.writeFileSync(OUT_FILE, bundle);
-console.log(`✅ CSS bundled → ${OUT_FILE}`);
+const { styles, errors } = new CleanCSS({ level: 2 }).minify(bundle);
+if (errors.length) {
+    console.error('❌ CSS minification errors:', errors);
+    process.exit(1);
+}
+
+fs.writeFileSync(OUT_FILE, styles);
+console.log(`✅ CSS bundled & minified → ${OUT_FILE}`);
+

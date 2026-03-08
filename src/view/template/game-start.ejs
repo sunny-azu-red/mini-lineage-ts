@@ -6,6 +6,7 @@
 
 <form method="POST" action="/start">
     <div class="form-row">
+        <input type="text" class="form-input" name="name" maxlength="20" placeholder="Identify yourself, champion..." autocomplete="off" />
         <select class="form-select" name="select_race">
             <% races.forEach(race => { %>
                 <option value="<%= race.id %>"><%= race.emoji %> <%= race.label %></option>

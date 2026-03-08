@@ -3,6 +3,7 @@ import { RaceType } from './game.interface';
 
 export interface PlayerState {
     raceId: RaceType;
+    name?: string | null;
     health: number;
     prevHealth?: number;
     adena: number;
@@ -11,6 +12,8 @@ export interface PlayerState {
     prevExperience?: number;
     weaponId: number;
     armorId: number;
+    totalBattles?: number;
+    totalEnemiesKilled?: number;
     dead?: boolean;
     ambushed?: boolean;
     coward?: boolean;

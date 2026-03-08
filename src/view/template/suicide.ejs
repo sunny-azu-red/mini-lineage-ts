@@ -9,19 +9,3 @@
         <button type="submit" class="btn btn-secondary" id="suicide-btn">Return</button>
     </div>
 </form>
-
-<script>
-    (function () {
-        var sel = document.getElementById('suicide-select');
-        var btn = document.getElementById('suicide-btn');
-        sel.addEventListener('change', function () {
-            if (sel.value === 'yes') {
-                btn.textContent = '🪦 Die';
-                btn.className = 'btn btn-danger';
-            } else {
-                btn.textContent = 'Phew 😅';
-                btn.className = 'btn btn-secondary';
-            }
-        });
-    })();
-</script>

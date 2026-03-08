@@ -3,7 +3,7 @@
     Where do you want to go next, or what do you want to do?
 </p>
 
-<form onsubmit="window.location.href=this.querySelector('select').value; return false;" id="home-form">
+<form id="home-form">
     <div class="form-row">
         <select class="form-select" name="travel" id="home-select">
             <option value="/inn">🍺 Inn</option>
@@ -15,13 +15,3 @@
         <button type="submit" class="btn" id="home-btn">Travel</button>
     </div>
 </form>
-
-<script>
-    (function () {
-        var sel = document.getElementById('home-select');
-        var btn = document.getElementById('home-btn');
-        sel.addEventListener('change', function () {
-            btn.textContent = sel.value === '/suicide' ? '🪦 Die' : 'Travel';
-        });
-    })();
-</script>

@@ -8,12 +8,12 @@ const highscoresTpl = readTemplate('highscores.ejs');
 const highscoresSubmitTpl = readTemplate('highscores-submit.ejs');
 
 export function renderHighscoresSubmitView(player: PlayerState): string {
-    const content = render(highscoresSubmitTpl);
+    const content = render(highscoresSubmitTpl, { playerName: player.name || null });
 
     return renderPage('Write your Legacy', player, content);
 }
 
-export function renderHighscoresView(highscores: HighscoreEntry[] = []): string {
+export function renderHighscoresView(highscores: HighscoreEntry[] = [], activeRaceId?: number): string {
     const rows = highscores.map((score) => {
         const d = new Date(score.created);
         const pad = (n: number) => n.toString().padStart(2, '0');
@@ -28,7 +28,7 @@ export function renderHighscoresView(highscores: HighscoreEntry[] = []): string 
             date,
         };
     });
-    const content = render(highscoresTpl, { rows });
+    const content = render(highscoresTpl, { rows, activeRaceId, races: RACES });
 
     return renderSimplePage('Hall of Champions', content);
 }

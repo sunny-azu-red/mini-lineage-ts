@@ -76,6 +76,9 @@ export function renderStatus(player: PlayerState): string {
         prevAdena: prevAdena,
         adenaFormatted: formatAdena(player.adena),
         levelDisplay,
+        playerName: player.name || null,
+        totalBattles: player.totalBattles ?? 0,
+        totalEnemiesKilled: player.totalEnemiesKilled ?? 0,
     });
 }
 

@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import { getHome, postGameStart } from '@/controller/game.controller';
 import { getWeaponsShop, postWeaponsShop, getArmorsShop, postArmorsShop, getInn, postInn } from '@/controller/shop.controller';
-import { getBattle } from '@/controller/battle.controller';
+import { getBattle, postEscape } from '@/controller/battle.controller';
 import { getSuicide, postSuicide, getDeath, getRestart, getXpTable } from '@/controller/player.controller';
 import { getHighscoresSubmit, postHighscores, getHighscores } from '@/controller/highscores.controller';
+import { battleRateLimiter, shopRateLimiter } from '@/middleware/rate-limit.middleware';
 
 const router = Router();
 
@@ -12,15 +13,16 @@ router.get('/', getHome);
 router.post('/start', postGameStart);
 
 // battle
-router.get('/battle', getBattle);
+router.get('/battle', battleRateLimiter, getBattle);
+router.post('/battle/escape', battleRateLimiter, postEscape);
 
 // shops & inn
 router.get('/shop/weapons', getWeaponsShop);
-router.post('/shop/weapons', postWeaponsShop);
+router.post('/shop/weapons', shopRateLimiter, postWeaponsShop);
 router.get('/shop/armors', getArmorsShop);
-router.post('/shop/armors', postArmorsShop);
+router.post('/shop/armors', shopRateLimiter, postArmorsShop);
 router.get('/inn', getInn);
-router.post('/inn', postInn);
+router.post('/inn', shopRateLimiter, postInn);
 
 // suicide
 router.get('/suicide', getSuicide);

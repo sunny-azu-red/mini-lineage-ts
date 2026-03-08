@@ -23,7 +23,7 @@ export const postGameStart = (req: Request, res: Response, next: NextFunction) =
 
     const race = RACES[parsed.data.select_race];
     const player = res.locals.player;
-    const flash = initializePlayer(player, race);
+    const flash = initializePlayer(player, race, parsed.data.name);
     player.flash = makeFlash(flash.text, flash.type);
 
     res.redirect('/');

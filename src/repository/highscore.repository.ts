@@ -9,7 +9,14 @@ export const highscoreRepository = {
         );
     },
 
-    async findAll(): Promise<HighscoreEntry[]> {
+    async findAll(raceId?: number): Promise<HighscoreEntry[]> {
+        if (raceId !== undefined) {
+            const [rows] = await db.execute(
+                'SELECT * FROM highscores WHERE race_id = ? ORDER BY total_xp DESC, adena DESC LIMIT 25',
+                [raceId]
+            );
+            return rows as HighscoreEntry[];
+        }
         const [rows] = await db.execute('SELECT * FROM highscores ORDER BY total_xp DESC, adena DESC LIMIT 25');
         return rows as HighscoreEntry[];
     },
