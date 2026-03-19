@@ -1,13 +1,13 @@
 import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
-import { db } from '../src/config/database.config';
+import { dbPool } from '../src/config/database.config';
 
 const MIGRATIONS_DIR = path.join(__dirname, '../database/migrations');
 
 export async function runMigrations() {
     console.log('🚀 Running migrations...');
-    const connection = await db.getConnection();
+    const connection = await dbPool.getConnection();
 
     try {
         // ensure migrations tracking table exists

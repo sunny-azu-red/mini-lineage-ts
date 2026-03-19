@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node dist/server.js",
     "dev": "nodemon src/server.ts",
+    "prebuild": "npm run test",
     "build:css": "ts-node scripts/build-css.ts",
     "build:js": "ts-node scripts/build-js.ts",
     "build": "rm -rf dist && tsc && tsc-alias && mkdir -p dist/view/template && cp -r src/view/template dist/view/ && npm run build:css && npm run build:js && git rev-parse --short HEAD > dist/version.txt",

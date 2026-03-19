@@ -1,12 +1,12 @@
 import 'dotenv/config';
-import { db } from '../src/config/database.config';
+import { dbPool } from '../src/config/database.config';
 import { runMigrations } from './migrate';
 
 async function resetDb() {
     console.log('🚀 Resetting database to a clean state...');
 
     try {
-        const connection = await db.getConnection();
+        const connection = await dbPool.getConnection();
         console.log('🧹 Clearing all existing tables...');
 
         // get all tables in the current database
