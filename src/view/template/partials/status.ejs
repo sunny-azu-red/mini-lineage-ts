@@ -1,4 +1,4 @@
-<div class="panel">
+<div class="panel status-panel">
     <div class="panel-header">
         <% if (playerName) { %>
             <span title="Your legend"><%= playerName %></span>
@@ -37,15 +37,9 @@
             <span class="stat-label">Adena</span>
             <span class="stat-value gold">🪙 <span class="animate-val" data-val="<%= adena %>" data-prev="<%= prevAdena %>" data-final="<%= adenaFormatted %>"><%= adenaFormatted %></span></span>
         </div>
-        <% if (totalBattles > 0) { %>
         <div class="stat-row">
-            <span class="stat-label">Battles</span>
-            <span class="stat-value muted"><%= totalBattles %></span>
+            <span class="stat-label">Stats</span>
+            <span class="stat-value"><%= totalBattles %> Fights, <%= totalEnemiesKilled %> Kills</span>
         </div>
-        <div class="stat-row">
-            <span class="stat-label">Kills</span>
-            <span class="stat-value muted"><%= totalEnemiesKilled %></span>
-        </div>
-        <% } %>
     </div>
 </div>

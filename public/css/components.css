@@ -34,7 +34,7 @@
 }
 
 .panel-body.small {
-    padding: 6px 12px;
+    padding: 0px 12px;
 }
 
 /* ===== Status Panel ===== */
@@ -42,8 +42,15 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 6px 0;
+    padding: 12px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.status-panel .stat-row {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    align-items: center;
+    gap: 10px;
 }
 
 .stat-row:last-child {
@@ -65,23 +72,27 @@
 .stat-row.danger {
     background: rgba(146, 43, 33, 0.2);
     border-radius: 6px;
-    padding: 7px 6px;
-    margin: -1px -6px;
+    padding: 8px 6px;
+    /* Matches row height perfectly */
+    margin: 0 -6px;
     animation: danger-pulse .5s ease-in-out infinite;
 }
 
 .stat-label {
-    flex: 0 0 44px;
     font-size: 11px;
     color: var(--text-secondary);
     text-align: right;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    line-height: 1;
+    margin-top: 1px;
+    /* Optical center adjustment */
 }
 
 .stat-value {
     color: var(--text-primary);
     font-size: 12px;
+    line-height: 1;
 }
 
 .stat-value.gold {
