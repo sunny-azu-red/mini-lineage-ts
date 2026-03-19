@@ -27,7 +27,7 @@ describe('debugMiddleware', () => {
 
     it('should log debug info on finish in development', () => {
         vi.spyOn(util, 'isRelease').mockReturnValue(false);
-        const req = { method: 'GET', url: '/', sessionID: 'xyz', session: { player: { name: 'Player' } } };
+        const req = { method: 'GET', url: '/', sessionID: 'xyz', session: { name: 'Player' } };
         let finishHandler: Function = () => { };
         const res = {
             on: vi.fn((event, handler) => { if (event === 'finish') finishHandler = handler; }),
@@ -38,10 +38,11 @@ describe('debugMiddleware', () => {
         debugMiddleware(req as any, res as any, next);
         finishHandler();
 
-        expect(logger.debug).toHaveBeenCalled();
-        // first call for request info, second for session state
-        expect(logger.debug).toHaveBeenCalledWith(expect.stringContaining('[GET] / = 200'));
-        expect(logger.debug).toHaveBeenCalledWith(expect.any(Object), 'session state');
+        expect(logger.debug).toHaveBeenCalledOnce();
+        expect(logger.debug).toHaveBeenCalledWith(
+            expect.objectContaining({ "name\u200B": 'Player' }),
+            expect.stringContaining('[GET] / = 200')
+        );
     });
 
     it('should NOT log debug info on finish in release', () => {

@@ -11,15 +11,20 @@ export const debugMiddleware = (req: Request, res: Response, next: NextFunction)
             return;
 
         const duration = Date.now() - start;
-        logger.debug(`[${req.method}] ${req.url} = ${res.statusCode} (${duration}ms) ${req.sessionID}`);
+        const message = `[${req.method}] ${req.url} = ${res.statusCode} (${duration}ms) ${req.sessionID}`;
 
+        let logData = {};
         if (req.session) {
             const state = { ...req.session };
             delete (state as any).cookie;
 
-            if (state && Object.keys(state).length > 0)
-                logger.debug(state, 'session state');
+            if (state && Object.keys(state).length > 0) {
+                const { name, ...rest } = state as any;
+                logData = { "name\u200B": name, ...rest };
+            }
         }
+
+        logger.debug(logData, message);
     });
 
     next();

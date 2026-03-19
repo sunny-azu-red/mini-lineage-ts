@@ -1,10 +1,10 @@
 (function () {
     // suicide confirmation
-    var select = document.getElementById('suicide-select');
+    var sel = document.getElementById('suicide-select');
     var btn = document.getElementById('suicide-btn');
-    if (select && btn) {
-        select.addEventListener('change', function () {
-            if (select.value === 'yes') {
+    if (sel && btn) {
+        sel.addEventListener('change', function () {
+            if (sel.value === 'yes') {
                 btn.textContent = '🪦 Die';
                 btn.className = 'btn btn-danger';
             } else {
