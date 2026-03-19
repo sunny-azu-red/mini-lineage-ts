@@ -11,7 +11,7 @@
             <span class="stat-label">Race</span>
             <span class="stat-value"><%- levelDisplay %></span>
         </div>
-        <div class="stat-row <% if (isLowHealth) { %>danger<% } %>">
+        <div class="stat-row bar <% if (isLowHealth) { %>danger<% } %>">
             <span class="stat-label">HP</span>
             <div class="bar-track">
                 <div class="bar hp-bar" id="hp-bar" style="width: <%= prevHpPercent %>%" data-width="<%= hpPercent %>"></div>
@@ -20,7 +20,7 @@
                 </span>
             </div>
         </div>
-        <div class="stat-row">
+        <div class="stat-row bar">
             <span class="stat-label">XP</span>
             <div class="bar-track">
                 <div class="bar xp-bar" id="xp-bar" style="width: <%= prevXpPercent %>%" data-width="<%= isMaxLevel ? 100 : xpPercent %>"></div>
@@ -37,9 +37,27 @@
             <span class="stat-label">Adena</span>
             <span class="stat-value gold">🪙 <span class="animate-val" data-val="<%= adena %>" data-prev="<%= prevAdena %>" data-final="<%= adenaFormatted %>"><%= adenaFormatted %></span></span>
         </div>
+    </div>
+</div>
+
+<!--
+<div class="panel status-panel" style="margin-top: 12px;">
+    <div class="panel-header">
+        Stats
+    </div>
+    <div class="panel-body small">
         <div class="stat-row">
-            <span class="stat-label">Stats</span>
-            <span class="stat-value"><%= totalBattles %> Fights, <%= totalEnemiesKilled %> Kills</span>
+            <span class="stat-label"><%= totalEnemiesKilled %></span>
+            <span class="stat-value">Kills</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label"><%= totalBattles %></span>
+            <span class="stat-value">Battles</span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-label"><%= totalAmbushes %></span>
+            <span class="stat-value">Ambushes</span>
         </div>
     </div>
 </div>
+-->

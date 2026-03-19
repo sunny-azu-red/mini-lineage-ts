@@ -21,6 +21,7 @@ export const getBattle = (req: Request, res: Response) => {
     let isAmbushed = randomInt(1, race.ambushOdds) === 1;
     if (isAmbushed) {
         player.ambushed = true;
+        player.totalAmbushes = (player.totalAmbushes ?? 0) + 1;
         void gameStatsRepository.increment('total_ambushes');
     }
 

@@ -21,6 +21,7 @@ export function initializePlayer(player: PlayerState, race: Race, name?: string 
     player.weaponId = 0;
     player.armorId = 0;
     player.totalBattles = 0;
+    player.totalAmbushes = 0;
     player.totalEnemiesKilled = 0;
 
     void gameStatsRepository.increment('total_players');

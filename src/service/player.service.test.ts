@@ -28,6 +28,7 @@ const makePlayer = (overrides: Partial<PlayerState> = {}): PlayerState => ({
     weaponId: 0,
     armorId: 0,
     totalBattles: 0,
+    totalAmbushes: 0,
     totalEnemiesKilled: 0,
     ...overrides,
 } as PlayerState);
@@ -47,6 +48,7 @@ describe('initializePlayer', () => {
         expect(p.health).toBe(race.startHealth);
         expect(p.adena).toBe(race.startAdena);
         expect(p.experience).toBe(0);
+        expect(p.totalAmbushes).toBe(0);
         expect(flash.type).toBe('info');
         expect(flash.text).toContain('Human');
         // Verify repository increment for new players

@@ -69,11 +69,14 @@
     }
 }
 
+.stat-row.bar {
+    padding: 10px 0;
+}
+
 .stat-row.danger {
     background: rgba(146, 43, 33, 0.2);
     border-radius: 6px;
-    padding: 8px 6px;
-    /* Matches row height perfectly */
+    padding: 10px 6px;
     margin: 0 -6px;
     animation: danger-pulse .5s ease-in-out infinite;
 }
@@ -86,7 +89,6 @@
     letter-spacing: 0.05em;
     line-height: 1;
     margin-top: 1px;
-    /* Optical center adjustment */
 }
 
 .stat-value {
@@ -103,7 +105,7 @@
 .bar-track {
     flex: 1;
     position: relative;
-    height: 16px;
+    height: 18px;
     background: rgba(0, 0, 0, 0.4);
     border-radius: 4px;
     overflow: hidden;

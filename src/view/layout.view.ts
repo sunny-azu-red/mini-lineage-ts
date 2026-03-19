@@ -79,6 +79,7 @@ export function renderStatus(player: PlayerState): string {
         levelDisplay,
         playerName: player.name || null,
         totalBattles: player.totalBattles ?? 0,
+        totalAmbushes: player.totalAmbushes ?? 0,
         totalEnemiesKilled: player.totalEnemiesKilled ?? 0,
     });
 }

@@ -18,6 +18,7 @@ export interface PlayerState {
     deathReason?: string;
     flash?: FlashMessage;
     totalBattles?: number;
+    totalAmbushes?: number;
     totalEnemiesKilled?: number;
 }
 
