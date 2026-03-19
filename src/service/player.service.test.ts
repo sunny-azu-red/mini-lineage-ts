@@ -3,6 +3,7 @@ import { ItemType, PlayerState } from '@/interface';
 import { RACES } from '@/constant/game.constant';
 import {
     isGameStarted,
+    initializePlayer,
     deductCost,
     killPlayer,
     commitSuicide,
@@ -10,6 +11,7 @@ import {
     purchaseItem,
     applyBattleResult,
 } from './player.service';
+import { gameStatsRepository } from '@/repository/game-stats.repository';
 
 vi.mock('@/repository/game-stats.repository', () => ({
     gameStatsRepository: {
@@ -33,6 +35,29 @@ const makePlayer = (overrides: Partial<PlayerState> = {}): PlayerState => ({
 describe('isGameStarted', () => {
     it('returns true for a fully initialized player', () => expect(isGameStarted(makePlayer())).toBe(true));
     it('returns false when raceId is missing', () => expect(isGameStarted({} as PlayerState)).toBe(false));
+});
+
+describe('initializePlayer', () => {
+    it('populates player state and returns an info flash message', () => {
+        const p = {} as any;
+        const race = RACES[0]; // Human
+        const flash = initializePlayer(p, race, 'Arthur');
+
+        expect(p.name).toBe('Arthur');
+        expect(p.health).toBe(race.startHealth);
+        expect(p.adena).toBe(race.startAdena);
+        expect(p.experience).toBe(0);
+        expect(flash.type).toBe('info');
+        expect(flash.text).toContain('Human');
+        // Verify repository increment for new players
+        expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_players');
+    });
+
+    it('handles null name correctly', () => {
+        const p = {} as any;
+        initializePlayer(p, RACES[0], null);
+        expect(p.name).toBeNull();
+    });
 });
 
 describe('deductCost', () => {
@@ -143,5 +168,20 @@ describe('applyBattleResult', () => {
         expect(p.experience).toBe(50);
         expect(p.totalBattles).toBe(1);
         expect(p.totalEnemiesKilled).toBe(5);
+    });
+
+    it('increments global stats during battle', () => {
+        const p = makePlayer({ health: 100 });
+        applyBattleResult(p, 10, 50, 25, 5);
+
+        expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_battles');
+        expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_enemies_killed', 5);
+        expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_adena_generated', 25);
+    });
+
+    it('increments total_deaths when player dies', () => {
+        const p = makePlayer({ health: 5 });
+        applyBattleResult(p, 10, 0, 0, 0);
+        expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_deaths');
     });
 });
