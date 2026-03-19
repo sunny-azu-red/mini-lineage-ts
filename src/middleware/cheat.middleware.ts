@@ -19,9 +19,9 @@ export const cheatMiddleware = (req: Request, res: Response, next: NextFunction)
     if (!player.dead && deathPaths.includes(req.path))
         return res.redirect('/');
 
-    // prevent escaping from ambushes — only trap on real game navigation, not browser/asset requests
-    const ambushEscapePaths = ['/', '/shop/weapons', '/shop/armors', '/inn', '/suicide', '/death', '/restart', '/xp-table', '/highscores'];
-    if (player.ambushed && !player.dead && ambushEscapePaths.includes(req.path)) {
+    // kill ambushed players if they navigate away (cheaters)
+    const ambushedPaths = ['/', '/shop/weapons', '/shop/armors', '/inn', '/suicide', '/death', '/restart', '/xp-table', '/highscores'];
+    if (player.ambushed && !player.dead && ambushedPaths.includes(req.path)) {
         commitSuicide(player);
         return res.redirect('/death');
     }

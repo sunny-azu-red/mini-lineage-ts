@@ -41,30 +41,13 @@ export function initializePlayer(player: PlayerState, race: Race, name?: string 
 export function killPlayer(player: PlayerState): void {
     player.health = 0;
     player.dead = true;
+
     void gameStatsRepository.increment('total_deaths');
 }
 
 export function commitSuicide(player: PlayerState): void {
     killPlayer(player);
     player.coward = true;
-}
-
-export function attemptEscape(player: PlayerState): boolean {
-    const race = RACES[player.raceId];
-    // Lower ambushOdds = rarer ambushes = harder to escape (aggressive races)
-    // Higher ambushOdds = common ambushes = easier to escape (nimble races)
-    // Escape chance range: ~20% (Orc, odds 6) to ~62% (Elf, odds 25)
-    const escapeChance = Math.min(0.1 + race.ambushOdds / 40, 0.8);
-    const penalty = randomInt(5, 12);
-
-    player.health = Math.max(0, player.health - penalty);
-
-    if (Math.random() < escapeChance) {
-        player.ambushed = false;
-        void gameStatsRepository.increment('total_escapes');
-        return true;
-    }
-    return false;
 }
 
 export function deductCost(player: PlayerState, cost: number): boolean {

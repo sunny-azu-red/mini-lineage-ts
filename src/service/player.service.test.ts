@@ -9,7 +9,6 @@ import {
     restoreHealth,
     purchaseItem,
     applyBattleResult,
-    attemptEscape,
 } from './player.service';
 
 vi.mock('@/repository/game-stats.repository', () => ({
@@ -19,9 +18,8 @@ vi.mock('@/repository/game-stats.repository', () => ({
     },
 }));
 
-
 const makePlayer = (overrides: Partial<PlayerState> = {}): PlayerState => ({
-    raceId: 0,        // Human — startHealth: 100
+    raceId: 0, // Human — startHealth: 100
     health: 100,
     adena: 500,
     experience: 0,
@@ -145,41 +143,5 @@ describe('applyBattleResult', () => {
         expect(p.experience).toBe(50);
         expect(p.totalBattles).toBe(1);
         expect(p.totalEnemiesKilled).toBe(5);
-    });
-});
-
-describe('attemptEscape', () => {
-    it('always deducts an HP penalty regardless of success', () => {
-        vi.spyOn(Math, 'random').mockReturnValue(0.99); // guaranteed fail
-        const p = makePlayer({ health: 100, raceId: 0, ambushed: true });
-        attemptEscape(p);
-        expect(p.health).toBeLessThan(100);
-        vi.restoreAllMocks();
-    });
-
-    it('clears ambushed flag on successful escape', () => {
-        vi.spyOn(Math, 'random').mockReturnValue(0); // guaranteed success
-        const p = makePlayer({ health: 100, raceId: 0, ambushed: true });
-        const result = attemptEscape(p);
-        expect(result).toBe(true);
-        expect(p.ambushed).toBe(false);
-        vi.restoreAllMocks();
-    });
-
-    it('keeps ambushed flag on failed escape', () => {
-        vi.spyOn(Math, 'random').mockReturnValue(0.99); // guaranteed fail
-        const p = makePlayer({ health: 100, raceId: 0, ambushed: true });
-        const result = attemptEscape(p);
-        expect(result).toBe(false);
-        expect(p.ambushed).toBe(true);
-        vi.restoreAllMocks();
-    });
-
-    it('HP can reach 0 from the penalty (handled by controller)', () => {
-        vi.spyOn(Math, 'random').mockReturnValue(0.99); // fail
-        const p = makePlayer({ health: 1, raceId: 0, ambushed: true });
-        attemptEscape(p);
-        expect(p.health).toBe(0);
-        vi.restoreAllMocks();
     });
 });

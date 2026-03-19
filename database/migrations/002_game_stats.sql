@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS `game_stats` (
     `total_battles` BIGINT NOT NULL DEFAULT 0,
     `total_deaths` BIGINT NOT NULL DEFAULT 0,
     `total_ambushes` BIGINT NOT NULL DEFAULT 0,
-    `total_escapes` BIGINT NOT NULL DEFAULT 0,
     `total_enemies_killed` BIGINT NOT NULL DEFAULT 0,
     `total_adena_generated` BIGINT NOT NULL DEFAULT 0,
     `total_players` BIGINT NOT NULL DEFAULT 0,
