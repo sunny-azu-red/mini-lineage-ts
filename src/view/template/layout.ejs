@@ -64,7 +64,14 @@
                 <div id="copyright">Version <%- version %> &copy; 2005 &ndash; <%= year %></div>
             </div>
         </div>
-        <script src="/js/game.js"></script>
+        <% if (isRelease) { %>
+            <script src="/js/script.js"></script>
+        <% } else { %>
+            <script src="/js/sidebar.js"></script>
+            <script src="/js/home.js"></script>
+            <script src="/js/suicide.js"></script>
+            <script src="/js/shop.js"></script>
+        <% } %>
     </body>
 
 </html>
