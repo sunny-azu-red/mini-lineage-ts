@@ -1,6 +1,7 @@
 import { readTemplate, render } from './base.view';
 import { WEAPONS, ARMORS, RACES, GAME_VERSION, REPO_COMMIT_URL } from '@/constant/game.constant';
 import { calculateLevel, isLowHealth, calculatePercentage, getXpProgress, isMaxLevel } from '@/service/math.service';
+import { isGameStarted } from '@/service/player.service';
 import { formatAdena, randomElement, isRelease } from '@/util';
 import { AMBUSH_LOW_HEALTH_MESSAGES } from '@/constant/narratives.constant';
 import { PlayerState, RenderOptions, FlashMessage } from '@/interface';
@@ -121,11 +122,12 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
     });
 }
 
-export function renderSimplePage(title: string, mainContent: string, flash: FlashMessage | null = null): string {
+export function renderSimplePage(title: string, mainContent: string, flash: FlashMessage | null = null, player: PlayerState | null = null): string {
     return render(simpleTpl, {
         title,
         mainContent,
         flash,
+        headerClickable: (player && isGameStarted(player)) ? (!player.ambushed && !player.dead) : true,
         headerBanner: HEADER_BANNER,
         year: new Date().getFullYear(),
         version: getVersionHtml(),

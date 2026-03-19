@@ -27,7 +27,11 @@
         <div id="app">
             <div id="wrapper">
                 <div id="header">
-                    <a href="/" id="header-link"><%- headerBanner %></a>
+                    <% if (headerClickable) { %>
+                        <a href="/" id="header-link"><%- headerBanner %></a>
+                    <% } else { %>
+                        <%- headerBanner %>
+                    <% } %>
                 </div>
 
                 <div id="main-simple">
