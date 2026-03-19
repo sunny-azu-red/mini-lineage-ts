@@ -4,3 +4,4 @@ export * from './game.interface';
 export * from './battle.interface';
 export * from './view.interface';
 export * from './database.interface';
+export * from './game-stats.interface';

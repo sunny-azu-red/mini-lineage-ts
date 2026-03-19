@@ -23,7 +23,6 @@ export function initializePlayer(player: PlayerState, race: Race, name?: string 
     player.totalBattles = 0;
     player.totalEnemiesKilled = 0;
 
-    // fire-and-forget: don't block game flow on DB write
     void gameStatsRepository.increment('total_players');
 
     const builds = ['a slim', 'a lean', 'an average', 'a fit', 'a stocky', 'a broad', 'a round'];
@@ -80,7 +79,6 @@ export function applyBattleResult(player: PlayerState, hpLost: number, xpGained:
     player.totalBattles = (player.totalBattles ?? 0) + 1;
     player.totalEnemiesKilled = (player.totalEnemiesKilled ?? 0) + enemiesKilled;
 
-    // fire-and-forget global stats
     void gameStatsRepository.increment('total_battles');
     void gameStatsRepository.increment('total_enemies_killed', enemiesKilled);
     void gameStatsRepository.increment('total_adena_generated', adenaGained);
