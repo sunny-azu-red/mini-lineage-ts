@@ -1,7 +1,6 @@
-dist/
-node_modules/
-.git/
+/.git/
+/dist/
+/node_modules/
+/.env
+/package-lock.json
 .DS_Store
-.env
-package-lock.json
-*.log
