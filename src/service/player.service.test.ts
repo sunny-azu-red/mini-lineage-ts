@@ -53,6 +53,7 @@ describe('initializePlayer', () => {
         expect(flash.text).toContain('Human');
         // Verify repository increment for new players
         expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_players');
+        expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_adena', race.startAdena);
     });
 
     it('handles null name correctly', () => {
@@ -81,11 +82,12 @@ describe('deductCost', () => {
 });
 
 describe('killPlayer', () => {
-    it('sets health to 0 and dead to true', () => {
+    it('sets health to 0 and dead to true and increments total_deaths', () => {
         const p = makePlayer({ health: 75 });
         killPlayer(p);
         expect(p.health).toBe(0);
         expect(p.dead).toBe(true);
+        expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_deaths');
     });
 });
 
@@ -119,6 +121,8 @@ describe('purchaseItem — weapon', () => {
         expect(result?.success).toBe(true);
         expect(p.weaponId).toBe(1);
         expect(p.adena).toBe(700);
+        expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_weapons_bought');
+        expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_adena_spent', 300);
     });
     it('fails when adena is insufficient', () => {
         const p = makePlayer({ adena: 10, weaponId: 0 });
@@ -135,13 +139,26 @@ describe('purchaseItem — weapon', () => {
     });
 });
 
+describe('purchaseItem — armor', () => {
+    it('deducts cost and updates armorId and increments stats', () => {
+        const p = makePlayer({ adena: 1000, armorId: 0 });
+        const result = purchaseItem(p, ItemType.Armor, 1); // Brigandine Leathers costs 500
+        expect(result?.success).toBe(true);
+        expect(p.armorId).toBe(1);
+        expect(p.adena).toBe(500);
+        expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_armors_bought');
+        expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_adena_spent', 500);
+    });
+});
 describe('purchaseItem — food', () => {
-    it('heals the player on purchase', () => {
+    it('heals the player on purchase and increments stats', () => {
         const p = makePlayer({ adena: 100, health: 50, raceId: 0 });
         const result = purchaseItem(p, ItemType.Food, 0); // Spiced Ale: stat 4, cost 7
         expect(result?.success).toBe(true);
         expect(p.health).toBe(54);
         expect(p.adena).toBe(93);
+        expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_food_bought');
+        expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_adena_spent', 7);
     });
 });
 
@@ -179,6 +196,7 @@ describe('applyBattleResult', () => {
         expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_battles');
         expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_enemies_killed', 5);
         expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_adena_generated', 25);
+        expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_adena', 25);
     });
 
     it('increments total_deaths when player dies', () => {

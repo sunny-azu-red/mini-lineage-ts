@@ -1,15 +1,23 @@
--- Migration 002: Global game stats tracker
+-- Migration 002: Global game stats tracker (Key-Value format)
 
 CREATE TABLE IF NOT EXISTS `game_stats` (
-    `id` INT NOT NULL DEFAULT 1,
-    `total_battles` BIGINT NOT NULL DEFAULT 0,
-    `total_deaths` BIGINT NOT NULL DEFAULT 0,
-    `total_ambushes` BIGINT NOT NULL DEFAULT 0,
-    `total_enemies_killed` BIGINT NOT NULL DEFAULT 0,
-    `total_adena_generated` BIGINT NOT NULL DEFAULT 0,
-    `total_players` BIGINT NOT NULL DEFAULT 0,
-    PRIMARY KEY (`id`)
+    `stat_name` VARCHAR(64) NOT NULL,
+    `stat_value` BIGINT NOT NULL DEFAULT 0,
+    PRIMARY KEY (`stat_name`)
 ) ENGINE=InnoDB;
 
--- Seed the single stats row
-INSERT IGNORE INTO `game_stats` (`id`) VALUES (1);
+-- Seed the initial stats
+INSERT IGNORE INTO `game_stats` (`stat_name`, `stat_value`) VALUES
+('total_adena', 0),
+('total_adena_generated', 0),
+('total_adena_spent', 0),
+('total_ambushes', 0),
+('total_armors_bought', 0),
+('total_battles', 0),
+('total_deaths', 0),
+('total_enemies_killed', 0),
+('total_food_bought', 0),
+('total_players', 0),
+('total_players_cheated', 0),
+('total_players_suicided', 0),
+('total_weapons_bought', 0);

@@ -5,7 +5,7 @@
     if (sel && btn) {
         sel.addEventListener('change', function () {
             if (sel.value === 'yes') {
-                btn.textContent = '🪦 Die';
+                btn.textContent = 'Do it 🥀';
                 btn.className = 'btn btn-danger';
             } else {
                 btn.textContent = 'Phew 😅';

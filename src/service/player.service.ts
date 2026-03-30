@@ -25,6 +25,7 @@ export function initializePlayer(player: PlayerState, race: Race, name?: string 
     player.totalEnemiesKilled = 0;
 
     void gameStatsRepository.increment('total_players');
+    void gameStatsRepository.increment('total_adena', player.adena);
 
     const builds = ['a slim', 'a lean', 'an average', 'a fit', 'a stocky', 'a broad', 'a round'];
     const build = randomElement(builds);
@@ -83,6 +84,7 @@ export function applyBattleResult(player: PlayerState, hpLost: number, xpGained:
     void gameStatsRepository.increment('total_battles');
     void gameStatsRepository.increment('total_enemies_killed', enemiesKilled);
     void gameStatsRepository.increment('total_adena_generated', adenaGained);
+    void gameStatsRepository.increment('total_adena', adenaGained);
 
     if (isLevelUp(oldXp, player.experience)) {
         const newLevel = calculateLevel(player.experience);
@@ -108,12 +110,18 @@ export function purchaseItem(player: PlayerState, itemType: ItemType, itemId: nu
 
     if (itemType === ItemType.Weapon) {
         player.weaponId = itemId;
+        void gameStatsRepository.increment('total_weapons_bought');
+        void gameStatsRepository.increment('total_adena_spent', item.cost);
         return { success: true, text: `You have bought a Weapon.\nYou are now wielding the swift ${item.emoji} ${item.name}!`, item };
     } else if (itemType === ItemType.Armor) {
         player.armorId = itemId;
+        void gameStatsRepository.increment('total_armors_bought');
+        void gameStatsRepository.increment('total_adena_spent', item.cost);
         return { success: true, text: `You have bought an Armor.\nYou are now wearing the mighty ${item.emoji} ${item.name}!`, item };
     } else {
         restoreHealth(player, item.stat);
+        void gameStatsRepository.increment('total_food_bought');
+        void gameStatsRepository.increment('total_adena_spent', item.cost);
         return { success: true, text: `You have bought ${item.emoji} ${item.name}.\nYou feel your strength returning, bringing you to ${player.health} HP.`, item };
     }
 }

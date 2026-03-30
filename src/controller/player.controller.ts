@@ -3,6 +3,7 @@ import { calculateLevel } from '@/service/math.service';
 import { renderSuicideView, renderDeathView, renderXpTableView } from '@/view/player.view';
 import { commitSuicide } from '@/service/player.service';
 import { SuicideSchema } from '@/schema/player.schema';
+import { gameStatsRepository } from '@/repository/game-stats.repository';
 
 export const getSuicide = (req: Request, res: Response) => {
     res.send(renderSuicideView(res.locals.player, res.locals.flash));
@@ -14,6 +15,7 @@ export const postSuicide = (req: Request, res: Response, next: NextFunction) => 
         return next(new Error('Invalid suicide selection'));
 
     if (parsed.data.suicide === 'yes') {
+        void gameStatsRepository.increment('total_players_suicided');
         commitSuicide(res.locals.player);
         return res.redirect('/death');
     }
