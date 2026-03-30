@@ -7,7 +7,7 @@ export const cheatMiddleware = (req: Request, res: Response, next: NextFunction)
 
     // checking dead players — cowards cannot access the highscores submit form
     const safePaths = ['/death', '/restart'];
-    const highscorePaths = ['/highscores/submit', '/highscores'];
+    const highscorePaths = ['/highscores'];
     if (player.dead) {
         const isBlocked = !safePaths.includes(req.path) &&
             (player.coward || !highscorePaths.includes(req.path));
@@ -16,7 +16,7 @@ export const cheatMiddleware = (req: Request, res: Response, next: NextFunction)
     }
 
     // checking alive players
-    const deathPaths = ['/death', '/restart', '/highscores/submit'];
+    const deathPaths = ['/death', '/restart'];
     if (!player.dead && deathPaths.includes(req.path))
         return res.redirect('/');
 

@@ -1,11 +1,7 @@
 import { Request, Response } from 'express';
 import { calculateLevel } from '@/service/math.service';
-import { renderHighscoresSubmitView, renderHighscoresView } from '@/view/highscores.view';
+import { renderHighscoresView } from '@/view/highscores.view';
 import { highscoreRepository } from '@/repository/highscore.repository';
-
-export const getHighscoresSubmit = (req: Request, res: Response) => {
-    res.send(renderHighscoresSubmitView(res.locals.player));
-};
 
 export const postHighscores = async (req: Request, res: Response) => {
     const player = res.locals.player;
