@@ -1,15 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { cheatMiddleware } from './cheat.middleware';
 import * as playerService from '@/service/player.service';
-import { gameStatsRepository } from '@/repository/game-stats.repository';
+import { statisticsRepository } from '@/repository/statistics.repository';
 
 vi.mock('@/service/player.service', () => ({
     commitSuicide: vi.fn(),
     isGameStarted: vi.fn()
 }));
 
-vi.mock('@/repository/game-stats.repository', () => ({
-    gameStatsRepository: {
+vi.mock('@/repository/statistics.repository', () => ({
+    statisticsRepository: {
         increment: vi.fn().mockResolvedValue(undefined),
     },
 }));
@@ -57,7 +57,7 @@ describe('cheatMiddleware', () => {
 
             cheatMiddleware(req, res, next);
 
-            expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_players_cheated');
+            expect(statisticsRepository.increment).toHaveBeenCalledWith('total_players_cheated');
             expect(playerService.commitSuicide).toHaveBeenCalledWith(res.locals.player);
             expect(res.redirect).toHaveBeenCalledWith('/death');
         });

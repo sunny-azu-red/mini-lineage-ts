@@ -1,15 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { postSuicide } from './player.controller';
 import { commitSuicide } from '@/service/player.service';
-import { gameStatsRepository } from '@/repository/game-stats.repository';
+import { statisticsRepository } from '@/repository/statistics.repository';
 
 vi.mock('@/service/player.service', () => ({
     commitSuicide: vi.fn(),
     calculateLevel: vi.fn()
 }));
 
-vi.mock('@/repository/game-stats.repository', () => ({
-    gameStatsRepository: {
+vi.mock('@/repository/statistics.repository', () => ({
+    statisticsRepository: {
         increment: vi.fn().mockResolvedValue(undefined),
     },
 }));
@@ -35,7 +35,7 @@ describe('playerController', () => {
             req.body.suicide = 'yes';
             postSuicide(req, res, next);
 
-            expect(gameStatsRepository.increment).toHaveBeenCalledWith('total_players_suicided');
+            expect(statisticsRepository.increment).toHaveBeenCalledWith('total_players_suicided');
             expect(commitSuicide).toHaveBeenCalledWith(res.locals.player);
             expect(res.redirect).toHaveBeenCalledWith('/death');
         });
@@ -44,7 +44,7 @@ describe('playerController', () => {
             req.body.suicide = 'no';
             postSuicide(req, res, next);
 
-            expect(gameStatsRepository.increment).not.toHaveBeenCalled();
+            expect(statisticsRepository.increment).not.toHaveBeenCalled();
             expect(commitSuicide).not.toHaveBeenCalled();
             expect(res.redirect).toHaveBeenCalledWith('/');
         });

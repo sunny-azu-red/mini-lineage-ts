@@ -4,8 +4,7 @@ import { renderBattlegroundView } from '@/view/battle.view';
 import { simulateBattle } from '@/service/battle.service';
 import { applyBattleResult } from '@/service/player.service';
 import { RACES } from '@/constant/game.constant';
-
-import { gameStatsRepository } from '@/repository/game-stats.repository';
+import { statisticsRepository } from '@/repository/statistics.repository';
 
 export const getBattle = (req: Request, res: Response) => {
     const player = res.locals.player;
@@ -22,7 +21,7 @@ export const getBattle = (req: Request, res: Response) => {
     if (isAmbushed) {
         player.ambushed = true;
         player.totalAmbushes = (player.totalAmbushes ?? 0) + 1;
-        void gameStatsRepository.increment('total_ambushes');
+        void statisticsRepository.increment('total_ambushes');
     }
 
     const flashToRender = levelUpFlash || res.locals.flash;

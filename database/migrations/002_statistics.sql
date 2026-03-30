@@ -1,13 +1,13 @@
--- Migration 002: Global game stats tracker (Key-Value format)
+-- Migration 002: Global statistics tracker (Key-Value format)
 
-CREATE TABLE IF NOT EXISTS `game_stats` (
-    `stat_name` VARCHAR(64) NOT NULL,
-    `stat_value` BIGINT NOT NULL DEFAULT 0,
-    PRIMARY KEY (`stat_name`)
+CREATE TABLE IF NOT EXISTS `statistics` (
+    `name` VARCHAR(64) NOT NULL,
+    `value` BIGINT NOT NULL DEFAULT 0,
+    PRIMARY KEY (`name`)
 ) ENGINE=InnoDB;
 
 -- Seed the initial stats
-INSERT IGNORE INTO `game_stats` (`stat_name`, `stat_value`) VALUES
+INSERT IGNORE INTO `statistics` (`name`, `value`) VALUES
 ('total_adena', 0),
 ('total_adena_generated', 0),
 ('total_adena_spent', 0),

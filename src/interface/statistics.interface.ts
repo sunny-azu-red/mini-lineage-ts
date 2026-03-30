@@ -1,4 +1,4 @@
-export type GameStatField =
+export type StatField =
     | 'total_adena'
     | 'total_adena_generated'
     | 'total_adena_spent'
@@ -13,11 +13,11 @@ export type GameStatField =
     | 'total_players_suicided'
     | 'total_weapons_bought';
 
-export interface GameStatRow {
-    stat_name: GameStatField;
-    stat_value: number;
+export interface StatRow {
+    name: StatField;
+    value: number;
 }
 
-export type GameStats = {
-    [K in GameStatField]: number;
+export type Statistics = {
+    [K in StatField]: number;
 };

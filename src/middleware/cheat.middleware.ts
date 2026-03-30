@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { commitSuicide, isGameStarted } from '@/service/player.service';
-import { gameStatsRepository } from '@/repository/game-stats.repository';
+import { statisticsRepository } from '@/repository/statistics.repository';
 
 export const cheatMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const player = res.locals.player;
@@ -23,7 +23,7 @@ export const cheatMiddleware = (req: Request, res: Response, next: NextFunction)
     // kill ambushed players if they navigate away (cheaters)
     const ambushedPaths = ['/', '/shop/weapons', '/shop/armors', '/inn', '/suicide', '/death', '/restart', '/xp-table', '/highscores'];
     if (player.ambushed && !player.dead && ambushedPaths.includes(req.path)) {
-        void gameStatsRepository.increment('total_players_cheated');
+        void statisticsRepository.increment('total_players_cheated');
         commitSuicide(player);
         return res.redirect('/death');
     }

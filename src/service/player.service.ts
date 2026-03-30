@@ -3,7 +3,7 @@ import { RACES, ARMORS, WEAPONS, FOODS } from '@/constant/game.constant';
 import { calculateLevel, isLevelUp, randomInt } from '@/service/math.service';
 import { formatAdena, randomElement, fillTemplate } from '@/util';
 import { WELCOME_MESSAGES } from '@/constant/narratives.constant';
-import { gameStatsRepository } from '@/repository/game-stats.repository';
+import { statisticsRepository } from '@/repository/statistics.repository';
 
 export function isGameStarted(player: PlayerState): boolean {
     return player.raceId !== undefined && player.health !== undefined && player.adena !== undefined;
@@ -24,8 +24,8 @@ export function initializePlayer(player: PlayerState, race: Race, name?: string 
     player.totalAmbushes = 0;
     player.totalEnemiesKilled = 0;
 
-    void gameStatsRepository.increment('total_players');
-    void gameStatsRepository.increment('total_adena', player.adena);
+    void statisticsRepository.increment('total_players');
+    void statisticsRepository.increment('total_adena', player.adena);
 
     const builds = ['a slim', 'a lean', 'an average', 'a fit', 'a stocky', 'a broad', 'a round'];
     const build = randomElement(builds);
@@ -43,7 +43,7 @@ export function killPlayer(player: PlayerState): void {
     player.health = 0;
     player.dead = true;
 
-    void gameStatsRepository.increment('total_deaths');
+    void statisticsRepository.increment('total_deaths');
 }
 
 export function commitSuicide(player: PlayerState): void {
@@ -81,10 +81,10 @@ export function applyBattleResult(player: PlayerState, hpLost: number, xpGained:
     player.totalBattles = (player.totalBattles ?? 0) + 1;
     player.totalEnemiesKilled = (player.totalEnemiesKilled ?? 0) + enemiesKilled;
 
-    void gameStatsRepository.increment('total_battles');
-    void gameStatsRepository.increment('total_enemies_killed', enemiesKilled);
-    void gameStatsRepository.increment('total_adena_generated', adenaGained);
-    void gameStatsRepository.increment('total_adena', adenaGained);
+    void statisticsRepository.increment('total_battles');
+    void statisticsRepository.increment('total_enemies_killed', enemiesKilled);
+    void statisticsRepository.increment('total_adena_generated', adenaGained);
+    void statisticsRepository.increment('total_adena', adenaGained);
 
     if (isLevelUp(oldXp, player.experience)) {
         const newLevel = calculateLevel(player.experience);
@@ -110,18 +110,18 @@ export function purchaseItem(player: PlayerState, itemType: ItemType, itemId: nu
 
     if (itemType === ItemType.Weapon) {
         player.weaponId = itemId;
-        void gameStatsRepository.increment('total_weapons_bought');
-        void gameStatsRepository.increment('total_adena_spent', item.cost);
+        void statisticsRepository.increment('total_weapons_bought');
+        void statisticsRepository.increment('total_adena_spent', item.cost);
         return { success: true, text: `You have bought a Weapon.\nYou are now wielding the swift ${item.emoji} ${item.name}!`, item };
     } else if (itemType === ItemType.Armor) {
         player.armorId = itemId;
-        void gameStatsRepository.increment('total_armors_bought');
-        void gameStatsRepository.increment('total_adena_spent', item.cost);
+        void statisticsRepository.increment('total_armors_bought');
+        void statisticsRepository.increment('total_adena_spent', item.cost);
         return { success: true, text: `You have bought an Armor.\nYou are now wearing the mighty ${item.emoji} ${item.name}!`, item };
     } else {
         restoreHealth(player, item.stat);
-        void gameStatsRepository.increment('total_food_bought');
-        void gameStatsRepository.increment('total_adena_spent', item.cost);
+        void statisticsRepository.increment('total_food_bought');
+        void statisticsRepository.increment('total_adena_spent', item.cost);
         return { success: true, text: `You have bought ${item.emoji} ${item.name}.\nYou feel your strength returning, bringing you to ${player.health} HP.`, item };
     }
 }
