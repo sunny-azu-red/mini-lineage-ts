@@ -215,3 +215,8 @@
     text-align: left;
     white-space: pre-wrap;
 }
+
+/* ===== Version Badge ===== */
+.version-debug {
+    color: var(--hp-color);
+}

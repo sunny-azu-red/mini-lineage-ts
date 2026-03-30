@@ -6,12 +6,11 @@ export type GameStatField =
     | 'total_adena_generated'
     | 'total_players';
 
-export interface GameStats {
-    id: number;
-    total_battles: number;
-    total_deaths: number;
-    total_ambushes: number;
-    total_enemies_killed: number;
-    total_adena_generated: number;
-    total_players: number;
+export interface GameStatRow {
+    stat_name: GameStatField;
+    stat_value: number;
 }
+
+export type GameStats = {
+    [K in GameStatField]: number;
+};

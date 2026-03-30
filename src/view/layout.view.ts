@@ -26,7 +26,7 @@ const HEADER_BANNER = `
 function getVersionHtml(): string {
     return isRelease(GAME_VERSION)
         ? `<a href="${REPO_COMMIT_URL}${GAME_VERSION}" target="_blank" class="version-link">${GAME_VERSION}</a>`
-        : GAME_VERSION;
+        : `<span class="version-debug">${GAME_VERSION}</span>`;
 }
 
 export function renderStatus(player: PlayerState): string {

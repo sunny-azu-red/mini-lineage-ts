@@ -3,9 +3,9 @@ import { skipIfDev, battleRateLimitHandler, shopRateLimitHandler } from './rate-
 import * as util from '@/util';
 import * as rateLimitView from '@/view/rate-limit.view';
 
-// mock the constant as it might be 'Development' or a real SHA
+// mock the constant as it might be 'development' or a real SHA
 vi.mock('@/constant/game.constant', () => ({
-    GAME_VERSION: 'Development'
+    GAME_VERSION: 'development'
 }));
 
 vi.mock('@/view/rate-limit.view', () => ({
