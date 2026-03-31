@@ -28,9 +28,9 @@
             <div id="wrapper">
                 <div id="header">
                     <% if (headerClickable) { %>
-                        <a href="/" id="header-link"><%- headerBanner %></a>
+                        <a href="/" id="header-link"><%- include('partials/header') %></a>
                     <% } else { %>
-                        <%- headerBanner %>
+                        <%- include('partials/header') %>
                     <% } %>
                 </div>
 
