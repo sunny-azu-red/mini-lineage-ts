@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { minify } from 'html-minifier-terser';
 
-const DIST_VIEW_DIR = path.join(__dirname, '../dist/view/template');
+const DIST_VIEW_DIR = path.join(__dirname, '../../dist/view/template');
 
 async function minifyFile(filePath: string) {
     const content = fs.readFileSync(filePath, 'utf-8');
@@ -34,7 +34,7 @@ async function walkDir(dir: string) {
     }
 }
 
-async function buildHtml() {
+async function minHtml() {
     if (!fs.existsSync(DIST_VIEW_DIR)) {
         console.error(`❌ Error: ${DIST_VIEW_DIR} does not exist. Run 'npm run build' first or ensure templates are copied.`);
         process.exit(1);
@@ -45,4 +45,4 @@ async function buildHtml() {
     console.log('✨ HTML minification complete.');
 }
 
-buildHtml();
+minHtml();

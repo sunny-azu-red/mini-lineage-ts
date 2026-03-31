@@ -1,8 +1,8 @@
 import 'dotenv/config';
-import { dbPool } from '../src/config/database.config';
-import { runMigrations } from './migrate';
+import { dbPool } from '../../src/config/database.config';
+import { dbMigrate } from './migrate';
 
-async function resetDb() {
+async function dbReset() {
     console.log('🚀 Resetting database to a clean state...');
 
     try {
@@ -30,7 +30,7 @@ async function resetDb() {
 
         connection.release();
 
-        await runMigrations();
+        await dbMigrate();
 
         console.log('✅ Database reset successfully!');
     } catch (err) {
@@ -41,4 +41,4 @@ async function resetDb() {
     }
 }
 
-resetDb();
+dbReset();

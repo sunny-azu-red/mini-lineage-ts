@@ -12,10 +12,10 @@ const CSS_ORDER = [
     'components.css',
 ];
 
-const SRC_DIR = path.join(__dirname, '../public/css');
+const SRC_DIR = path.join(__dirname, '../../public/css');
 const OUT_FILE = path.join(SRC_DIR, 'style.css');
 
-async function buildCss() {
+async function minCss() {
     if (!fs.existsSync(SRC_DIR)) {
         fs.mkdirSync(SRC_DIR, { recursive: true });
     }
@@ -45,4 +45,4 @@ async function buildCss() {
     }
 }
 
-buildCss();
+minCss();

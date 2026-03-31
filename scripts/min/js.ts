@@ -9,10 +9,10 @@ const JS_ORDER = [
     'shop.js',
 ];
 
-const SRC_DIR = path.join(__dirname, '../public/js');
+const SRC_DIR = path.join(__dirname, '../../public/js');
 const OUT_FILE = path.join(SRC_DIR, 'script.js');
 
-async function buildJs() {
+async function minJs() {
     if (!fs.existsSync(SRC_DIR)) {
         fs.mkdirSync(SRC_DIR, { recursive: true });
     }
@@ -43,4 +43,4 @@ async function buildJs() {
     }
 }
 
-buildJs();
+minJs();

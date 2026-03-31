@@ -1,11 +1,11 @@
 import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
-import { dbPool } from '../src/config/database.config';
+import { dbPool } from '../../src/config/database.config';
 
-const MIGRATIONS_DIR = path.join(__dirname, '../database/migrations');
+const MIGRATIONS_DIR = path.join(__dirname, '../../database/migrations');
 
-export async function runMigrations() {
+export async function dbMigrate() {
     console.log('🚀 Running migrations...');
     const connection = await dbPool.getConnection();
 
@@ -58,7 +58,7 @@ export async function runMigrations() {
 }
 
 if (require.main === module) {
-    runMigrations().catch(err => {
+    dbMigrate().catch(err => {
         console.error('❌ Migration failed:', err);
         process.exit(1);
     }).then(() => process.exit(0));
