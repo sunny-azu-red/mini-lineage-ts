@@ -48,6 +48,15 @@ describe('cheatMiddleware', () => {
 
             expect(next).toHaveBeenCalled();
         });
+
+        it('should allow dead players on filtered highscore paths', () => {
+            res.locals.player.dead = true;
+            req.path = '/highscores/elf';
+
+            cheatMiddleware(req, res, next);
+
+            expect(next).toHaveBeenCalled();
+        });
     });
 
     describe('ambushed players', () => {
@@ -86,6 +95,15 @@ describe('cheatMiddleware', () => {
         it('should allow non-initialized players on /start', () => {
             vi.mocked(playerService.isGameStarted).mockReturnValue(false);
             req.path = '/start';
+
+            cheatMiddleware(req, res, next);
+
+            expect(next).toHaveBeenCalled();
+        });
+
+        it('should allow non-initialized players on filtered highscore paths', () => {
+            vi.mocked(playerService.isGameStarted).mockReturnValue(false);
+            req.path = '/highscores/dark-elf';
 
             cheatMiddleware(req, res, next);
 

@@ -37,5 +37,6 @@ router.get('/xp-table', getXpTable);
 // highscores
 router.post('/highscores', postHighscores);
 router.get('/highscores', getHighscores);
+router.get('/highscores/:raceLabel', getHighscores);
 
 export default router;

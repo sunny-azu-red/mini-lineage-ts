@@ -1,7 +1,7 @@
 <div class="action-links top">
     <a href="/highscores" class="btn btn-secondary btn-sm<% if (activeRaceId === undefined) { %> active<% } %>">All</a>
     <% races.forEach(function(race) { %>
-        <a href="/highscores?race=<%= race.id %>" class="btn btn-secondary btn-sm<% if (activeRaceId === race.id) { %> active<% } %>">
+        <a href="/highscores/<%= slugify(race.label) %>" class="btn btn-secondary btn-sm<% if (activeRaceId === race.id) { %> active<% } %>">
             <%= race.emoji %> <%= race.label %>
         </a>
     <% }); %>

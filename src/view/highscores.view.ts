@@ -1,6 +1,6 @@
 import { readTemplate, render } from './base.view';
 import { renderSimplePage } from './layout.view';
-import { formatAdena } from '@/util';
+import { formatAdena, slugify } from '@/util';
 import { RACES } from '@/constant/game.constant';
 import { HighscoreEntry } from '@/interface';
 
@@ -21,7 +21,7 @@ export function renderHighscoresView(highscores: HighscoreEntry[] = [], activeRa
             date,
         };
     });
-    const content = render(highscoresTpl, { rows, activeRaceId, races: RACES });
+    const content = render(highscoresTpl, { rows, activeRaceId, races: RACES, slugify });
 
     return renderSimplePage('Hall of Champions', content);
 }

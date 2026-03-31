@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { calculateLevel } from '@/service/math.service';
 import { renderHighscoresView } from '@/view/highscores.view';
 import { highscoreRepository } from '@/repository/highscore.repository';
+import { RACES } from '@/constant/game.constant';
+import { slugify } from '@/util';
 
 export const postHighscores = async (req: Request, res: Response) => {
     const player = res.locals.player;
@@ -27,9 +29,15 @@ export const getHighscores = async (req: Request, res: Response) => {
     if (player.dead)
         return res.redirect('/death');
 
-    const raceParam = req.query.race;
-    const raceId = raceParam !== undefined ? parseInt(String(raceParam), 10) : undefined;
-    const filteredRaceId = (raceId !== undefined && !isNaN(raceId)) ? raceId : undefined;
+    const { raceLabel } = req.params;
+    let filteredRaceId: number | undefined;
+
+    if (raceLabel) {
+        const race = RACES.find(r => slugify(r.label) === raceLabel);
+        if (race) {
+            filteredRaceId = race.id;
+        }
+    }
 
     const highscores = await highscoreRepository.findAll(filteredRaceId);
     res.send(renderHighscoresView(highscores, filteredRaceId));
