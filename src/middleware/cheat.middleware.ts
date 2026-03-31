@@ -6,37 +6,38 @@ export const cheatMiddleware = (req: Request, res: Response, next: NextFunction)
     const player = res.locals.player;
     const isHighscores = req.path.startsWith('/highscores');
 
-    // checking dead players — cowards cannot access the highscores submit form
-    const safePaths = ['/death', '/restart'];
+    // checking dead players — cowards cannot post to the highscores
     if (player.dead) {
-        const isBlocked = !safePaths.includes(req.path) &&
-            (player.coward || !isHighscores);
-        if (isBlocked)
+        const isSafePath = ['/death', '/restart'].includes(req.path);
+        const canSubmitLegacy = req.method === 'POST' && req.path === '/highscores' && !player.coward;
+        if (!isSafePath && !canSubmitLegacy)
             return res.redirect('/death');
+
+        return next(); // dead players don't need further checks
     }
 
     // checking alive players
-    const deathPaths = ['/death', '/restart'];
-    if (!player.dead && deathPaths.includes(req.path))
+    const isDeathPath = ['/death', '/restart'].includes(req.path);
+    if (isDeathPath)
         return res.redirect('/');
 
     // kill ambushed players if they navigate away (cheaters)
-    const ambushedPaths = ['/', '/shop/weapons', '/shop/armors', '/inn', '/suicide', '/death', '/restart', '/xp-table'];
-    if (player.ambushed && !player.dead && (ambushedPaths.includes(req.path) || isHighscores)) {
+    if (player.ambushed && req.path !== '/battle') {
         void statisticsRepository.increment('total_players_cheated');
         commitSuicide(player);
         return res.redirect('/death');
     }
 
     // prevent already initialized players from accessing start routes
-    const startPaths = ['/start'];
-    if (isGameStarted(player) && startPaths.includes(req.path))
+    if (isGameStarted(player) && req.path === '/start')
         return res.redirect('/');
 
     // additional sanity checks for routes that require an initialized character
-    const safePathsInit = ['/', '/start'];
-    if (!isGameStarted(player) && !safePathsInit.includes(req.path) && !isHighscores)
-        return res.redirect('/');
+    if (!isGameStarted(player)) {
+        const isUninitializedSafePath = ['/', '/start'].includes(req.path) || isHighscores;
+        if (!isUninitializedSafePath)
+            return res.redirect('/');
+    }
 
     next();
 };

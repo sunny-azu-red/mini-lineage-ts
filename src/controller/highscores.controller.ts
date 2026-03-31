@@ -8,6 +8,9 @@ import { slugify } from '@/util';
 export const postHighscores = async (req: Request, res: Response) => {
     const player = res.locals.player;
     if (player.dead && !player.coward) {
+        const race = RACES.find(r => r.id === player.raceId);
+        const redirectUrl = race ? `/highscores/${slugify(race.label)}` : '/highscores';
+
         await highscoreRepository.insert({
             name: player.name ?? null,
             experience: player.experience,
@@ -17,7 +20,7 @@ export const postHighscores = async (req: Request, res: Response) => {
         });
 
         return req.session.destroy(() => {
-            res.redirect('/highscores');
+            res.redirect(redirectUrl);
         });
     }
 
@@ -34,9 +37,8 @@ export const getHighscores = async (req: Request, res: Response) => {
 
     if (raceLabel) {
         const race = RACES.find(r => slugify(r.label) === raceLabel);
-        if (race) {
+        if (race)
             filteredRaceId = race.id;
-        }
     }
 
     const highscores = await highscoreRepository.findAll(filteredRaceId);

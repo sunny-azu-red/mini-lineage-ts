@@ -49,20 +49,42 @@ describe('cheatMiddleware', () => {
             expect(next).toHaveBeenCalled();
         });
 
-        it('should allow dead players on filtered highscore paths', () => {
+        it('should redirect dead players away from highscore GET paths', () => {
             res.locals.player.dead = true;
             req.path = '/highscores/elf';
+            req.method = 'GET';
+
+            cheatMiddleware(req, res, next);
+
+            expect(res.redirect).toHaveBeenCalledWith('/death');
+        });
+
+        it('should allow dead players to POST highscores if not a coward', () => {
+            res.locals.player.dead = true;
+            res.locals.player.coward = false;
+            req.path = '/highscores';
+            req.method = 'POST';
 
             cheatMiddleware(req, res, next);
 
             expect(next).toHaveBeenCalled();
+        });
+
+        it('should redirect dead cowards away from highscore paths', () => {
+            res.locals.player.dead = true;
+            res.locals.player.coward = true;
+            req.path = '/highscores/elf';
+
+            cheatMiddleware(req, res, next);
+
+            expect(res.redirect).toHaveBeenCalledWith('/death');
         });
     });
 
     describe('ambushed players', () => {
         it('should kill ambushed player if they navigate to forbidden path', () => {
             res.locals.player.ambushed = true;
-            req.path = '/shop/weapons';
+            req.path = '/some/random/path';
 
             cheatMiddleware(req, res, next);
 
