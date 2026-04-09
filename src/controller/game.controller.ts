@@ -3,7 +3,7 @@ import { renderGameStartView, renderHomeView } from '@/view/game.view';
 import { initializePlayer, isGameStarted } from '@/service/player.service';
 import { makeFlash } from '@/util';
 import { RACES } from '@/constant/game.constant';
-import { GameStartSchema } from '@/schema/shop.schema';
+import { GameStartSchema } from '@/schema/game.schema';
 
 export const getHome = (req: Request, res: Response) => {
     const player = res.locals.player;

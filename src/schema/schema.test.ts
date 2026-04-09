@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { ShopWeaponSchema, ShopArmorSchema, ShopFoodSchema, GameStartSchema } from './shop.schema';
+import { ShopWeaponSchema, ShopArmorSchema, ShopFoodSchema } from './shop.schema';
+import { GameStartSchema } from './game.schema';
 import { SuicideSchema, HighscoreNameSchema } from './player.schema';
 
 // ---------------------------------------------------------------------------
