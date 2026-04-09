@@ -9,9 +9,9 @@ export function isGameStarted(player: PlayerState): boolean {
     return player.raceId !== undefined && player.health !== undefined && player.adena !== undefined;
 }
 
-export function initializePlayer(player: PlayerState, race: Race, name?: string | null): FlashMessage {
+export function initializePlayer(player: PlayerState, race: Race, name: string): FlashMessage {
     player.raceId = race.id;
-    player.name = name || null;
+    player.name = name;
     player.health = race.startHealth;
     player.prevHealth = 0;
     player.adena = race.startAdena;

@@ -12,7 +12,7 @@ export const postHighscores = async (req: Request, res: Response) => {
         const redirectUrl = race ? `/highscores/${slugify(race.label)}` : '/highscores';
 
         await highscoreRepository.insert({
-            name: player.name ?? null,
+            name: player.name,
             experience: player.experience,
             raceId: player.raceId,
             adena: player.adena,

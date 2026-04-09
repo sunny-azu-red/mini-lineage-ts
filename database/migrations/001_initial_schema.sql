@@ -2,7 +2,7 @@
 
 CREATE TABLE IF NOT EXISTS `highscores` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
+  `name` varchar(18) NOT NULL,
   `total_xp` int(11) NOT NULL,
   `race_id` int(11) NOT NULL,
   `adena` int(11) NOT NULL,

@@ -21,6 +21,7 @@ vi.mock('@/repository/statistics.repository', () => ({
 }));
 
 const makePlayer = (overrides: Partial<PlayerState> = {}): PlayerState => ({
+    name: 'Test Hero',
     raceId: 0, // Human — startHealth: 100
     health: 100,
     adena: 500,
@@ -56,10 +57,10 @@ describe('initializePlayer', () => {
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_adena', race.startAdena);
     });
 
-    it('handles null name correctly', () => {
+    it('stores the provided name', () => {
         const p = {} as any;
-        initializePlayer(p, RACES[0], null);
-        expect(p.name).toBeNull();
+        initializePlayer(p, RACES[0], 'Merlin');
+        expect(p.name).toBe('Merlin');
     });
 });
 

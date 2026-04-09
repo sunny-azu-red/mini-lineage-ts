@@ -14,7 +14,7 @@ export function renderHighscoresView(highscores: HighscoreEntry[] = [], activeRa
         const emoji = RACES[score.race_id]?.emoji || '❓';
 
         return {
-            name: `${emoji} ${score.name || 'Unsung Champion'}`,
+            name: `${emoji} ${score.name}`,
             level: score.level,
             totalXp: score.total_xp,
             adena: formatAdena(score.adena),

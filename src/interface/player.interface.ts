@@ -2,7 +2,7 @@ import 'express-session';
 import { RaceType } from './game.interface';
 
 export interface PlayerState {
-    name?: string | null;
+    name: string;
     raceId: RaceType;
     health: number;
     prevHealth?: number;

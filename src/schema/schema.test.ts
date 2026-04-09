@@ -49,24 +49,28 @@ describe('ShopFoodSchema', () => {
 describe('GameStartSchema', () => {
     it('accepts all 4 valid race ids', () => {
         for (const id of [0, 1, 2, 3]) {
-            expect(GameStartSchema.safeParse({ select_race: String(id) }).success).toBe(true);
+            expect(GameStartSchema.safeParse({ select_race: String(id), name: 'Hero' }).success).toBe(true);
         }
     });
     it('rejects race id 4 (out of range)', () => {
         expect(GameStartSchema.safeParse({ select_race: '4' }).success).toBe(false);
     });
-    it('accepts a name within 20 chars', () => {
+    it('accepts a name within 18 chars', () => {
         const result = GameStartSchema.safeParse({ select_race: '0', name: 'Hero' });
         expect(result.success).toBe(true);
         if (result.success) expect(result.data.name).toBe('Hero');
     });
-    it('rejects a name exceeding 20 chars', () => {
-        expect(GameStartSchema.safeParse({ select_race: '0', name: 'a'.repeat(21) }).success).toBe(false);
+    it('rejects a name exceeding 18 chars', () => {
+        expect(GameStartSchema.safeParse({ select_race: '0', name: 'a'.repeat(19) }).success).toBe(false);
     });
-    it('coerces missing name to null', () => {
-        const result = GameStartSchema.safeParse({ select_race: '0' });
-        expect(result.success).toBe(true);
-        if (result.success) expect(result.data.name).toBeNull();
+    it('rejects missing name', () => {
+        expect(GameStartSchema.safeParse({ select_race: '0' }).success).toBe(false);
+    });
+    it('rejects empty name', () => {
+        expect(GameStartSchema.safeParse({ select_race: '0', name: '' }).success).toBe(false);
+    });
+    it('rejects whitespace-only name', () => {
+        expect(GameStartSchema.safeParse({ select_race: '0', name: '   ' }).success).toBe(false);
     });
 });
 
