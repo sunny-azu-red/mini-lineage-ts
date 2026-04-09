@@ -27,6 +27,34 @@
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
+.panel-header.flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-stats {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: none;
+    letter-spacing: normal;
+    font-size: 11px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.header-stats-value {
+    color: var(--gold);
+}
+
+.header-stats-divider {
+    opacity: 0.4;
+    padding: 0 2px;
+}
+
 .panel-body {
     padding: 12px;
     font-size: 13px;

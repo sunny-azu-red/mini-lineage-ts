@@ -67,9 +67,6 @@ export function renderStatus(player: PlayerState): string {
         adenaFormatted: formatAdena(player.adena),
         levelDisplay,
         playerName: player.name || null,
-        totalBattles: player.totalBattles ?? 0,
-        totalAmbushes: player.totalAmbushes ?? 0,
-        totalEnemiesKilled: player.totalEnemiesKilled ?? 0,
     });
 }
 
@@ -89,7 +86,10 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
     const statusHtml = renderStatus(player);
     const inventoryHtml = renderInventory(player);
 
-    const maxHp = RACES[player.raceId].startHealth;
+    const playerRace = RACES[player.raceId];
+    const enemyRace = RACES[playerRace.enemyRaceId];
+    const maxHp = playerRace.startHealth;
+
     let lowHealthAlert = '';
     if (!player.dead && isLowHealth(player.health, maxHp) && !options.hideLowHealthAlert) {
         lowHealthAlert = player.ambushed
@@ -105,6 +105,10 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
         lowHealthAlert,
         flash,
         headerClickable: !player.ambushed && !player.dead,
+        totalBattles: player.totalBattles ?? 0,
+        totalAmbushes: player.totalAmbushes ?? 0,
+        totalEnemiesKilled: player.totalEnemiesKilled ?? 0,
+        enemyEmoji: enemyRace.emoji,
         year: new Date().getFullYear(),
         version: getVersionHtml(),
         isRelease: isRelease(GAME_VERSION),
