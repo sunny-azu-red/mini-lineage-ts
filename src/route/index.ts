@@ -4,6 +4,7 @@ import { getWeaponsShop, postWeaponsShop, getArmorsShop, postArmorsShop, getInn,
 import { getBattle } from '@/controller/battle.controller';
 import { getSuicide, postSuicide, getDeath, getRestart, getXpTable } from '@/controller/player.controller';
 import { postHighscores, getHighscores } from '@/controller/highscores.controller';
+import { getStatistics } from '@/controller/statistics.controller';
 import { battleRateLimiter, shopRateLimiter } from '@/middleware/rate-limit.middleware';
 
 const router = Router();
@@ -38,5 +39,8 @@ router.get('/xp-table', getXpTable);
 router.post('/highscores', postHighscores);
 router.get('/highscores', getHighscores);
 router.get('/highscores/:raceLabel', getHighscores);
+
+// statistics
+router.get('/statistics', getStatistics);
 
 export default router;

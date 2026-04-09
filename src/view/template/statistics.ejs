@@ -1,0 +1,56 @@
+        <p>
+            In the age of steel and magic, <span class="gold"><%= stats.total_players %> brave souls</span> have set foot upon these dangerous lands. 
+            Through hardship and triumph, they have collectively ascended <span class="gold"><%= stats.total_levels_gained %> levels</span> in their pursuit of power. 
+            Yet, glory always exacts a price, because <span class="hp"><%= stats.total_deaths %> champions</span> have fallen in battle... lost, but not forgotten. 
+            A few, overwhelmed by the weight of their journey, chose the coward's end, with <span class="muted"><%= stats.total_players_suicided %> weak souls</span> taking their own lives, 
+            while <span class="hp"><%= stats.total_players_cheated %> snakes</span> were struck down by the gods for attempting to bypass the laws of the realm.
+        </p>
+    </div>
+</div>
+
+<div class="panel" style="margin-top: 12px;">
+    <div class="panel-header">
+        Echoes of the Battlefield
+    </div>
+    <div class="panel-body">
+        <p>
+            The drums of war never truly fall silent because <span class="gold"><%= stats.total_battles %> battles</span> have been fought against the encroaching darkness, 
+            resulting in the defeat of <span class="gold"><%= stats.total_enemies_killed %> formidable foes</span>. 
+            From these conflicts, the survivors extracted vast wisdom, gaining a total of <span class="xp"><%= stats.total_xp_gained %> XP</span>. 
+            But the wild is treacherous, as the hunters became the hunted and <span class="hp"><%= stats.total_ambushes %> ambushes</span> have occurred, nearly claiming those who walked unprepared.
+        </p>
+    </div>
+</div>
+
+<div class="panel" style="margin-top: 12px;">
+    <div class="panel-header">
+        The Toll of Survival
+    </div>
+    <div class="panel-body">
+        <p>
+            Hardship is measured in blood and resilience. Our champions have shed <span class="hp"><%= stats.total_hp_lost %> HP</span>, 
+            flesh torn by tooth and claw. Yet, the craft of the blacksmith has proven its worth, as armor deflected <span class="muted"><%= stats.total_damage_blocked %> damage</span>. 
+            To mend their broken bodies, they have sought the warmth of the Inn and the delicious food inside, healing for a combined total of <span style="color: green"><%= stats.total_hp_healed %> HP</span>.
+        </p>
+    </div>
+</div>
+
+<div class="panel" style="margin-top: 12px;">
+    <div class="panel-header">
+        The Flow of Fortune
+    </div>
+    <div class="panel-body">
+        <p>
+            Wealth flows like a river through the pockets of the daring. A massive sum of <span class="gold">🪙 <%= stats.total_adena_generated %> Adena</span> has been pulled from the corpses of monsters and the hidden corners of the world. 
+            Most of this fortune, however, returns to the realm's economy since <span class="gold">🪙 <%= stats.total_adena_spent %> Adena</span> has been spent on provisions and equipment. 
+            The shops have flourished, selling <span class="gold"><%= stats.total_weapons_bought %> weapons</span> and <span class="gold"><%= stats.total_armors_bought %> armors</span> to those who would be king, 
+            while the local Inn has served <span class="gold"><%= stats.total_food_bought %> meals</span> to keep the fires of life burning. 
+            Today, the total wealth held within the pouches of all active wanderers stands at <span class="gold">🪙 <%= stats.total_adena %> Adena</span>.
+        </p>
+
+
+<style>
+    p {
+        margin-bottom: 0px;
+    }
+</style>
