@@ -103,15 +103,22 @@ describe('commitSuicide', () => {
 });
 
 describe('restoreHealth', () => {
-    it('restores partial HP', () => {
+    it('restores partial HP and returns amount healed', () => {
         const p = makePlayer({ raceId: 0, health: 50 });
-        restoreHealth(p, 20);
+        const healed = restoreHealth(p, 20);
         expect(p.health).toBe(70);
+        expect(healed).toBe(20);
     });
-    it('clamps to maxHp — no over-healing', () => {
+    it('clamps to maxHp — no over-healing — and returns clamped amount', () => {
         const p = makePlayer({ raceId: 0, health: 90 });
-        restoreHealth(p, 999);
+        const healed = restoreHealth(p, 999);
         expect(p.health).toBe(RACES[0].startHealth); // 100
+        expect(healed).toBe(10);
+    });
+    it('returns 0 when already at full health', () => {
+        const p = makePlayer({ raceId: 0, health: RACES[0].startHealth });
+        const healed = restoreHealth(p, 20);
+        expect(healed).toBe(0);
     });
 });
 
@@ -160,13 +167,14 @@ describe('purchaseItem — food', () => {
         expect(p.adena).toBe(93);
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_food_bought');
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_adena_spent', 7);
+        expect(statisticsRepository.increment).toHaveBeenCalledWith('total_hp_healed', 4);
     });
 });
 
 describe('applyBattleResult', () => {
     it('kills the player on lethal damage', () => {
         const p = makePlayer({ health: 5 });
-        const flash = applyBattleResult(p, 10, 100, 50, 3);
+        const flash = applyBattleResult(p, 10, 100, 50, 3, 2);
         expect(p.dead).toBe(true);
         expect(p.health).toBe(0);
         expect(flash).toBeNull();
@@ -174,14 +182,20 @@ describe('applyBattleResult', () => {
     it('returns a level-up flash and restores hp on level-up', () => {
         const p = makePlayer({ health: 90, experience: 0, raceId: 0 });
         // Level 2 threshold is calculateXpForLevel(2) = 780
-        const flash = applyBattleResult(p, 0, 780, 0, 0);
+        const flash = applyBattleResult(p, 0, 780, 0, 0, 0);
         expect(flash).not.toBeNull();
         expect(flash?.type).toBe('warning');
         expect(p.health).toBe(RACES[0].startHealth); // full HP on level up
     });
+    it('increments total_levels_gained and total_hp_healed on level-up', () => {
+        const p = makePlayer({ health: 60, experience: 0, raceId: 0 });
+        applyBattleResult(p, 0, 780, 0, 0, 0);
+        expect(statisticsRepository.increment).toHaveBeenCalledWith('total_levels_gained');
+        expect(statisticsRepository.increment).toHaveBeenCalledWith('total_hp_healed', 40); // 100 - 60
+    });
     it('returns null flash and updates stats on normal battle', () => {
         const p = makePlayer({ health: 80, adena: 100, experience: 0 });
-        const flash = applyBattleResult(p, 10, 50, 25, 5);
+        const flash = applyBattleResult(p, 10, 50, 25, 5, 3);
         expect(flash).toBeNull();
         expect(p.health).toBe(70);
         expect(p.adena).toBe(125);
@@ -192,17 +206,20 @@ describe('applyBattleResult', () => {
 
     it('increments global stats during battle', () => {
         const p = makePlayer({ health: 100 });
-        applyBattleResult(p, 10, 50, 25, 5);
+        applyBattleResult(p, 10, 50, 25, 5, 7);
 
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_battles');
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_enemies_killed', 5);
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_adena_generated', 25);
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_adena', 25);
+        expect(statisticsRepository.increment).toHaveBeenCalledWith('total_hp_lost', 10);
+        expect(statisticsRepository.increment).toHaveBeenCalledWith('total_xp_gained', 50);
+        expect(statisticsRepository.increment).toHaveBeenCalledWith('total_damage_blocked', 7);
     });
 
     it('increments total_deaths when player dies', () => {
         const p = makePlayer({ health: 5 });
-        applyBattleResult(p, 10, 0, 0, 0);
+        applyBattleResult(p, 10, 0, 0, 0, 0);
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_deaths');
     });
 });

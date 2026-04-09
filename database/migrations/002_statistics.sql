@@ -14,10 +14,15 @@ INSERT IGNORE INTO `statistics` (`name`, `value`) VALUES
 ('total_ambushes', 0),
 ('total_armors_bought', 0),
 ('total_battles', 0),
+('total_damage_blocked', 0),
 ('total_deaths', 0),
 ('total_enemies_killed', 0),
 ('total_food_bought', 0),
+('total_hp_healed', 0),
+('total_hp_lost', 0),
+('total_levels_gained', 0),
 ('total_players', 0),
 ('total_players_cheated', 0),
 ('total_players_suicided', 0),
-('total_weapons_bought', 0);
+('total_weapons_bought', 0),
+('total_xp_gained', 0);

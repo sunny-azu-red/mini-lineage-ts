@@ -71,7 +71,7 @@ describe('battleController', () => {
     it('should simulate battle and apply results', () => {
         getBattle(req, res);
         expect(battleService.simulateBattle).toHaveBeenCalledWith(player.weaponId, player.armorId);
-        expect(playerService.applyBattleResult).toHaveBeenCalledWith(player, 10, 100, 50, 5);
+        expect(playerService.applyBattleResult).toHaveBeenCalledWith(player, 10, 100, 50, 5, 5);
         expect(res.send).toHaveBeenCalledWith('rendered-view');
     });
 

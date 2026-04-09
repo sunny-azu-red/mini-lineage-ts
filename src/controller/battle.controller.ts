@@ -12,7 +12,7 @@ export const getBattle = (req: Request, res: Response) => {
         player.ambushed = false;
 
     const results = simulateBattle(player.weaponId, player.armorId);
-    const levelUpFlash = applyBattleResult(player, results.hpLost, results.xpGained, results.adenaGained, results.enemiesKilled);
+    const levelUpFlash = applyBattleResult(player, results.hpLost, results.xpGained, results.adenaGained, results.enemiesKilled, results.damageBlocked);
     if (player.dead)
         return res.redirect('/death');
 

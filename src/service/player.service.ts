@@ -59,12 +59,14 @@ export function deductCost(player: PlayerState, cost: number): boolean {
     return true;
 }
 
-export function restoreHealth(player: PlayerState, amount: number): void {
+export function restoreHealth(player: PlayerState, amount: number): number {
     const maxHp = RACES[player.raceId].startHealth;
+    const oldHealth = player.health;
     player.health = Math.min(maxHp, player.health + amount);
+    return player.health - oldHealth;
 }
 
-export function applyBattleResult(player: PlayerState, hpLost: number, xpGained: number, adenaGained: number, enemiesKilled: number): FlashMessage | null {
+export function applyBattleResult(player: PlayerState, hpLost: number, xpGained: number, adenaGained: number, enemiesKilled: number, damageBlocked: number): FlashMessage | null {
     // hpLost = 0; // DEBUG: never die
     // xpGained = xpGained * 250; // DEBUG: level up faster
     // adenaGained = adenaGained * 500; // DEBUG: get adena faster
@@ -85,10 +87,15 @@ export function applyBattleResult(player: PlayerState, hpLost: number, xpGained:
     void statisticsRepository.increment('total_enemies_killed', enemiesKilled);
     void statisticsRepository.increment('total_adena_generated', adenaGained);
     void statisticsRepository.increment('total_adena', adenaGained);
+    void statisticsRepository.increment('total_hp_lost', hpLost);
+    void statisticsRepository.increment('total_xp_gained', xpGained);
+    void statisticsRepository.increment('total_damage_blocked', damageBlocked);
 
     if (isLevelUp(oldXp, player.experience)) {
         const newLevel = calculateLevel(player.experience);
-        player.health = RACES[player.raceId].startHealth;
+        const hpHealed = restoreHealth(player, RACES[player.raceId].startHealth);
+        void statisticsRepository.increment('total_levels_gained');
+        void statisticsRepository.increment('total_hp_healed', hpHealed);
         return { text: `🎉 Congratulations! You have reached level ${newLevel}.`, type: 'warning' };
     }
 
@@ -119,9 +126,10 @@ export function purchaseItem(player: PlayerState, itemType: ItemType, itemId: nu
         void statisticsRepository.increment('total_adena_spent', item.cost);
         return { success: true, text: `You have bought an Armor.\nYou are now wearing the mighty ${item.emoji} ${item.name}!`, item };
     } else {
-        restoreHealth(player, item.stat);
+        const hpHealed = restoreHealth(player, item.stat);
         void statisticsRepository.increment('total_food_bought');
         void statisticsRepository.increment('total_adena_spent', item.cost);
+        void statisticsRepository.increment('total_hp_healed', hpHealed);
         return { success: true, text: `You have bought ${item.emoji} ${item.name}.\nYou feel your strength returning, bringing you to ${player.health} HP.`, item };
     }
 }
