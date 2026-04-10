@@ -20,7 +20,7 @@ export function pluralize(singular: string, plural: string, count: number, emoji
         const article = ['a', 'e', 'i', 'o', 'u'].includes(singular.charAt(0).toLowerCase()) ? 'an' : 'a';
         return `${article} ${icon}${singular}`;
     }
-    return `${count} ${icon}${plural}`;
+    return `${count.toLocaleString()} ${icon}${plural}`;
 }
 
 export function formatShopItems(items: Item[]) {
@@ -70,9 +70,16 @@ export function getVersion(): string {
     } catch (err) {
     }
 
-    return 'Development';
+    return '⚡development';
 }
 
 export function isRelease(version: string): boolean {
     return version.length === 7 && /^[0-9a-f]+$/i.test(version);
+}
+
+export function slugify(text: string): string {
+    return text.toString().toLowerCase().trim()
+        .replace(/\s+/g, '-')     // Replace spaces with -
+        .replace(/[^\w-]+/g, '')  // Remove all non-word chars
+        .replace(/--+/g, '-');    // Replace multiple - with single -
 }

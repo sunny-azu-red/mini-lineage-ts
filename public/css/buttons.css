@@ -34,7 +34,8 @@
     vertical-align: middle;
 
     /* Geometry — padding matches .form-select so heights align */
-    padding: 8px 16px;
+    padding: 0 16px;
+    height: 31px;
     border-radius: var(--radius);
 
     /* Single uniform border like the select element */
@@ -108,7 +109,7 @@
     box-shadow:
         0 0 0 2px rgba(201, 168, 76, 0.15),
         0 1px 3px rgba(0, 0, 0, 0.35);
-    color: var(--gold-hover);
+    /* color: var(--gold-hover); */
     text-decoration: none;
 }
 
@@ -118,12 +119,16 @@
 }
 
 /* ===== Active / Press ===== */
-.btn:active {
+.btn:active,
+.btn.active {
     background: linear-gradient(180deg, #172030 0%, #1a2640 100%);
-    border-color: rgba(74, 85, 128, 0.6);
+    border-color: var(--gold-dim);
     box-shadow:
-        0 0 0 2px rgba(100, 80, 30, 0.12),
+        0 0 0 2px rgba(201, 168, 76, 0.2),
         inset 0 2px 4px rgba(0, 0, 0, 0.4);
+    transform: none;
+    transition: none;
+    /* Instant feedback */
 }
 
 /* ===== Danger Variant ===== */
@@ -157,16 +162,18 @@
         0 0 0 2px rgba(231, 76, 60, 0.15),
         0 1px 3px rgba(0, 0, 0, 0.4);
 
-    color: #f4a89e;
+    /* color: #f4a89e; */
 }
 
-.btn-danger:active {
+.btn-danger:active,
+.btn-danger.active {
     background: linear-gradient(180deg, #2e0c09 0%, #380e08 100%);
-    border-color: rgba(150, 40, 30, 0.6);
+    border-color: rgba(192, 57, 43, 0.9);
     box-shadow:
-        0 0 0 2px rgba(150, 30, 20, 0.12),
+        0 0 0 2px rgba(150, 30, 20, 0.2),
         inset 0 2px 4px rgba(0, 0, 0, 0.5);
     transform: none;
+    transition: none;
 }
 
 /* ===== Secondary Variant ===== */
@@ -199,16 +206,18 @@
     box-shadow:
         0 0 0 2px rgba(74, 85, 128, 0.15),
         0 1px 3px rgba(0, 0, 0, 0.3);
-    color: var(--text-primary);
+    /* color: var(--text-primary); */
 }
 
-.btn-secondary:active {
+.btn-secondary:active,
+.btn-secondary.active {
     background: linear-gradient(180deg, #131320 0%, #191928 100%);
-    border-color: var(--border);
+    border-color: var(--border-bright);
     box-shadow:
-        0 0 0 2px rgba(74, 85, 128, 0.1),
+        0 0 0 2px rgba(74, 85, 128, 0.2),
         inset 0 2px 3px rgba(0, 0, 0, 0.35);
     transform: none;
+    transition: none;
 }
 
 /* ===== Action link container ===== */
@@ -217,4 +226,16 @@
     gap: 8px;
     flex-wrap: wrap;
     margin-top: 12px;
+}
+
+.action-links.top {
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+/* ===== Sizing Variants ===== */
+.btn-sm {
+    padding: 0 10px;
+    height: 26px;
+    font-size: 11px;
 }

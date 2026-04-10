@@ -27,7 +27,11 @@
         <div id="app">
             <div id="wrapper">
                 <div id="header">
-                    <a href="/" id="header-link"><%- headerBanner %></a>
+                    <% if (headerClickable) { %>
+                        <a href="/" id="header-link"><%- include('partials/header') %></a>
+                    <% } else { %>
+                        <%- include('partials/header') %>
+                    <% } %>
                 </div>
 
                 <div id="main-simple">
@@ -47,6 +51,11 @@
                 <div id="copyright">Version <%- version %> &copy; 2005 &ndash; <%= year %></div>
             </div>
         </div>
+        <% if (isRelease) { %>
+            <script src="/js/script.js"></script>
+        <% } else { %>
+            <script src="/js/back.js"></script>
+        <% } %>
     </body>
 
 </html>

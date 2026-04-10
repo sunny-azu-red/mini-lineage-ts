@@ -2,6 +2,7 @@ import 'express-session';
 import { RaceType } from './game.interface';
 
 export interface PlayerState {
+    name: string;
     raceId: RaceType;
     health: number;
     prevHealth?: number;
@@ -16,6 +17,9 @@ export interface PlayerState {
     coward?: boolean;
     deathReason?: string;
     flash?: FlashMessage;
+    totalBattles?: number;
+    totalAmbushes?: number;
+    totalEnemiesKilled?: number;
 }
 
 export interface FlashMessage {

@@ -1,19 +1,12 @@
 import { readTemplate, render } from './base.view';
-import { renderPage, renderSimplePage } from './layout.view';
-import { formatAdena } from '@/util';
+import { renderSimplePage } from './layout.view';
+import { formatAdena, slugify } from '@/util';
 import { RACES } from '@/constant/game.constant';
-import { HighscoreEntry, PlayerState } from '@/interface';
+import { HighscoreEntry } from '@/interface';
 
 const highscoresTpl = readTemplate('highscores.ejs');
-const highscoresSubmitTpl = readTemplate('highscores-submit.ejs');
 
-export function renderHighscoresSubmitView(player: PlayerState): string {
-    const content = render(highscoresSubmitTpl);
-
-    return renderPage('Write your Legacy', player, content);
-}
-
-export function renderHighscoresView(highscores: HighscoreEntry[] = []): string {
+export function renderHighscoresView(highscores: HighscoreEntry[] = [], activeRaceId?: number): string {
     const rows = highscores.map((score) => {
         const d = new Date(score.created);
         const pad = (n: number) => n.toString().padStart(2, '0');
@@ -21,14 +14,14 @@ export function renderHighscoresView(highscores: HighscoreEntry[] = []): string 
         const emoji = RACES[score.race_id]?.emoji || '❓';
 
         return {
-            name: `${emoji} ${score.name || 'Unsung Champion'}`,
+            name: `${emoji} ${score.name}`,
             level: score.level,
             totalXp: score.total_xp,
             adena: formatAdena(score.adena),
             date,
         };
     });
-    const content = render(highscoresTpl, { rows });
+    const content = render(highscoresTpl, { rows, activeRaceId, races: RACES, slugify });
 
     return renderSimplePage('Hall of Champions', content);
 }

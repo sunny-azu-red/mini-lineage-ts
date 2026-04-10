@@ -8,7 +8,9 @@
 
 <div class="action-links">
     <% if (!coward) { %>
-        <a href="/highscores/submit" class="btn">📜 Write your Legacy!</a>
+        <form action="/highscores" method="post">
+            <button type="submit" class="btn">📜 Write your Legacy!</button>
+        </form>
     <% } %>
     <a href="/restart" class="btn btn-secondary">Play Again?</a>
 </div>

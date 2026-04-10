@@ -159,9 +159,11 @@
 @media (max-width: 520px) {
     #content {
         flex-direction: column;
+        align-items: stretch;
     }
 
-    #sidebar {
+    #sidebar,
+    #main {
         flex: none;
         width: 100%;
     }

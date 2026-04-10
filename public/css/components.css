@@ -27,6 +27,34 @@
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
+.panel-header.flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-stats {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: none;
+    letter-spacing: normal;
+    font-size: 11px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.header-stats-value {
+    color: var(--gold);
+}
+
+.header-stats-divider {
+    opacity: 0.4;
+    padding: 0 2px;
+}
+
 .panel-body {
     padding: 12px;
     font-size: 13px;
@@ -34,7 +62,7 @@
 }
 
 .panel-body.small {
-    padding: 6px 12px;
+    padding: 0px 12px;
 }
 
 /* ===== Status Panel ===== */
@@ -42,8 +70,15 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 6px 0;
+    padding: 12px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.status-panel .stat-row {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    align-items: center;
+    gap: 10px;
 }
 
 .stat-row:last-child {
@@ -62,26 +97,32 @@
     }
 }
 
+.stat-row.bar {
+    padding: 10px 0;
+}
+
 .stat-row.danger {
     background: rgba(146, 43, 33, 0.2);
     border-radius: 6px;
-    padding: 7px 6px;
-    margin: -1px -6px;
+    padding: 10px 6px;
+    margin: 0 -6px;
     animation: danger-pulse .5s ease-in-out infinite;
 }
 
 .stat-label {
-    flex: 0 0 44px;
     font-size: 11px;
     color: var(--text-secondary);
     text-align: right;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    line-height: 1;
+    margin-top: 1px;
 }
 
 .stat-value {
     color: var(--text-primary);
     font-size: 12px;
+    line-height: 1;
 }
 
 .stat-value.gold {
@@ -92,7 +133,7 @@
 .bar-track {
     flex: 1;
     position: relative;
-    height: 16px;
+    height: 18px;
     background: rgba(0, 0, 0, 0.4);
     border-radius: 4px;
     overflow: hidden;
@@ -201,4 +242,9 @@
     padding: 12px;
     text-align: left;
     white-space: pre-wrap;
+}
+
+/* ===== Version Badge ===== */
+.version-debug {
+    color: var(--hp-color);
 }

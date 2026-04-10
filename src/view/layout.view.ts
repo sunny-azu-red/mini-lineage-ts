@@ -1,6 +1,7 @@
 import { readTemplate, render } from './base.view';
 import { WEAPONS, ARMORS, RACES, GAME_VERSION, REPO_COMMIT_URL } from '@/constant/game.constant';
 import { calculateLevel, isLowHealth, calculatePercentage, getXpProgress, isMaxLevel } from '@/service/math.service';
+import { isGameStarted } from '@/service/player.service';
 import { formatAdena, randomElement, isRelease } from '@/util';
 import { AMBUSH_LOW_HEALTH_MESSAGES } from '@/constant/narratives.constant';
 import { PlayerState, RenderOptions, FlashMessage } from '@/interface';
@@ -10,22 +11,11 @@ const simpleTpl = readTemplate('simple.ejs');
 const statusTpl = readTemplate('partials/status.ejs');
 const inventoryTpl = readTemplate('partials/inventory.ejs');
 
-const HEADER_BANNER = `
-<div id="site-header">
-  <svg class="header-emblem" xmlns="http://www.w3.org/2000/svg" viewBox="58 0 50 157">
-    <g>
-        <path fill="#c9a84c" d="M88.696 135.174c0 14.37 8.958 19.79 8.958 19.79-5.312-8.229-4.688-19.9-4.688-19.9l-.105-111.5c-.103-13.23 5-21.04 5-21.04-9.584 8.645-9.166 21.04-9.166 21.04v111.6m-18.999-.09c0 14.38-8.96 19.79-8.96 19.79 5.313-8.23 4.689-19.9 4.689-19.9l.104-111.5c.104-13.23-5-21.04-5-21.04 9.584 8.646 9.167 21.04 9.167 21.04v111.6"/>
-    </g>
-  </svg>
-  <span class="header-title">Mini Lineage</span>
-  <span class="header-subtitle">Remastered</span>
-</div>
-`;
 
 function getVersionHtml(): string {
     return isRelease(GAME_VERSION)
         ? `<a href="${REPO_COMMIT_URL}${GAME_VERSION}" target="_blank" class="version-link">${GAME_VERSION}</a>`
-        : GAME_VERSION;
+        : `<span class="version-debug">${GAME_VERSION}</span>`;
 }
 
 export function renderStatus(player: PlayerState): string {
@@ -76,6 +66,7 @@ export function renderStatus(player: PlayerState): string {
         prevAdena: prevAdena,
         adenaFormatted: formatAdena(player.adena),
         levelDisplay,
+        playerName: player.name,
     });
 }
 
@@ -95,7 +86,10 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
     const statusHtml = renderStatus(player);
     const inventoryHtml = renderInventory(player);
 
-    const maxHp = RACES[player.raceId].startHealth;
+    const playerRace = RACES[player.raceId];
+    const enemyRace = RACES[playerRace.enemyRaceId];
+    const maxHp = playerRace.startHealth;
+
     let lowHealthAlert = '';
     if (!player.dead && isLowHealth(player.health, maxHp) && !options.hideLowHealthAlert) {
         lowHealthAlert = player.ambushed
@@ -111,19 +105,22 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
         lowHealthAlert,
         flash,
         headerClickable: !player.ambushed && !player.dead,
-        headerBanner: HEADER_BANNER,
+        totalBattles: player.totalBattles ?? 0,
+        totalAmbushes: player.totalAmbushes ?? 0,
+        totalEnemiesKilled: player.totalEnemiesKilled ?? 0,
+        enemyEmoji: enemyRace.emoji,
         year: new Date().getFullYear(),
         version: getVersionHtml(),
         isRelease: isRelease(GAME_VERSION),
     });
 }
 
-export function renderSimplePage(title: string, mainContent: string, flash: FlashMessage | null = null): string {
+export function renderSimplePage(title: string, mainContent: string, flash: FlashMessage | null = null, player: PlayerState | null = null): string {
     return render(simpleTpl, {
         title,
         mainContent,
         flash,
-        headerBanner: HEADER_BANNER,
+        headerClickable: (player && isGameStarted(player)) ? (!player.ambushed && !player.dead) : true,
         year: new Date().getFullYear(),
         version: getVersionHtml(),
         isRelease: isRelease(GAME_VERSION),

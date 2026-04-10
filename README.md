@@ -29,18 +29,19 @@ Mini-Lineage Remastered is a modern, high-performance rewrite of the classic Min
    Create a `.env` file in the root directory based on `.env.example`
 
 3. **Database Initialization**:
-   Run the automated script to set up your tables and initial seeds:
+   Run migrations to set up your tables and initial seeds:
 
    ```bash
-   npm run db:init
+   npm run db:migrate
    ```
 
 ## 🗄️ Database Management
 
-We use a custom, lightweight seeding system for the remastered version.
+We use a migration-based system for the remastered version.
 
-- `npm run db:init`: Safe initialization. Creates tables and seeds data only if they don't exist. Useful for standard updates.
-- `npm run db:fresh`: Full reset. Drops all managed tables and runs a clean install from `database/dump.sql`. **Use with caution!**
+- `npm run db:migrate`: Standard migration. Creates the database schema and applies any pending migrations. Safe for existing data.
+- `npm run db:fresh`: Full reset. Drops **all tables** and runs all migrations from scratch. **Use with caution!**
+
 
 ## 🚀 Execution
 

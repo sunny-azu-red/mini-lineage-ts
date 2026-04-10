@@ -28,9 +28,9 @@
             <div id="wrapper">
                 <div id="header">
                     <% if (headerClickable) { %>
-                        <a href="/" id="header-link"><%- headerBanner %></a>
+                        <a href="/" id="header-link"><%- include('partials/header') %></a>
                     <% } else { %>
-                        <%- headerBanner %>
+                        <%- include('partials/header') %>
                     <% } %>
                 </div>
 
@@ -42,8 +42,16 @@
 
                     <div id="main">
                         <div class="panel">
-                            <div class="panel-header">
-                                <%= title %>
+                            <div class="panel-header flex">
+                                <span><%= title %></span>
+
+                                <div class="header-stats" title="Kills / Battles / Ambushes">
+                                    <span class="header-stats-value"><%= enemyEmoji %> <%= totalEnemiesKilled %></span>
+                                    <span class="header-stats-divider">/</span>
+                                    <span class="header-stats-value">⚡ <%= totalBattles %></span>
+                                    <span class="header-stats-divider">/</span>
+                                    <span class="header-stats-value">💢 <%= totalAmbushes %></span>
+                                </div>
                             </div>
 
                             <div class="panel-body">
@@ -58,12 +66,22 @@
                                 <%- mainContent %>
                             </div>
                         </div>
+
+                        <div id="copyright">Version <%- version %> &copy; 2005 &ndash; <%= year %></div>
                     </div>
                 </div>
 
-                <div id="copyright">Version <%- version %> &copy; 2005 &ndash; <%= year %></div>
             </div>
         </div>
+        <% if (isRelease) { %>
+            <script src="/js/script.js"></script>
+        <% } else { %>
+            <script src="/js/sidebar.js"></script>
+            <script src="/js/home.js"></script>
+            <script src="/js/suicide.js"></script>
+            <script src="/js/shop.js"></script>
+            <script src="/js/back.js"></script>
+        <% } %>
     </body>
 
 </html>

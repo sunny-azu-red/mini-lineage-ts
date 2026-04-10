@@ -1,3 +1,12 @@
+<div class="action-links top">
+    <a href="/highscores" class="btn btn-secondary btn-sm<% if (activeRaceId === undefined) { %> active<% } %>">All</a>
+    <% races.forEach(function(race) { %>
+        <a href="/highscores/<%= slugify(race.label) %>" class="btn btn-secondary btn-sm<% if (activeRaceId === race.id) { %> active<% } %>">
+            <%= race.emoji %> <%= race.label %>
+        </a>
+    <% }); %>
+</div>
+
 <% if (rows.length > 0) { %>
     <table class="data-table">
         <thead>
@@ -35,4 +44,6 @@
     <p>No champions here yet...<br>You could be the first one!</p>
 <% } %>
 
-<p class="last"><a href="/">Go back</a></p>
+<p class="last">
+    <a href="/">Go back to game start</a>
+</p>

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { GAME_VERSION } from '@/constant/game.constant';
 import { isRelease } from '@/util';
+import { logger } from '@/config/logger.config';
 
 export const debugMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const start = Date.now();
@@ -10,15 +11,20 @@ export const debugMiddleware = (req: Request, res: Response, next: NextFunction)
             return;
 
         const duration = Date.now() - start;
-        console.log(`\n[${req.method}] \x1b[96m${req.url}\x1b[0m = ${res.statusCode} \x1b[90m(${duration}ms)\x1b[0m \x1b[95m${req.sessionID}\x1b[0m`);
+        const message = `[${req.method}] ${req.url} = ${res.statusCode} (${duration}ms) ${req.sessionID}`;
 
+        let logData = {};
         if (req.session) {
             const state = { ...req.session };
             delete (state as any).cookie;
 
-            if (state && Object.keys(state).length > 0)
-                console.dir(state, { colors: true, depth: null });
+            if (state && Object.keys(state).length > 0) {
+                const { name, ...rest } = state as any;
+                logData = { "name\u200B": name, ...rest };
+            }
         }
+
+        logger.debug(logData, message);
     });
 
     next();
