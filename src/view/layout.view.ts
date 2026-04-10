@@ -51,13 +51,20 @@ export function renderStatus(player: PlayerState): string {
         hp,
         prevHp,
         maxHp,
+        hpFormatted: formatNumber(hp),
+        prevHpFormatted: formatNumber(prevHp),
+        maxHpFormatted: formatNumber(maxHp),
         hpPercent: calculatePercentage(hp, maxHp),
         prevHpPercent,
         xpPercent,
         prevXpPercent,
+        currentXpFormatted: formatNumber(currentXp),
+        prevCurrentXpFormatted: formatNumber(prevCurrentXpAnim),
+        nextLevelXpFormatted: formatNumber(nextLevelXp),
+        totalXpFormatted: formatNumber(player.experience),
+        prevTotalXpFormatted: formatNumber(prevXp),
         currentXp,
         prevCurrentXp: prevCurrentXpAnim,
-        nextLevelXp,
         totalXp: player.experience,
         prevTotalXp: prevXp,
         isMaxLevel: isMaxLevel(level),
@@ -67,7 +74,6 @@ export function renderStatus(player: PlayerState): string {
         adenaFormatted: formatAdena(player.adena),
         levelDisplay,
         playerName: player.name,
-        formatNumber,
     });
 }
 
@@ -106,14 +112,13 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
         lowHealthAlert,
         flash,
         headerClickable: !player.ambushed && !player.dead,
-        totalBattles: player.totalBattles ?? 0,
-        totalAmbushes: player.totalAmbushes ?? 0,
-        totalEnemiesKilled: player.totalEnemiesKilled ?? 0,
+        totalBattles: formatNumber(player.totalBattles ?? 0),
+        totalAmbushes: formatNumber(player.totalAmbushes ?? 0),
+        totalEnemiesKilled: formatNumber(player.totalEnemiesKilled ?? 0),
         enemyEmoji: enemyRace.emoji,
         year: new Date().getFullYear(),
         version: getVersionHtml(),
         isRelease: isRelease(GAME_VERSION),
-        formatNumber,
     });
 }
 
@@ -126,6 +131,5 @@ export function renderSimplePage(title: string, mainContent: string, flash: Flas
         year: new Date().getFullYear(),
         version: getVersionHtml(),
         isRelease: isRelease(GAME_VERSION),
-        formatNumber,
     });
 }

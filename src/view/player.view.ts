@@ -41,7 +41,12 @@ export function renderXpTableView(currentXp: number, currentLevel: number, flash
         for (let i = start; i <= end; i++) {
             const xpReq = calculateXpForLevel(i);
             const rowClass = currentLevel === i ? 'row-current' : '';
-            rows.push({ level: i, xpReq, rowClass });
+            rows.push({
+                level: i,
+                levelFormatted: formatNumber(i),
+                xpReqFormatted: formatNumber(xpReq),
+                rowClass
+            });
         }
         return rows;
     };
@@ -53,7 +58,15 @@ export function renderXpTableView(currentXp: number, currentLevel: number, flash
         buildColumn(61, 80),
     ];
     const xpNeeded = getXpNeededToLevelUp(currentXp);
-    const content = render(xpTableTpl, { columns, currentXp, currentLevel, xpNeeded, maxLevel: MAX_LEVEL, formatNumber });
+    const content = render(xpTableTpl, {
+        columns,
+        currentXpFormatted: formatNumber(currentXp),
+        currentLevel,
+        currentLevelFormatted: formatNumber(currentLevel),
+        nextLevelFormatted: formatNumber(currentLevel + 1),
+        xpNeededFormatted: formatNumber(xpNeeded),
+        maxLevel: MAX_LEVEL
+    });
 
     return renderSimplePage('Experience Table', content, flash);
 }

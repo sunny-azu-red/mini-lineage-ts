@@ -30,7 +30,7 @@
     resulting in the defeat of <span class="gold"><%- pluralize('formidable foe', 'formidable foes', stats.total_enemies_killed) %></span>. 
 </p>
 <p>
-    From these conflicts, the survivors extracted vast wisdom, gaining a total of <span class="xp"><%= formatNumber(stats.total_xp_gained) %> XP</span>. 
+    From these conflicts, the survivors extracted vast wisdom, gaining a total of <span class="xp"><%= stats.total_xp_gained_formatted %> XP</span>. 
     <%- fillTemplate("But the wild is treacherous, as the hunters became the hunted and <span class=\"hp\">{ambushText}</span> {isSingleAmbush ? 'has' : 'have'} occurred, nearly claiming those who walked unprepared.", {
         ambushText: pluralize('ambush', 'ambushes', stats.total_ambushes),
         isSingleAmbush: stats.total_ambushes === 1
@@ -39,17 +39,17 @@
 
 <h2>The Toll of Survival</h2>
 <p>
-    Hardship is measured in blood and resilience. Our champions have shed <span class="hp"><%= formatNumber(stats.total_hp_lost) %> HP</span>, 
-    flesh torn by tooth and claw. Yet, the craft of the blacksmith has proven its worth, as armor deflected <span class="muted"><%= formatNumber(stats.total_damage_blocked) %> damage</span>. 
+    Hardship is measured in blood and resilience. Our champions have shed <span class="hp"><%= stats.total_hp_lost_formatted %> HP</span>, 
+    flesh torn by tooth and claw. Yet, the craft of the blacksmith has proven its worth, as armor deflected <span class="muted"><%= stats.total_damage_blocked_formatted %> damage</span>. 
 </p>
 <p>
-    To mend their broken bodies, they have sought the warmth of the Inn and the delicious food inside, healing for a combined total of <span class="heal"><%= formatNumber(stats.total_hp_healed) %> HP</span>.
+    To mend their broken bodies, they have sought the warmth of the Inn and the delicious food inside, healing for a combined total of <span class="heal"><%= stats.total_hp_healed_formatted %> HP</span>.
 </p>
 
 <h2>The Flow of Fortune</h2>
 <p>
-    Wealth flows like a river through the pockets of the daring. A massive sum of <span class="gold">🪙 <%= formatAdena(stats.total_adena_generated) %> Adena</span> has been pulled from the corpses of monsters and the hidden corners of the world. 
-    Most of this fortune, however, returns to the realm's economy since <span class="gold">🪙 <%= formatAdena(stats.total_adena_spent) %> Adena</span> has been spent on provisions and equipment. 
+    Wealth flows like a river through the pockets of the daring. A massive sum of <span class="gold">🪙 <%= stats.total_adena_generated_formatted %> Adena</span> has been pulled from the corpses of monsters and the hidden corners of the world. 
+    Most of this fortune, however, returns to the realm's economy since <span class="gold">🪙 <%= stats.total_adena_spent_formatted %> Adena</span> has been spent on provisions and equipment. 
 </p>
 <p> 
     The shops have flourished, selling <span class="gold"><%- pluralize('weapon', 'weapons', stats.total_weapons_bought) %></span> and <span class="gold"><%- pluralize('armor', 'armors', stats.total_armors_bought) %></span> to those who would be king, 

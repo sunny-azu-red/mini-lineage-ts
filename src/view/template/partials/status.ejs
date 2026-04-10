@@ -12,7 +12,7 @@
             <div class="bar-track">
                 <div class="bar hp-bar" id="hp-bar" style="width: <%= prevHpPercent %>%" data-width="<%= hpPercent %>"></div>
                 <span class="bar-text">
-                    <span class="animate-val" data-val="<%= hp %>" data-prev="<%= prevHp %>"><%= formatNumber(prevHp) %></span>/<%= formatNumber(maxHp) %>
+                    <span class="animate-val" data-val="<%= hp %>" data-prev="<%= prevHp %>"><%= prevHpFormatted %></span>/<%= maxHpFormatted %>
                 </span>
             </div>
         </div>
@@ -22,9 +22,9 @@
                 <div class="bar xp-bar" id="xp-bar" style="width: <%= prevXpPercent %>%" data-width="<%= isMaxLevel ? 100 : xpPercent %>"></div>
                 <span class="bar-text">
                     <% if (isMaxLevel) { %>
-                        <span class="animate-val" data-val="<%= totalXp %>" data-prev="<%= prevTotalXp %>"><%= formatNumber(prevTotalXp) %></span>
+                        <span class="animate-val" data-val="<%= totalXp %>" data-prev="<%= prevTotalXp %>"><%= prevTotalXpFormatted %></span>
                     <% } else { %>
-                        <span class="animate-val" data-val="<%= currentXp %>" data-prev="<%= prevCurrentXp %>"><%= formatNumber(prevCurrentXp) %></span>/<%= formatNumber(nextLevelXp) %>
+                        <span class="animate-val" data-val="<%= currentXp %>" data-prev="<%= prevCurrentXp %>"><%= prevCurrentXpFormatted %></span>/<%= nextLevelXpFormatted %>
                     <% } %>
                 </span>
             </div>

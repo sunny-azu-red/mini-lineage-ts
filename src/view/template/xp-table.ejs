@@ -1,7 +1,7 @@
 <p>
-    You currently have <span class="xp"><%= formatNumber(currentXp) %> XP</span>, 
+    You currently have <span class="xp"><%= currentXpFormatted %> XP</span>, 
     <% if (currentLevel < maxLevel) { %>
-        but you need <span class="xp"><%= formatNumber(xpNeeded) %> XP</span> more to reach Level <%= currentLevel + 1 %>.
+        but you need <span class="xp"><%= xpNeededFormatted %> XP</span> more to reach Level <%= nextLevelFormatted %>.
     <% } else { %>
         and you're already max level!
     <% } %>
@@ -20,10 +20,10 @@
                 <% col.forEach(function(row) { %>
                     <tr<% if (row.rowClass === 'row-current') { %> class="row-current"<% } %>>
                         <td class="center">
-                            <%= row.level %>
+                            <%= row.levelFormatted %>
                         </td>
                         <td class="xp">
-                            <%= formatNumber(row.xpReq) %>
+                            <%= row.xpReqFormatted %>
                         </td>
                     </tr>
                 <% }); %>
