@@ -9,6 +9,7 @@ async function minifyFile(filePath: string) {
     try {
         const minified = await minify(content, {
             collapseWhitespace: true,
+            conservativeCollapse: true,
             removeComments: true,
             minifyJS: true,
             minifyCSS: true,
