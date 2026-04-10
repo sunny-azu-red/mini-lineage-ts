@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  mini-lineage:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mini-lineage-app:latest
+    container_name: mini-lineage
+    restart: always
+    ports:
+      - "3000:3000"
+    # Note: Environment variables are left blank here 
+    # because they will be defined securely in the Portainer UI
