@@ -20,7 +20,7 @@ export function pluralize(singular: string, plural: string, count: number, emoji
         const article = ['a', 'e', 'i', 'o', 'u'].includes(singular.charAt(0).toLowerCase()) ? 'an' : 'a';
         return `${article} ${icon}${singular}`;
     }
-    return `${count} ${icon}${plural}`;
+    return `${count.toLocaleString()} ${icon}${plural}`;
 }
 
 export function formatShopItems(items: Item[]) {
