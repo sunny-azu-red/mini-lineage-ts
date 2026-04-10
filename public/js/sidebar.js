@@ -1,4 +1,6 @@
 (function () {
+    const formatNumber = (num) => num.toLocaleString('en-US');
+
     // sidebar animations
     function animateValue(el, start, end, duration) {
         let startTimestamp = null;
@@ -7,9 +9,9 @@
             let progress = Math.min((timestamp - startTimestamp) / duration, 1);
             const easeProgress = 1 - Math.pow(1 - progress, 3);
             if (progress < 1) {
-                el.innerText = Math.round(easeProgress * (end - start) + start).toLocaleString('en-US');
+                el.innerText = formatNumber(Math.round(easeProgress * (end - start) + start));
                 window.requestAnimationFrame(step);
-            } else el.innerText = el.dataset.final || end.toLocaleString('en-US');
+            } else el.innerText = el.dataset.final || formatNumber(end);
         };
         window.requestAnimationFrame(step);
     }

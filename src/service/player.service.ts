@@ -1,7 +1,7 @@
 import { PlayerState, Race, FlashMessage, PurchaseResult, ItemType } from '@/interface';
 import { RACES, ARMORS, WEAPONS, FOODS } from '@/constant/game.constant';
 import { calculateLevel, isLevelUp, randomInt } from '@/service/math.service';
-import { formatAdena, randomElement, fillTemplate } from '@/util';
+import { formatAdena, formatNumber, randomElement, fillTemplate } from '@/util';
 import { WELCOME_MESSAGES } from '@/constant/narratives.constant';
 import { statisticsRepository } from '@/repository/statistics.repository';
 
@@ -96,7 +96,7 @@ export function applyBattleResult(player: PlayerState, hpLost: number, xpGained:
         const hpHealed = restoreHealth(player, RACES[player.raceId].startHealth);
         void statisticsRepository.increment('total_levels_gained');
         void statisticsRepository.increment('total_hp_healed', hpHealed);
-        return { text: `🎉 Congratulations! You have reached level ${newLevel}.`, type: 'warning' };
+        return { text: `🎉 Congratulations! You have reached level ${formatNumber(newLevel)}.`, type: 'warning' };
     }
 
     return null;
@@ -130,6 +130,6 @@ export function purchaseItem(player: PlayerState, itemType: ItemType, itemId: nu
         void statisticsRepository.increment('total_food_bought');
         void statisticsRepository.increment('total_adena_spent', item.cost);
         void statisticsRepository.increment('total_hp_healed', hpHealed);
-        return { success: true, text: `You have bought ${item.emoji} ${item.name}.\nYou feel your strength returning, bringing you to ${player.health} HP.`, item };
+        return { success: true, text: `You have bought ${item.emoji} ${item.name}.\nYou feel your strength returning, bringing you to ${formatNumber(player.health)} HP.`, item };
     }
 }

@@ -1,6 +1,6 @@
 import { readTemplate, render } from './base.view';
 import { renderSimplePage } from './layout.view';
-import { formatAdena, slugify } from '@/util';
+import { formatAdena, formatNumber, slugify } from '@/util';
 import { RACES } from '@/constant/game.constant';
 import { HighscoreEntry } from '@/interface';
 
@@ -15,8 +15,8 @@ export function renderHighscoresView(highscores: HighscoreEntry[] = [], activeRa
 
         return {
             name: `${emoji} ${score.name}`,
-            level: score.level,
-            totalXp: score.total_xp.toLocaleString('en-US'),
+            level: formatNumber(score.level),
+            totalXp: formatNumber(score.total_xp),
             adena: formatAdena(score.adena),
             date,
         };

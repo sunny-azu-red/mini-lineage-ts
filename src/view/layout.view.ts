@@ -2,7 +2,7 @@ import { readTemplate, render } from './base.view';
 import { WEAPONS, ARMORS, RACES, GAME_VERSION, REPO_COMMIT_URL } from '@/constant/game.constant';
 import { calculateLevel, isLowHealth, calculatePercentage, getXpProgress, isMaxLevel } from '@/service/math.service';
 import { isGameStarted } from '@/service/player.service';
-import { formatAdena, randomElement, isRelease } from '@/util';
+import { formatAdena, formatNumber, randomElement, isRelease } from '@/util';
 import { AMBUSH_LOW_HEALTH_MESSAGES } from '@/constant/narratives.constant';
 import { PlayerState, RenderOptions, FlashMessage } from '@/interface';
 
@@ -44,8 +44,8 @@ export function renderStatus(player: PlayerState): string {
 
     const statusEmoji = player.dead ? '☠️' : race.emoji;
     const levelDisplay = (player.ambushed || player.dead)
-        ? `${statusEmoji} <span class="gold">${race.label} level ${level}</span>`
-        : `${statusEmoji} <a href='/xp-table'>${race.label} level ${level}</a>`;
+        ? `${statusEmoji} <span class="gold">${race.label} level ${formatNumber(level)}</span>`
+        : `${statusEmoji} <a href='/xp-table'>${race.label} level ${formatNumber(level)}</a>`;
 
     return render(statusTpl, {
         hp,
@@ -67,6 +67,7 @@ export function renderStatus(player: PlayerState): string {
         adenaFormatted: formatAdena(player.adena),
         levelDisplay,
         playerName: player.name,
+        formatNumber,
     });
 }
 
@@ -112,6 +113,7 @@ export function renderPage(title: string, player: PlayerState, mainContent: stri
         year: new Date().getFullYear(),
         version: getVersionHtml(),
         isRelease: isRelease(GAME_VERSION),
+        formatNumber,
     });
 }
 
@@ -124,5 +126,6 @@ export function renderSimplePage(title: string, mainContent: string, flash: Flas
         year: new Date().getFullYear(),
         version: getVersionHtml(),
         isRelease: isRelease(GAME_VERSION),
+        formatNumber,
     });
 }

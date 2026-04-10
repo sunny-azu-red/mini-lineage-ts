@@ -3,7 +3,7 @@ import { renderPage, renderSimplePage } from './layout.view';
 import { PlayerState, FlashMessage } from '@/interface';
 import { calculateXpForLevel, getXpNeededToLevelUp } from '@/service/math.service';
 import { MAX_LEVEL } from '@/constant/game.constant';
-import { randomElement } from '@/util';
+import { randomElement, formatNumber } from '@/util';
 import { DEATH_MESSAGES } from '@/constant/narratives.constant';
 
 const suicideTpl = readTemplate('suicide.ejs');
@@ -53,7 +53,7 @@ export function renderXpTableView(currentXp: number, currentLevel: number, flash
         buildColumn(61, 80),
     ];
     const xpNeeded = getXpNeededToLevelUp(currentXp);
-    const content = render(xpTableTpl, { columns, currentXp, currentLevel, xpNeeded, maxLevel: MAX_LEVEL });
+    const content = render(xpTableTpl, { columns, currentXp, currentLevel, xpNeeded, maxLevel: MAX_LEVEL, formatNumber });
 
     return renderSimplePage('Experience Table', content, flash);
 }

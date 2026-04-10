@@ -1,7 +1,7 @@
 <p>
-    You currently have <span class="xp"><%= currentXp.toLocaleString('en-US') %> XP</span>, 
+    You currently have <span class="xp"><%= formatNumber(currentXp) %> XP</span>, 
     <% if (currentLevel < maxLevel) { %>
-        but you need <span class="xp"><%= xpNeeded.toLocaleString('en-US') %> XP</span> more to reach Level <%= currentLevel + 1 %>.
+        but you need <span class="xp"><%= formatNumber(xpNeeded) %> XP</span> more to reach Level <%= currentLevel + 1 %>.
     <% } else { %>
         and you're already max level!
     <% } %>
@@ -23,7 +23,7 @@
                             <%= row.level %>
                         </td>
                         <td class="xp">
-                            <%= row.xpReq.toLocaleString('en-US') %>
+                            <%= formatNumber(row.xpReq) %>
                         </td>
                     </tr>
                 <% }); %>

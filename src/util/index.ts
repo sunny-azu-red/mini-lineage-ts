@@ -8,10 +8,17 @@ export function randomElement<T>(array: T[]): T {
 }
 
 export function formatAdena(adena: number): string {
-    if (adena <= 999) return adena.toString();
-    if (adena <= 999_000) return (adena / 1_000).toFixed(1).replace('.0', '') + 'k';
-    if (adena <= 999_000_000) return (adena / 1_000_000).toFixed(1).replace('.0', '') + 'kk';
-    return (adena / 1_000_000_000).toFixed(1).replace('.0', '') + 'kkk';
+    const abs = Math.abs(adena);
+    const sign = adena < 0 ? '-' : '';
+
+    if (abs <= 999) return adena.toString();
+    if (abs <= 999_000) return sign + (abs / 1_000).toFixed(1).replace('.0', '') + 'k';
+    if (abs <= 999_000_000) return sign + (abs / 1_000_000).toFixed(1).replace('.0', '') + 'kk';
+    return sign + (abs / 1_000_000_000).toFixed(1).replace('.0', '') + 'kkk';
+}
+
+export function formatNumber(num: number): string {
+    return num.toLocaleString('en-US');
 }
 
 export function pluralize(singular: string, plural: string, count: number, emoji?: string): string {
@@ -20,7 +27,7 @@ export function pluralize(singular: string, plural: string, count: number, emoji
         const article = ['a', 'e', 'i', 'o', 'u'].includes(singular.charAt(0).toLowerCase()) ? 'an' : 'a';
         return `${article} ${icon}${singular}`;
     }
-    return `${count.toLocaleString('en-US')} ${icon}${plural}`;
+    return `${formatNumber(count)} ${icon}${plural}`;
 }
 
 export function formatShopItems(items: Item[]) {
@@ -28,7 +35,7 @@ export function formatShopItems(items: Item[]) {
         id: i.id,
         emoji: i.emoji,
         name: i.name,
-        stat: i.stat,
+        statFormatted: formatNumber(i.stat),
         costFormatted: formatAdena(i.cost),
     }));
 }

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatAdena, pluralize, fillTemplate, makeFlash, makePurchaseFlash, isRelease } from './index';
+import { formatAdena, formatNumber, pluralize, fillTemplate, makeFlash, makePurchaseFlash, isRelease } from './index';
 
 describe('formatAdena', () => {
     it('returns plain number below 1k', () => expect(formatAdena(999)).toBe('999'));
@@ -8,6 +8,15 @@ describe('formatAdena', () => {
     it('strips trailing .0 from k', () => expect(formatAdena(5_000)).toBe('5k'));
     it('returns kk for millions', () => expect(formatAdena(1_000_000)).toBe('1kk'));
     it('returns kkk for billions', () => expect(formatAdena(1_000_000_000)).toBe('1kkk'));
+    it('handles negative numbers below 1k', () => expect(formatAdena(-500)).toBe('-500'));
+    it('handles negative thousands', () => expect(formatAdena(-1_500)).toBe('-1.5k'));
+});
+
+describe('formatNumber', () => {
+    it('returns plain number below 1k', () => expect(formatNumber(999)).toBe('999'));
+    it('formats thousands with commas', () => expect(formatNumber(1_000)).toBe('1,000'));
+    it('formats millions with commas', () => expect(formatNumber(1_000_000)).toBe('1,000,000'));
+    it('formats negative numbers with commas', () => expect(formatNumber(-2_500)).toBe('-2,500'));
 });
 
 describe('pluralize', () => {

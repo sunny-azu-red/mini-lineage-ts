@@ -46,11 +46,11 @@
                                 <span><%= title %></span>
 
                                 <div class="header-stats" title="Kills / Battles / Ambushes">
-                                    <span class="header-stats-value"><%= enemyEmoji %> <%= totalEnemiesKilled.toLocaleString('en-US') %></span>
+                                    <span class="header-stats-value"><%= enemyEmoji %> <%= formatNumber(totalEnemiesKilled) %></span>
                                     <span class="header-stats-divider">/</span>
-                                    <span class="header-stats-value">⚡ <%= totalBattles.toLocaleString('en-US') %></span>
+                                    <span class="header-stats-value">⚡ <%= formatNumber(totalBattles) %></span>
                                     <span class="header-stats-divider">/</span>
-                                    <span class="header-stats-value">💢 <%= totalAmbushes.toLocaleString('en-US') %></span>
+                                    <span class="header-stats-value">💢 <%= formatNumber(totalAmbushes) %></span>
                                 </div>
                             </div>
 
