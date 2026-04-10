@@ -1,3 +1,8 @@
+<div class="panel">
+    <div class="panel-header">
+        The Legacy of the Realm
+    </div>
+    <div class="panel-body">
         <p>
             In the age of steel and magic, <span class="gold"><%= stats.total_players %> brave souls</span> have set foot upon these dangerous lands. 
             Through hardship and triumph, they have collectively ascended <span class="gold"><%= stats.total_levels_gained %> levels</span> in their pursuit of power. 
@@ -47,10 +52,9 @@
             while the local Inn has served <span class="gold"><%= stats.total_food_bought %> meals</span> to keep the fires of life burning. 
             Today, the total wealth held within the pouches of all active wanderers stands at <span class="gold">🪙 <%= stats.total_adena %> Adena</span>.
         </p>
+    </div>
+</div>
 
-
-<style>
-    p {
-        margin-bottom: 0px;
-    }
-</style>
+<p class="last">
+    <a href="/" class="js-back-link">Go back to the journey</a>
+</p>

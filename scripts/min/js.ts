@@ -7,6 +7,7 @@ const JS_ORDER = [
     'home.js',
     'suicide.js',
     'shop.js',
+    'back.js',
 ];
 
 const SRC_DIR = path.join(__dirname, '../../public/js');

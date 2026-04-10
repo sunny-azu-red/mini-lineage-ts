@@ -51,6 +51,11 @@
                 <div id="copyright">Version <%- version %> &copy; 2005 &ndash; <%= year %></div>
             </div>
         </div>
+        <% if (isRelease) { %>
+            <script src="/js/script.js"></script>
+        <% } else { %>
+            <script src="/js/back.js"></script>
+        <% } %>
     </body>
 
 </html>
