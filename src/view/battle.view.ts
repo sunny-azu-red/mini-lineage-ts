@@ -28,10 +28,10 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
         enemyGroup,
         enemyEmoji,
         enemyName,
-        blocked: results.damageBlocked,
-        xpGained: results.xpGained,
+        blocked: results.damageBlocked.toLocaleString('en-US'),
+        xpGained: results.xpGained.toLocaleString('en-US'),
         adenaGained: formatAdena(results.adenaGained),
-        hp: player.health,
+        hp: player.health.toLocaleString('en-US'),
         isSingleEnemy: enemies === 1,
     };
 

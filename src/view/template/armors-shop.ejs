@@ -15,7 +15,7 @@
         <% items.forEach(function(armor) { %>
             <tr>
                 <td><%= armor.emoji %> <%= armor.name %></td>
-                <td><%= armor.stat %></td>
+                <td><%= armor.stat.toLocaleString('en-US') %></td>
                 <td class="gold">🪙 <%= armor.costFormatted %></td>
             </tr>
         <% }); %>

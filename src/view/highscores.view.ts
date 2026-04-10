@@ -16,7 +16,7 @@ export function renderHighscoresView(highscores: HighscoreEntry[] = [], activeRa
         return {
             name: `${emoji} ${score.name}`,
             level: score.level,
-            totalXp: score.total_xp,
+            totalXp: score.total_xp.toLocaleString('en-US'),
             adena: formatAdena(score.adena),
             date,
         };

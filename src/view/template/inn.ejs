@@ -15,7 +15,7 @@
         <% items.forEach(function(food) { %>
             <tr>
                 <td><%= food.emoji %> <%= food.name %></td>
-                <td><%= food.stat %></td>
+                <td><%= food.stat.toLocaleString('en-US') %></td>
                 <td class="gold">🪙 <%= food.costFormatted %></td>
             </tr>
         <% }); %>

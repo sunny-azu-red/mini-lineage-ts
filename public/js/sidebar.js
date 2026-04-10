@@ -7,9 +7,9 @@
             let progress = Math.min((timestamp - startTimestamp) / duration, 1);
             const easeProgress = 1 - Math.pow(1 - progress, 3);
             if (progress < 1) {
-                el.innerText = Math.round(easeProgress * (end - start) + start);
+                el.innerText = Math.round(easeProgress * (end - start) + start).toLocaleString('en-US');
                 window.requestAnimationFrame(step);
-            } else el.innerText = el.dataset.final || end;
+            } else el.innerText = el.dataset.final || end.toLocaleString('en-US');
         };
         window.requestAnimationFrame(step);
     }

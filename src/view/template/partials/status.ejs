@@ -12,7 +12,7 @@
             <div class="bar-track">
                 <div class="bar hp-bar" id="hp-bar" style="width: <%= prevHpPercent %>%" data-width="<%= hpPercent %>"></div>
                 <span class="bar-text">
-                    <span class="animate-val" data-val="<%= hp %>" data-prev="<%= prevHp %>"><%= prevHp %></span>/<%= maxHp %>
+                    <span class="animate-val" data-val="<%= hp %>" data-prev="<%= prevHp %>"><%= prevHp.toLocaleString('en-US') %></span>/<%= maxHp.toLocaleString('en-US') %>
                 </span>
             </div>
         </div>
@@ -22,16 +22,16 @@
                 <div class="bar xp-bar" id="xp-bar" style="width: <%= prevXpPercent %>%" data-width="<%= isMaxLevel ? 100 : xpPercent %>"></div>
                 <span class="bar-text">
                     <% if (isMaxLevel) { %>
-                        <span class="animate-val" data-val="<%= totalXp %>" data-prev="<%= prevTotalXp %>"><%= prevTotalXp %></span>
+                        <span class="animate-val" data-val="<%= totalXp %>" data-prev="<%= prevTotalXp %>"><%= prevTotalXp.toLocaleString('en-US') %></span>
                     <% } else { %>
-                        <span class="animate-val" data-val="<%= currentXp %>" data-prev="<%= prevCurrentXp %>"><%= prevCurrentXp %></span>/<%= nextLevelXp %>
+                        <span class="animate-val" data-val="<%= currentXp %>" data-prev="<%= prevCurrentXp %>"><%= prevCurrentXp.toLocaleString('en-US') %></span>/<%= nextLevelXp.toLocaleString('en-US') %>
                     <% } %>
                 </span>
             </div>
         </div>
         <div class="stat-row">
             <span class="stat-label">Adena</span>
-            <span class="stat-value gold">🪙 <span class="animate-val" data-val="<%= adena %>" data-prev="<%= prevAdena %>" data-final="<%= adenaFormatted %>"><%= adenaFormatted %></span></span>
+            <span class="stat-value gold">🪙 <%= adenaFormatted %></span>
         </div>
     </div>
 </div>

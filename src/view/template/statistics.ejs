@@ -30,7 +30,7 @@
     resulting in the defeat of <span class="gold"><%- pluralize('formidable foe', 'formidable foes', stats.total_enemies_killed) %></span>. 
 </p>
 <p>
-    From these conflicts, the survivors extracted vast wisdom, gaining a total of <span class="xp"><%= stats.total_xp_gained.toLocaleString() %> XP</span>. 
+    From these conflicts, the survivors extracted vast wisdom, gaining a total of <span class="xp"><%= stats.total_xp_gained.toLocaleString('en-US') %> XP</span>. 
     <%- fillTemplate("But the wild is treacherous, as the hunters became the hunted and <span class=\"hp\">{ambushText}</span> {isSingleAmbush ? 'has' : 'have'} occurred, nearly claiming those who walked unprepared.", {
         ambushText: pluralize('ambush', 'ambushes', stats.total_ambushes),
         isSingleAmbush: stats.total_ambushes === 1
@@ -39,11 +39,11 @@
 
 <h2>The Toll of Survival</h2>
 <p>
-    Hardship is measured in blood and resilience. Our champions have shed <span class="hp"><%= stats.total_hp_lost.toLocaleString() %> HP</span>, 
-    flesh torn by tooth and claw. Yet, the craft of the blacksmith has proven its worth, as armor deflected <span class="muted"><%= stats.total_damage_blocked.toLocaleString() %> damage</span>. 
+    Hardship is measured in blood and resilience. Our champions have shed <span class="hp"><%= stats.total_hp_lost.toLocaleString('en-US') %> HP</span>, 
+    flesh torn by tooth and claw. Yet, the craft of the blacksmith has proven its worth, as armor deflected <span class="muted"><%= stats.total_damage_blocked.toLocaleString('en-US') %> damage</span>. 
 </p>
 <p>
-    To mend their broken bodies, they have sought the warmth of the Inn and the delicious food inside, healing for a combined total of <span class="heal"><%= stats.total_hp_healed.toLocaleString() %> HP</span>.
+    To mend their broken bodies, they have sought the warmth of the Inn and the delicious food inside, healing for a combined total of <span class="heal"><%= stats.total_hp_healed.toLocaleString('en-US') %> HP</span>.
 </p>
 
 <h2>The Flow of Fortune</h2>
