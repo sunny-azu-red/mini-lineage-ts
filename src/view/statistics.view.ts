@@ -29,5 +29,5 @@ export function renderStatisticsView(stats: Statistics): string {
         }
     });
 
-    return renderSimplePage('The Legacy of the Realm', content);
+    return renderSimplePage('The Tome of Lore', content);
 }

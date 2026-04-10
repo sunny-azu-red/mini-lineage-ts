@@ -28,10 +28,6 @@ export const postHighscores = async (req: Request, res: Response) => {
 };
 
 export const getHighscores = async (req: Request, res: Response) => {
-    const player = res.locals.player;
-    if (player.dead)
-        return res.redirect('/death');
-
     const { raceLabel } = req.params;
     let filteredRaceId: number | undefined;
 

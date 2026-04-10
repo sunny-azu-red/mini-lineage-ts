@@ -50,6 +50,24 @@ strong {
     color: var(--text-secondary);
 }
 
+h2 {
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+    margin-top: 24px;
+    margin-bottom: 12px;
+}
+
+h2:first-child {
+    margin-top: 0;
+}
+
 p {
     margin-bottom: 12px;
 }
@@ -65,6 +83,10 @@ p.last {
 
 .gold {
     color: var(--gold) !important;
+}
+
+.heal {
+    color: var(--success) !important;
 }
 
 .hp {

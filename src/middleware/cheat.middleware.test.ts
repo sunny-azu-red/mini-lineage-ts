@@ -81,6 +81,20 @@ describe('cheatMiddleware', () => {
         });
     });
 
+    describe('alive players on death paths', () => {
+        it('should redirect alive players away from /death', () => {
+            req.path = '/death';
+            cheatMiddleware(req, res, next);
+            expect(res.redirect).toHaveBeenCalledWith('/');
+        });
+
+        it('should redirect alive players away from /restart', () => {
+            req.path = '/restart';
+            cheatMiddleware(req, res, next);
+            expect(res.redirect).toHaveBeenCalledWith('/');
+        });
+    });
+
     describe('ambushed players', () => {
         it('should kill ambushed player if they navigate to forbidden path', () => {
             res.locals.player.ambushed = true;
@@ -123,6 +137,15 @@ describe('cheatMiddleware', () => {
             expect(next).toHaveBeenCalled();
         });
 
+        it('should allow non-initialized players on /statistics', () => {
+            vi.mocked(playerService.isGameStarted).mockReturnValue(false);
+            req.path = '/statistics';
+
+            cheatMiddleware(req, res, next);
+
+            expect(next).toHaveBeenCalled();
+        });
+
         it('should allow non-initialized players on filtered highscore paths', () => {
             vi.mocked(playerService.isGameStarted).mockReturnValue(false);
             req.path = '/highscores/dark-elf';
@@ -133,12 +156,32 @@ describe('cheatMiddleware', () => {
         });
     });
 
-    it('should allow initialized players on valid paths', () => {
-        vi.mocked(playerService.isGameStarted).mockReturnValue(true);
-        req.path = '/battle';
+    describe('initialized players', () => {
+        it('should allow initialized players on valid paths like /battle', () => {
+            vi.mocked(playerService.isGameStarted).mockReturnValue(true);
+            req.path = '/battle';
 
-        cheatMiddleware(req, res, next);
+            cheatMiddleware(req, res, next);
 
-        expect(next).toHaveBeenCalled();
+            expect(next).toHaveBeenCalled();
+        });
+
+        it('should redirect initialized players away from /start', () => {
+            vi.mocked(playerService.isGameStarted).mockReturnValue(true);
+            req.path = '/start';
+
+            cheatMiddleware(req, res, next);
+
+            expect(res.redirect).toHaveBeenCalledWith('/');
+        });
+
+        it('should redirect initialized players away from /statistics', () => {
+            vi.mocked(playerService.isGameStarted).mockReturnValue(true);
+            req.path = '/statistics';
+
+            cheatMiddleware(req, res, next);
+
+            expect(res.redirect).toHaveBeenCalledWith('/');
+        });
     });
 });

@@ -10,9 +10,6 @@ export const getHome = (req: Request, res: Response) => {
     if (!isGameStarted(player))
         return res.send(renderGameStartView());
 
-    if (player.ambushed)
-        return res.redirect('/battle');
-
     res.send(renderHomeView(player, res.locals.flash));
 };
 
