@@ -1,24 +1,30 @@
-# Use a lightweight Node.js 20 image
+# Use Node 20
 FROM node:20-alpine
 
-# The build script in your package.json requires git
+# 1. Install git (required for your build script)
 RUN apk add --no-cache git
 
-# Set the working directory
+# 2. Set working directory
 WORKDIR /app
 
-# Copy package files and install ALL dependencies (including dev for ts-node)
+# 3. FIX: Tell Git to trust this directory (fixes Exit Code 128)
+RUN git config --global --add safe.directory /app
+
+# 4. Install dependencies first (for caching)
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the application code
+# 5. Copy the rest of the files
+# Portainer clones the repo including the .git folder, so this copies it over
 COPY . .
 
-# Build the application (runs your custom tsc, minification, and git versioning)
+# 6. Run the build script
+# This will now successfully run: git rev-parse --short HEAD > dist/version.txt
 RUN npm run build
 
-# Expose the port
+# 7. Expose the app port
 EXPOSE 3000
 
-# The startup command: run migrations, then start the server
+# 8. Start: Run migrations, then start server
+# We use sh -c to chain the commands
 CMD ["sh", "-c", "npm run db:migrate && npm start"]
