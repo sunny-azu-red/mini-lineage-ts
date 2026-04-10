@@ -54,7 +54,7 @@
 <p> 
     The shops have flourished, selling <span class="gold"><%- pluralize('weapon', 'weapons', stats.total_weapons_bought) %></span> and <span class="gold"><%- pluralize('armor', 'armors', stats.total_armors_bought) %></span> to those who would be king, 
     while the local Inn has served <span class="gold"><%- pluralize('meal', 'meals', stats.total_food_bought) %></span> to keep the fires of life burning. 
-    <!-- Today, the total wealth held within the pouches of all active wanderers stands at <span class="gold">🪙 <%= formatAdena(stats.total_adena) %> Adena</span>. -->
+    <!-- Today, the total wealth held within the pouches of all active wanderers stands at <span class="gold">🪙 <%= stats.total_adena_formatted %> Adena</span>. -->
 </p>
 
 <p class="last">
