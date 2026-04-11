@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { GAME_VERSION } from '@/constant/game.constant';
-import { isRelease } from '@/util';
+import { isRelease } from '@/util/version';
 import { logger } from '@/config/logger.config';
 
 export const debugMiddleware = (req: Request, res: Response, next: NextFunction) => {

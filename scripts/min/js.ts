@@ -10,8 +10,8 @@ const JS_ORDER = [
     'back.js',
 ];
 
-const SRC_DIR = path.join(__dirname, '../../public/js');
-const OUT_FILE = path.join(SRC_DIR, 'script.js');
+const SRC_DIR = path.resolve(process.cwd(), 'public/js');
+const OUT_FILE = path.resolve(process.cwd(), 'dist/public/script.js');
 
 async function minJs() {
     if (!fs.existsSync(SRC_DIR)) {

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { debugMiddleware } from './debug.middleware';
 import { logger } from '@/config/logger.config';
-import * as util from '@/util';
+import * as version from '@/util/version';
 
 vi.mock('@/config/logger.config', () => ({
     logger: {
@@ -26,7 +26,7 @@ describe('debugMiddleware', () => {
     });
 
     it('should log debug info on finish in development', () => {
-        vi.spyOn(util, 'isRelease').mockReturnValue(false);
+        vi.spyOn(version, 'isRelease').mockReturnValue(false);
         const req = { method: 'GET', url: '/', sessionID: 'xyz', session: { name: 'Player' } };
         let finishHandler: Function = () => { };
         const res = {
@@ -46,7 +46,7 @@ describe('debugMiddleware', () => {
     });
 
     it('should NOT log debug info on finish in release', () => {
-        vi.spyOn(util, 'isRelease').mockReturnValue(true);
+        vi.spyOn(version, 'isRelease').mockReturnValue(true);
         const req = { method: 'GET', url: '/', sessionID: 'xyz' };
         let finishHandler: Function = () => { };
         const res = {

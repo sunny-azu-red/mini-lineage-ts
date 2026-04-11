@@ -1,5 +1,3 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import { FlashMessage, Item, PurchaseResult } from '@/interface';
 import { randomInt } from '@/service/math.service';
 
@@ -66,22 +64,6 @@ export function fillTemplate(template: string, data: Record<string, any>): strin
         const val = data[key];
         return val !== undefined && val !== null ? val.toString() : `{${key}}`;
     });
-}
-
-export function getVersion(): string {
-    try {
-        const versionPath = path.join(__dirname, '../version.txt');
-        if (fs.existsSync(versionPath)) {
-            return fs.readFileSync(versionPath, 'utf8').trim();
-        }
-    } catch (err) {
-    }
-
-    return '⚡development';
-}
-
-export function isRelease(version: string): boolean {
-    return version.length === 7 && /^[0-9a-f]+$/i.test(version);
 }
 
 export function slugify(text: string): string {

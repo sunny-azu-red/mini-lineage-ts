@@ -1,8 +1,8 @@
 import { Item, Race, RaceType } from '@/interface';
-import { getVersion } from '@/util';
+import { getVersion } from '@/util/version';
 
 export const GAME_VERSION = getVersion();
-export const REPO_COMMIT_URL = 'https://github.com/sunny-azu-red/mini-lineage-ts/commit/';
+export const REPO_COMMIT_URL = 'https://github.com/sunny-azu-red/mini-lineage-remastered/commit/';
 
 export const MAX_LEVEL = 80;
 

@@ -1,6 +1,6 @@
 import pino from 'pino';
 import { GAME_VERSION } from '@/constant/game.constant';
-import { isRelease } from '@/util';
+import { isRelease } from '@/util/version';
 
 export const logger = pino(
     isRelease(GAME_VERSION)

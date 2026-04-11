@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatAdena, formatNumber, pluralize, fillTemplate, makeFlash, makePurchaseFlash, isRelease } from './index';
+import { formatAdena, formatNumber, pluralize, fillTemplate, makeFlash, makePurchaseFlash, slugify } from './index';
 
 describe('formatAdena', () => {
     it('returns plain number below 1k', () => expect(formatAdena(999)).toBe('999'));
@@ -66,10 +66,8 @@ describe('makePurchaseFlash', () => {
     });
 });
 
-describe('isRelease', () => {
-    it('returns true for a valid 7-char hex git hash', () => expect(isRelease('a1b2c3d')).toBe(true));
-    it('returns false for "⚡development"', () => expect(isRelease('⚡development')).toBe(false));
-    it('returns false for a 6-char string', () => expect(isRelease('a1b2c3')).toBe(false));
-    it('returns false for a 7-char non-hex string', () => expect(isRelease('xyz1234')).toBe(false));
-    it('returns false for empty string', () => expect(isRelease('')).toBe(false));
+describe('slugify', () => {
+    it('lowercases and replaces spaces', () => expect(slugify('Hello World')).toBe('hello-world'));
+    it('removes special characters', () => expect(slugify('Orcs & Humans!')).toBe('orcs-humans'));
+    it('collapses multiple dashes', () => expect(slugify('test---test')).toBe('test-test'));
 });

@@ -2,7 +2,8 @@ import { readTemplate, render } from './base.view';
 import { WEAPONS, ARMORS, RACES, GAME_VERSION, REPO_COMMIT_URL } from '@/constant/game.constant';
 import { calculateLevel, isLowHealth, calculatePercentage, getXpProgress, isMaxLevel } from '@/service/math.service';
 import { isGameStarted } from '@/service/player.service';
-import { formatAdena, formatNumber, randomElement, isRelease } from '@/util';
+import { formatAdena, formatNumber, randomElement } from '@/util';
+import { isRelease } from '@/util/version';
 import { AMBUSH_LOW_HEALTH_MESSAGES } from '@/constant/narratives.constant';
 import { PlayerState, RenderOptions, FlashMessage } from '@/interface';
 
