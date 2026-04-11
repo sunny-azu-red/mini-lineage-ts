@@ -18,6 +18,7 @@ const staticPath = isRelease(GAME_VERSION)
     ? path.join(__dirname, 'public')
     : path.join(__dirname, '../public');
 
+app.set('trust proxy', 1); // caddy fix
 app.use(helmet());
 app.use(compression());
 app.use(express.urlencoded({ extended: true }));
