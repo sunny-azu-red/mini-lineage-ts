@@ -20,5 +20,4 @@ COPY --from=builder /app/package*.json ./
 
 RUN npm ci --omit=dev
 
-EXPOSE 3000
 CMD ["sh", "-c", "node dist/scripts/db/migrate.js && npm start"]
