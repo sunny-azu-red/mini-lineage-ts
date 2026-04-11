@@ -1,17 +1,14 @@
 # --- STAGE 1: The Kitchen (Builder) ---
 FROM node:20-alpine AS builder
-RUN apk add --no-cache git
+RUN apk add --no-cache git curl
 WORKDIR /app
 
-ARG BUILDKIT_CONTEXT_KEEP_GIT_DIR=1
-ARG APP_VERSION
-
 COPY package*.json ./
-RUN npm ci 
+RUN npm ci
 
 COPY . .
-RUN git config --global --add safe.directory /app
-RUN npm run build
+RUN export APP_VERSION=$(curl -s https://api.github.com/repos/sunny-azu-red/mini-lineage-remastered/commits/main | grep -m 1 '"sha":' | cut -d '"' -f 4 | cut -c1-7) && \
+    npm run build
 
 # --- STAGE 2: The App (Production) ---
 FROM node:20-alpine AS runner
