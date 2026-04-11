@@ -19,7 +19,7 @@ describe('version utility', () => {
             it('returns true regardless of the version string content', () => {
                 vi.mocked(env).NODE_ENV = 'production';
 
-                expect(isRelease('⚡development')).toBe(true);
+                expect(isRelease('⚡ development')).toBe(true);
                 expect(isRelease('anything')).toBe(true);
                 expect(isRelease('')).toBe(true);
             });
@@ -36,9 +36,9 @@ describe('version utility', () => {
                 expect(isRelease('A1B2C3D')).toBe(true);
             });
 
-            it('returns false for "⚡development"', () => {
+            it('returns false for "⚡ development"', () => {
                 vi.mocked(env).NODE_ENV = 'development';
-                expect(isRelease('⚡development')).toBe(false);
+                expect(isRelease('⚡ development')).toBe(false);
             });
 
             it('returns false for invalid hex strings or lengths', () => {
@@ -52,8 +52,8 @@ describe('version utility', () => {
     });
 
     describe('getVersion', () => {
-        it('returns ⚡development if the version file is missing', () => {
-            expect(getVersion()).toBe('⚡development');
+        it('returns ⚡ development if the version file is missing', () => {
+            expect(getVersion()).toBe('⚡ development');
         });
     });
 });

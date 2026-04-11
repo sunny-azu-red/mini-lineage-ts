@@ -10,7 +10,7 @@ export function getVersion(): string {
     } catch (err) {
     }
 
-    return '⚡development';
+    return '⚡ development';
 }
 
 export function isRelease(version: string): boolean {
