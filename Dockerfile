@@ -14,6 +14,7 @@ RUN export APP_VERSION=$(curl -s https://api.github.com/repos/sunny-azu-red/mini
 FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
+ENV IN_DOCKER=true
 
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package*.json ./

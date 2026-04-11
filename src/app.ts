@@ -18,7 +18,7 @@ const staticPath = isRelease(GAME_VERSION)
     ? path.join(__dirname, 'public')
     : path.join(__dirname, '../public');
 
-app.set('trust proxy', 1); // caddy fix
+app.set('trust proxy', 1);
 app.use(helmet());
 app.use(compression());
 app.use(express.urlencoded({ extended: true }));
@@ -26,11 +26,12 @@ app.use(express.static(staticPath));
 app.use(session({
     secret: env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     store: sessionStore,
     cookie: {
-        sameSite: 'strict',
+        sameSite: 'lax',
         httpOnly: true,
+        secure: env.IN_DOCKER,
     },
 }));
 app.use(debugMiddleware);

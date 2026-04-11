@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { env } from '@/config/env.config';
 
 export function getVersion(): string {
     try {
@@ -13,5 +14,5 @@ export function getVersion(): string {
 }
 
 export function isRelease(version: string): boolean {
-    return process.env.NODE_ENV === 'production' || (version.length === 7 && /^[0-9a-f]+$/i.test(version));
+    return env.NODE_ENV === 'production' || (version.length === 7 && /^[0-9a-f]+$/i.test(version));
 }
