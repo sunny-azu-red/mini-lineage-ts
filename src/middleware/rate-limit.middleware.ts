@@ -1,6 +1,6 @@
 import rateLimit from 'express-rate-limit';
 import { renderRateLimitView } from '@/view/rate-limit.view';
-import { isRelease } from '@/util';
+import { isRelease } from '@/util/version';
 import { GAME_VERSION } from '@/constant/game.constant';
 
 export const skipIfDev = () => !isRelease(GAME_VERSION);

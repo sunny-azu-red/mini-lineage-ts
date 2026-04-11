@@ -12,8 +12,8 @@ const CSS_ORDER = [
     'components.css',
 ];
 
-const SRC_DIR = path.join(__dirname, '../../public/css');
-const OUT_FILE = path.join(SRC_DIR, 'style.css');
+const SRC_DIR = path.resolve(process.cwd(), 'public/css');
+const OUT_FILE = path.resolve(process.cwd(), 'dist/public/style.css');
 
 async function minCss() {
     if (!fs.existsSync(SRC_DIR)) {

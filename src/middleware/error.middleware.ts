@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { readTemplate, render } from '@/view/base.view';
 import { renderSimplePage } from '@/view/layout.view';
-import { isRelease } from '@/util';
+import { isRelease } from '@/util/version';
 import { GAME_VERSION } from '@/constant/game.constant';
 import { logger } from '@/config/logger.config';
 

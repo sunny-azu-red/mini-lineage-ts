@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { skipIfDev, battleRateLimitHandler, shopRateLimitHandler } from './rate-limit.middleware';
-import * as util from '@/util';
+import * as version from '@/util/version';
 import * as rateLimitView from '@/view/rate-limit.view';
 
 // mock the constant as it might be 'development' or a real SHA
@@ -19,13 +19,13 @@ describe('rate-limit.middleware', () => {
 
     describe('skipIfDev', () => {
         it('should skip rate limiting when not in release mode', () => {
-            const spy = vi.spyOn(util, 'isRelease').mockReturnValue(false);
+            const spy = vi.spyOn(version, 'isRelease').mockReturnValue(false);
             expect(skipIfDev()).toBe(true);
             spy.mockRestore();
         });
 
         it('should not skip rate limiting when in release mode', () => {
-            const spy = vi.spyOn(util, 'isRelease').mockReturnValue(true);
+            const spy = vi.spyOn(version, 'isRelease').mockReturnValue(true);
             expect(skipIfDev()).toBe(false);
             spy.mockRestore();
         });
