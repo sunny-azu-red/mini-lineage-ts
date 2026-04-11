@@ -6,10 +6,14 @@ describe('formatAdena', () => {
     it('returns 1k for exactly 1000', () => expect(formatAdena(1_000)).toBe('1k'));
     it('returns 1.5k for 1500', () => expect(formatAdena(1_500)).toBe('1.5k'));
     it('strips trailing .0 from k', () => expect(formatAdena(5_000)).toBe('5k'));
+    it('does NOT round up 4,950 to 5k (should be 4.9k)', () => expect(formatAdena(4_950)).toBe('4.9k'));
+    it('does NOT round up 4,999 to 5k', () => expect(formatAdena(4_999)).toBe('4.9k'));
     it('returns kk for millions', () => expect(formatAdena(1_000_000)).toBe('1kk'));
+    it('returns 1.2kk for 1,250,000 (floored)', () => expect(formatAdena(1_250_000)).toBe('1.2kk'));
     it('returns kkk for billions', () => expect(formatAdena(1_000_000_000)).toBe('1kkk'));
     it('handles negative numbers below 1k', () => expect(formatAdena(-500)).toBe('-500'));
     it('handles negative thousands', () => expect(formatAdena(-1_500)).toBe('-1.5k'));
+    it('floors negative values correctly', () => expect(formatAdena(-4_950)).toBe('-4.9k'));
 });
 
 describe('formatNumber', () => {

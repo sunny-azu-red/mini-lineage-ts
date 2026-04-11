@@ -9,10 +9,18 @@ export function formatAdena(adena: number): string {
     const abs = Math.abs(adena);
     const sign = adena < 0 ? '-' : '';
 
-    if (abs <= 999) return adena.toString();
-    if (abs <= 999_000) return sign + (abs / 1_000).toFixed(1).replace('.0', '') + 'k';
-    if (abs <= 999_000_000) return sign + (abs / 1_000_000).toFixed(1).replace('.0', '') + 'kk';
-    return sign + (abs / 1_000_000_000).toFixed(1).replace('.0', '') + 'kkk';
+    if (abs <= 999)
+        return adena.toString();
+
+    const floorToOneDecimal = (value: number, divisor: number, unit: string) => {
+        const calculated = Math.floor((abs / divisor) * 10) / 10;
+        return sign + calculated.toFixed(1).replace('.0', '') + unit;
+    };
+
+    if (abs < 1_000_000) return floorToOneDecimal(abs, 1_000, 'k');
+    if (abs < 1_000_000_000) return floorToOneDecimal(abs, 1_000_000, 'kk');
+
+    return floorToOneDecimal(abs, 1_000_000_000, 'kkk');
 }
 
 export function formatNumber(num: number): string {
