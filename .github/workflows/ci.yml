@@ -12,20 +12,21 @@ jobs:
       mysql:
         image: mysql:8
         env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: mini_lineage_test
+          MYSQL_ROOT_PASSWORD: pass
+          MYSQL_DATABASE: lineage_remastered
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     env:
+      NODE_ENV: test
+      PORT: 3000
       SESSION_SECRET: ci-secret-not-used-in-tests
       DB_HOST: 127.0.0.1
       DB_PORT: 3306
-      DB_USER: root
-      DB_PASSWORD: root
-      DB_NAME: mini_lineage_test
-      NODE_ENV: test
+      DB_DATABASE: lineage_remastered
+      DB_USERNAME: root
+      DB_PASSWORD: pass
 
     steps:
       - uses: actions/checkout@v6

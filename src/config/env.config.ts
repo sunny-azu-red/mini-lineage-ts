@@ -15,7 +15,8 @@ export const env = cleanEnv(process.env, {
     PORT: port({ default: 3000 }),
     SESSION_SECRET: isTest ? str({ default: 'your-secret-here' }) : nonEmptyStr(),
     DB_HOST: str({ default: isTest ? '127.0.0.1' : undefined }),
-    DB_USER: str({ default: isTest ? 'root' : undefined }),
+    DB_PORT: port({ default: 3306 }),
+    DB_DATABASE: str({ default: isTest ? 'lineage_remastered' : undefined }),
+    DB_USERNAME: str({ default: isTest ? 'root' : undefined }),
     DB_PASSWORD: str({ default: isTest ? 'pass' : undefined }),
-    DB_NAME: str({ default: isTest ? 'lineage_remastered' : undefined }),
 });
