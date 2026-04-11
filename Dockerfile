@@ -3,6 +3,9 @@ FROM node:20-alpine AS builder
 RUN apk add --no-cache git
 WORKDIR /app
 
+ARG BUILDKIT_CONTEXT_KEEP_GIT_DIR=1
+ARG APP_VERSION
+
 COPY package*.json ./
 RUN npm ci 
 

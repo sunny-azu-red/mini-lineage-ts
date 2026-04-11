@@ -1,18 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-let cachedVersion: string | null = null;
-
 export function getVersion(): string {
-    if (cachedVersion)
-        return cachedVersion;
-
     try {
         const versionPath = path.join(__dirname, '../version.txt');
-        if (fs.existsSync(versionPath)) {
-            cachedVersion = fs.readFileSync(versionPath, 'utf8').trim();
-            return cachedVersion;
-        }
+        if (fs.existsSync(versionPath))
+            return fs.readFileSync(versionPath, 'utf8').trim();
     } catch (err) {
     }
 
@@ -20,5 +13,5 @@ export function getVersion(): string {
 }
 
 export function isRelease(version: string): boolean {
-    return version.length === 7 && /^[0-9a-f]+$/i.test(version);
+    return process.env.NODE_ENV === 'production' || (version.length === 7 && /^[0-9a-f]+$/i.test(version));
 }

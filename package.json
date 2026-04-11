@@ -4,10 +4,10 @@
   "description": "Mini-Lineage Remastered is a modern rewrite of the original Mini-Lineage game.",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/server.js",
-    "dev": "nodemon src/server.ts",
+    "start": "cross-env NODE_ENV=production node dist/server.js",
+    "dev": "cross-env NODE_ENV=development nodemon src/server.ts",
     "prebuild": "npm run test",
-    "build": "rm -rf dist && tsc && tsc-alias && tsc -p tsconfig.scripts.json && tsc-alias -p tsconfig.scripts.json && mkdir -p dist/view/template dist/public && cp -r src/view/template dist/view/ && cp -r database dist/ && cp public/favicon.ico dist/public/ && npm run min:css && npm run min:js && npm run min:html && (git rev-parse --short HEAD || echo 'unknown') > dist/version.txt",
+    "build": "rm -rf dist && tsc && tsc-alias && tsc -p tsconfig.scripts.json && tsc-alias -p tsconfig.scripts.json && mkdir -p dist/view/template dist/public && cp -r src/view/template dist/view/ && cp -r database dist/ && cp public/favicon.ico dist/public/ && npm run min:css && npm run min:js && npm run min:html && (echo ${APP_VERSION:-$(git rev-parse --short HEAD || echo 'unknown')}) > dist/version.txt",
     "db:migrate": "node dist/scripts/db/migrate.js",
     "db:fresh": "node dist/scripts/db/reset.js",
     "db:migrate:dev": "ts-node -r tsconfig-paths/register scripts/db/migrate.ts",
@@ -24,6 +24,7 @@
   "type": "commonjs",
   "dependencies": {
     "compression": "^1.8.1",
+    "cross-env": "^10.1.0",
     "dotenv": "^17.3.1",
     "ejs": "^4.0.1",
     "envalid": "^8.1.1",

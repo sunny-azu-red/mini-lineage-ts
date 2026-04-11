@@ -1,16 +1,22 @@
 services:
   mini-lineage-remastered:
-    build: .
+    build:
+      context: .
+      args:
+        - BUILDKIT_CONTEXT_KEEP_GIT_DIR=1
+        - APP_VERSION=${APP_VERSION}
     image: mini-lineage-remastered:latest
     container_name: mini-lineage-remastered
     restart: always
     ports:
       - "${PORT}:${PORT}" 
     environment:
+      - NODE_ENV=production
       - PORT=${PORT}
+
+      - SESSION_SECRET=${SESSION_SECRET}
+
       - DB_HOST=${DB_HOST}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
-      - SESSION_SECRET=${SESSION_SECRET}
-      - NODE_ENV=production
