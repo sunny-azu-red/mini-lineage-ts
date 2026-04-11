@@ -38,7 +38,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run migrations (Development mode)
+      - name: Run migrations (dev mode)
         run: npm run db:migrate:dev
 
       - name: Test & Build

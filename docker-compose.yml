@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mini-lineage-remastered:
     build: .
@@ -7,9 +5,9 @@ services:
     container_name: mini-lineage-remastered
     restart: always
     ports:
-      - "3000:3000"
+      - "${PORT}:${PORT}" 
     environment:
-      - PORT=3000
+      - PORT=${PORT}
       - DB_HOST=${DB_HOST}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
