@@ -1,18 +1,18 @@
-<h2>Welcome, brave wanderer!</h2>
+<h2>A New Bloodline Rises</h2>
 <p>
-    Will you embark on a new journey, or perhaps reflect upon the legends within the <a href="/highscores">Hall of Champions</a>?
-    The deeds of all who came before are etched within <a href="/statistics">The Tome of Lore</a>, a chronicle of our shared history.
+    Will you forge a fresh path, or honor the ancestors resting within the <a href="/highscores">Hall of Champions</a>?
+    Blood, gold, and glory are etched in <a href="/statistics">The Tome of Lore</a>, a collective history of the dynasties that shaped our world.
 </p>
-<p>Under what name and through which lineage shall your own tale begin?</p>
+<p>Under what name shall the first chapter of your dynasty be written, and from which ancestry do you hail?</p>
 
 <form action="/start" method="post">
     <div class="form-row">
-        <input type="text" class="form-input" name="name" maxlength="18" placeholder="Identify yourself, champion..." required />
+        <input type="text" class="form-input" name="name" maxlength="18" placeholder="Enter your name, Heir" required />
         <select class="form-select" name="select_race">
             <% races.forEach(race => { %>
                 <option value="<%= race.id %>"><%= race.emoji %> <%= race.label %></option>
             <% }) %>
         </select>
-        <button type="submit" class="btn">🚩 Begin</button>
+        <button type="submit" class="btn">🚩 Enter Realm</button>
     </div>
 </form>
