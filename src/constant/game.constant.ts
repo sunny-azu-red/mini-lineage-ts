@@ -7,10 +7,10 @@ export const REPO_COMMIT_URL = 'https://github.com/sunny-azu-red/mini-lineage-re
 export const MAX_LEVEL = 80;
 
 export const RACES = [
-    { id: RaceType.Human, label: 'Human', plural: 'Humans', emoji: '🧙', enemyRaceId: RaceType.Orc, startHealth: 100, startAdena: 300, ambushOdds: 12, regen: 1 },
-    { id: RaceType.Orc, label: 'Orc', plural: 'Orcs', emoji: '🧟', enemyRaceId: RaceType.Human, startHealth: 150, startAdena: 250, ambushOdds: 6, regen: 0 },
-    { id: RaceType.Elf, label: 'Elf', plural: 'Elves', emoji: '🧝', enemyRaceId: RaceType.DarkElf, startHealth: 75, startAdena: 450, ambushOdds: 25, regen: 2 },
-    { id: RaceType.DarkElf, label: 'Dark Elf', plural: 'Dark Elves', emoji: '🧛', enemyRaceId: RaceType.Elf, startHealth: 85, startAdena: 350, ambushOdds: 20, regen: 2 },
+    { id: RaceType.Human, label: 'Human', plural: 'Humans', emoji: '🧙', enemyRaceId: RaceType.Orc, startHealth: 100, startAdena: 300, ambushOdds: 12, regen: 1, crit: 5 },
+    { id: RaceType.Orc, label: 'Orc', plural: 'Orcs', emoji: '🧟', enemyRaceId: RaceType.Human, startHealth: 150, startAdena: 250, ambushOdds: 6, regen: 0, crit: 0 },
+    { id: RaceType.Elf, label: 'Elf', plural: 'Elves', emoji: '🧝', enemyRaceId: RaceType.DarkElf, startHealth: 75, startAdena: 450, ambushOdds: 25, regen: 2, crit: 10 },
+    { id: RaceType.DarkElf, label: 'Dark Elf', plural: 'Dark Elves', emoji: '🧛', enemyRaceId: RaceType.Elf, startHealth: 85, startAdena: 350, ambushOdds: 20, regen: 2, crit: 10 },
 ] satisfies Race[];
 
 /**
@@ -35,9 +35,9 @@ export const WEAPONS = [
     { id: 0, name: `Brawler's Fists`, emoji: '👊', stat: 7, cost: 0 }, // start item
     { id: 1, name: `Elven Needle`, emoji: '🗡️', stat: 16, cost: 300 },
     { id: 2, name: `Stormbringer`, emoji: '⚡', stat: 28, cost: 5_000 },
-    { id: 3, name: `Echos of Valhalla`, emoji: '⚔️', stat: 45, cost: 18_000 },
-    { id: 4, name: `Calamity Comet`, emoji: '☄️', stat: 62, cost: 160_000 },
-    { id: 5, name: `The Forgotten Blade`, emoji: '💀', stat: 90, cost: 600_000 },
+    { id: 3, name: `Echos of Valhalla`, emoji: '⚔️', stat: 45, cost: 18_000, crit: 5 },
+    { id: 4, name: `Calamity Comet`, emoji: '☄️', stat: 62, cost: 160_000, crit: 10 },
+    { id: 5, name: `The Forgotten Blade`, emoji: '💀', stat: 90, cost: 600_000, crit: 20 },
 ] satisfies Item[];
 
 export const FOODS = [

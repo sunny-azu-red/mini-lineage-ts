@@ -21,6 +21,7 @@ export interface Race {
     startAdena: number;
     ambushOdds: number;
     regen: number;
+    crit: number;
 }
 
 export interface Item {
@@ -30,6 +31,7 @@ export interface Item {
     stat: number;
     cost: number;
     regen?: number;
+    crit?: number;
 }
 
 export interface PurchaseResult {

@@ -41,6 +41,8 @@ export function formatShopItems(items: Item[]) {
         id: i.id,
         emoji: i.emoji,
         name: i.name,
+        regen: i.regen,
+        crit: i.crit,
         statFormatted: formatNumber(i.stat),
         costFormatted: formatAdena(i.cost),
     }));
