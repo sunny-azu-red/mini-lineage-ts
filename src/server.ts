@@ -1,12 +1,12 @@
 import 'dotenv/config';
 import http from 'http';
+import app from './app';
 import { env } from '@/config/env.config';
 import { GAME_VERSION } from '@/constant/game.constant';
-import app, { sessionMiddleware } from './app';
 import { initSocketService } from '@/service/socket.service';
+import { sessionMiddleware } from '@/middleware/session.middleware';
 
 const server = http.createServer(app);
-
 initSocketService(server, sessionMiddleware);
 
 server.listen(env.PORT, () => {

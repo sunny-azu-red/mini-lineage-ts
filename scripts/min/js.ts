@@ -2,7 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import { minify } from 'terser';
 
+const SOCKET_IO_CLIENT = path.resolve(process.cwd(), 'node_modules/socket.io/client-dist/socket.io.min.js');
 const JS_ORDER = [
+    'socket.js',
     'sidebar.js',
     'home.js',
     'suicide.js',
@@ -19,6 +21,13 @@ async function minJs() {
     }
 
     let bundle = '';
+
+    if (fs.existsSync(SOCKET_IO_CLIENT)) {
+        bundle += fs.readFileSync(SOCKET_IO_CLIENT, 'utf-8') + '\n';
+    } else {
+        console.warn('⚠️ Warning: Socket.IO client not found in node_modules, build may be broken.');
+    }
+
     for (const file of JS_ORDER) {
         const filePath = path.join(SRC_DIR, file);
         if (fs.existsSync(filePath)) {
