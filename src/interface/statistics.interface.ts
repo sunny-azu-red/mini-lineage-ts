@@ -11,6 +11,7 @@ export type StatField =
     | 'total_food_bought'
     | 'total_hp_healed'
     | 'total_hp_lost'
+    | 'total_hp_regen'
     | 'total_levels_gained'
     | 'total_players'
     | 'total_players_cheated'

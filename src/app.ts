@@ -23,7 +23,7 @@ app.use(helmet());
 app.use(compression());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(staticPath));
-app.use(session({
+export const sessionMiddleware = session({
     secret: env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
@@ -33,7 +33,9 @@ app.use(session({
         httpOnly: true,
         secure: env.IN_DOCKER,
     },
-}));
+});
+
+app.use(sessionMiddleware);
 app.use(debugMiddleware);
 app.use(flashMiddleware);
 app.use(cheatMiddleware);

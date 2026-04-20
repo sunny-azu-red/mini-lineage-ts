@@ -20,6 +20,7 @@ export interface Race {
     startHealth: number;
     startAdena: number;
     ambushOdds: number;
+    regen: number;
 }
 
 export interface Item {
@@ -28,6 +29,7 @@ export interface Item {
     emoji: string;
     stat: number;
     cost: number;
+    regen?: number;
 }
 
 export interface PurchaseResult {

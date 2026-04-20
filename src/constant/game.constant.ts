@@ -7,10 +7,10 @@ export const REPO_COMMIT_URL = 'https://github.com/sunny-azu-red/mini-lineage-re
 export const MAX_LEVEL = 80;
 
 export const RACES = [
-    { id: RaceType.Human, label: 'Human', plural: 'Humans', emoji: '🧙', enemyRaceId: RaceType.Orc, startHealth: 100, startAdena: 300, ambushOdds: 12 },
-    { id: RaceType.Orc, label: 'Orc', plural: 'Orcs', emoji: '🧟', enemyRaceId: RaceType.Human, startHealth: 150, startAdena: 250, ambushOdds: 6 },
-    { id: RaceType.Elf, label: 'Elf', plural: 'Elves', emoji: '🧝', enemyRaceId: RaceType.DarkElf, startHealth: 75, startAdena: 450, ambushOdds: 25 },
-    { id: RaceType.DarkElf, label: 'Dark Elf', plural: 'Dark Elves', emoji: '🧛', enemyRaceId: RaceType.Elf, startHealth: 85, startAdena: 350, ambushOdds: 20 },
+    { id: RaceType.Human, label: 'Human', plural: 'Humans', emoji: '🧙', enemyRaceId: RaceType.Orc, startHealth: 100, startAdena: 300, ambushOdds: 12, regen: 1 },
+    { id: RaceType.Orc, label: 'Orc', plural: 'Orcs', emoji: '🧟', enemyRaceId: RaceType.Human, startHealth: 150, startAdena: 250, ambushOdds: 6, regen: 0 },
+    { id: RaceType.Elf, label: 'Elf', plural: 'Elves', emoji: '🧝', enemyRaceId: RaceType.DarkElf, startHealth: 75, startAdena: 450, ambushOdds: 25, regen: 2 },
+    { id: RaceType.DarkElf, label: 'Dark Elf', plural: 'Dark Elves', emoji: '🧛', enemyRaceId: RaceType.Elf, startHealth: 85, startAdena: 350, ambushOdds: 20, regen: 2 },
 ] satisfies Race[];
 
 /**
@@ -26,9 +26,9 @@ export const ARMORS = [
     { id: 0, name: `Peasant's Tunic`, emoji: '🧥', stat: 2, cost: 0 }, // start item
     { id: 1, name: `Brigandine Leathers`, emoji: '🥋', stat: 10, cost: 500 },
     { id: 2, name: `Spirit of the Forest`, emoji: '🪵', stat: 22, cost: 8_000 },
-    { id: 3, name: `Knight's Plate`, emoji: '🛡️', stat: 41, cost: 30_000 },
-    { id: 4, name: `Royal Chainmail`, emoji: '⛓️', stat: 64, cost: 140_000 },
-    { id: 5, name: `Eternal Aegis`, emoji: '💎', stat: 88, cost: 400_000 },
+    { id: 3, name: `Knight's Plate`, emoji: '🛡️', stat: 41, cost: 30_000, regen: 1 },
+    { id: 4, name: `Royal Chainmail`, emoji: '⛓️', stat: 64, cost: 140_000, regen: 2 },
+    { id: 5, name: `Eternal Aegis`, emoji: '💎', stat: 88, cost: 400_000, regen: 3 },
 ] satisfies Item[];
 
 export const WEAPONS = [
@@ -61,4 +61,17 @@ export const BATTLE_CONFIG = {
     xpGained: { exponent: 1.5, scaling: 0.8, killMin: 10, killMax: 18 },
     adenaGained: { exponent: 2.65, scaling: 0.05, killMin: 2, killMax: 4 },
     hpLost: { baseMin: 10, baseMax: 25, floor: 1 },
+} as const;
+
+/**
+ * Tick Configuration
+ *
+ * Controls the server-side regen tick sent via WebSocket.
+ * combatZones are paths where regen does NOT occur.
+ * restingZones are paths where regen IS applied.
+ */
+export const TICK_CONFIG = {
+    intervalMs: 5_000,
+    combatZones: ['/battle', '/suicide', '/death'],
+    restingZones: ['/', '/shop/weapons', '/shop/armors', '/inn'],
 } as const;

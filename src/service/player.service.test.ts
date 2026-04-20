@@ -10,6 +10,7 @@ import {
     restoreHealth,
     purchaseItem,
     applyBattleResult,
+    processTick,
 } from './player.service';
 import { statisticsRepository } from '@/repository/statistics.repository';
 
@@ -221,5 +222,58 @@ describe('applyBattleResult', () => {
         const p = makePlayer({ health: 5 });
         applyBattleResult(p, 10, 0, 0, 0, 0);
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_deaths');
+    });
+});
+
+describe('processTick', () => {
+    it('heals an Elf (regen 2) with no regen armor by 2 and returns true', () => {
+        const p = makePlayer({ raceId: 2, health: 50, armorId: 0 }); // Elf, Peasant's Tunic
+        const result = processTick(p);
+        expect(result).toBe(true);
+        expect(p.health).toBe(52);
+        expect(statisticsRepository.increment).toHaveBeenCalledWith('total_hp_regen', 2);
+    });
+
+    it('heals a Human (regen 1) with Knight\'s Plate (regen 1) by 2 total and returns true', () => {
+        const p = makePlayer({ raceId: 0, health: 70, armorId: 3 }); // Human, Knight's Plate
+        const result = processTick(p);
+        expect(result).toBe(true);
+        expect(p.health).toBe(72);
+        expect(statisticsRepository.increment).toHaveBeenCalledWith('total_hp_regen', 2);
+    });
+
+    it('returns false and does not heal an Orc (regen 0) with no regen armor', () => {
+        const p = makePlayer({ raceId: 1, health: 80, armorId: 0 }); // Orc, Peasant's Tunic
+        const result = processTick(p);
+        expect(result).toBe(false);
+        expect(p.health).toBe(80);
+    });
+
+    it('returns false when player is already at full HP', () => {
+        const p = makePlayer({ raceId: 2, health: 75, armorId: 0 }); // Elf at max HP (75)
+        const result = processTick(p);
+        expect(result).toBe(false);
+        expect(p.health).toBe(75);
+    });
+
+    it('returns false when player is dead', () => {
+        const p = makePlayer({ raceId: 2, health: 0, dead: true, armorId: 0 });
+        const result = processTick(p);
+        expect(result).toBe(false);
+        expect(p.health).toBe(0);
+    });
+
+    it('clamps HP to maxHp and heals only the remainder', () => {
+        const p = makePlayer({ raceId: 0, health: 99, armorId: 0 }); // Human max 100, regen 1
+        processTick(p);
+        expect(p.health).toBe(100);
+        expect(statisticsRepository.increment).toHaveBeenCalledWith('total_hp_regen', 1);
+    });
+
+    it('Dark Elf (regen 2) with Eternal Aegis (regen 3) heals for 5 total', () => {
+        const p = makePlayer({ raceId: 3, health: 50, armorId: 5 }); // Dark Elf, Eternal Aegis
+        processTick(p);
+        expect(p.health).toBe(55);
+        expect(statisticsRepository.increment).toHaveBeenCalledWith('total_hp_regen', 5);
     });
 });

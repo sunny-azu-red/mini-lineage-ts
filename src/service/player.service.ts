@@ -133,3 +133,26 @@ export function purchaseItem(player: PlayerState, itemType: ItemType, itemId: nu
         return { success: true, text: `You have bought ${item.emoji} ${item.name}.\nYou feel your strength returning, bringing you to ${formatNumber(player.health)} HP.`, item };
     }
 }
+
+/**
+ * processTick — entry point for all time-based passive effects (regen, future buffs/debuffs).
+ * Called by SocketService on every TICK_CONFIG.intervalMs tick.
+ * Returns true if the player state was modified (so the socket knows to emit).
+ */
+export function processTick(player: PlayerState): boolean {
+    if (player.dead)
+        return false;
+
+    const race = RACES[player.raceId];
+    const armor = ARMORS[player.armorId];
+    const totalRegen = race.regen + (armor.regen ?? 0);
+    if (totalRegen <= 0)
+        return false;
+
+    const healed = restoreHealth(player, totalRegen);
+    if (healed <= 0)
+        return false;
+
+    void statisticsRepository.increment('total_hp_regen', healed);
+    return true;
+}
