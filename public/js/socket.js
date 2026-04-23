@@ -1,9 +1,6 @@
 (function () {
     const socket = io();
 
-    // tell the server which zone we are in on every page load
-    socket.emit('zone', window.location.pathname);
-
     // helpers — shared animation logic with sidebar.js
     // --------
     const formatNumber = (num) => num.toLocaleString('en-US');

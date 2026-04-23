@@ -5,18 +5,21 @@ import { sessionStore } from '@/config/database.config';
 import { TICK_CONFIG, RACES } from '@/constant/game.constant';
 import { processTick, isGameStarted } from '@/service/player.service';
 import { PlayerState } from '@/interface';
+import { logger } from '@/config/logger.config';
 
-const socketZones = new Map<string, string>(); // map each socket to its current route so we can filter by zone
-const socketSessions = new Map<string, string>(); // map each socket to its session ID so we can load and save the session
+const GRACE_PERIOD_MS = 10_000;
+
+// Track active sessions and their associated sockets
+const sessionTracker = new Map<string, { socketIds: Set<string>, lastSeen: number }>();
 
 let io: SocketIOServer;
 
 export function initSocketService(server: HttpServer, sessionMiddleware: RequestHandler): void {
     io = new SocketIOServer(server, {
-        cors: { origin: false }, // restrict to same origin; can be loosened if needed
+        cors: { origin: false },
     });
 
-    // share the Express session with Socket.IO so we read/write the same session store
+    // Share the Express session with Socket.IO
     io.use((socket, next) => {
         (sessionMiddleware as any)(socket.request, {}, next);
     });
@@ -25,31 +28,40 @@ export function initSocketService(server: HttpServer, sessionMiddleware: Request
         const req = socket.request as any;
         const sessionId: string | undefined = req.session?.id;
 
-        if (sessionId)
-            socketSessions.set(socket.id, sessionId);
-
-        // client emits its current pathname on every page load/navigation
-        socket.on('zone', (path: string) => {
-            socketZones.set(socket.id, path);
-        });
+        if (sessionId) {
+            let tracker = sessionTracker.get(sessionId);
+            if (!tracker) {
+                tracker = { socketIds: new Set(), lastSeen: Date.now() };
+                sessionTracker.set(sessionId, tracker);
+            }
+            tracker.socketIds.add(socket.id);
+            tracker.lastSeen = Date.now();
+        }
 
         socket.on('disconnect', () => {
-            socketZones.delete(socket.id);
-            socketSessions.delete(socket.id);
+            if (sessionId) {
+                const tracker = sessionTracker.get(sessionId);
+                if (tracker) {
+                    tracker.socketIds.delete(socket.id);
+                    tracker.lastSeen = Date.now();
+                }
+            }
         });
     });
 
-    // global tick — runs every TICK_CONFIG.intervalMs on the server
+    // Global tick — runs every TICK_CONFIG.intervalMs on the server
     setInterval(() => {
-        socketZones.forEach((zone, socketId) => {
-            // only tick resting zones
-            if (!(TICK_CONFIG.restingZones as readonly string[]).includes(zone)) return;
+        const now = Date.now();
 
-            const sessionId = socketSessions.get(socketId);
-            if (!sessionId)
+        sessionTracker.forEach((tracker, sessionId) => {
+            // 1. Clean up stale sessions (no sockets and beyond grace period)
+            if (tracker.socketIds.size === 0 && now - tracker.lastSeen > GRACE_PERIOD_MS) {
+                logger.debug(`[SOCKET] Cleaning up stale "${sessionId}"`);
+                sessionTracker.delete(sessionId);
                 return;
+            }
 
-            // load the session from the store, apply regen, save it back, emit update
+            // 2. Load session from store to get latest player state and flags
             sessionStore.get(sessionId, (err, session) => {
                 if (err || !session)
                     return;
@@ -58,23 +70,33 @@ export function initSocketService(server: HttpServer, sessionMiddleware: Request
                 if (!isGameStarted(player))
                     return;
 
+                logger.debug(`[TICK] ${player.name} "${sessionId}"`);
+
+                // 3. Only tick if the player is in a resting state (set by zoneMiddleware)
+                if (!player.isResting)
+                    return;
+
+                // 4. Apply regeneration logic
+                const oldHp = player.health;
                 const changed = processTick(player);
                 if (!changed)
                     return;
 
-                // persist the updated session
+                logger.debug(`[REGEN] ${player.name} | HP: ${oldHp} -> ${player.health}`);
+
+                // 5. Persist the updated session and notify all connected clients
                 sessionStore.set(sessionId, session, (saveErr) => {
                     if (saveErr)
                         return;
 
-                    const targetSocket = io.sockets.sockets.get(socketId);
-                    if (!targetSocket)
-                        return;
-
-                    // emit the new HP to the specific client
-                    targetSocket.emit('player_update', {
-                        health: player.health,
-                        maxHealth: player.raceId !== undefined ? RACES[player.raceId].startHealth : null,
+                    tracker.socketIds.forEach(socketId => {
+                        const targetSocket = io.sockets.sockets.get(socketId);
+                        if (targetSocket) {
+                            targetSocket.emit('player_update', {
+                                health: player.health,
+                                maxHealth: player.raceId !== undefined ? RACES[player.raceId].startHealth : null,
+                            });
+                        }
                     });
                 });
             });
