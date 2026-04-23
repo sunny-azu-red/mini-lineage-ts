@@ -153,6 +153,8 @@ export function processTick(player: PlayerState): boolean {
     if (healed <= 0)
         return false;
 
+    player.prevHealth = player.health;
+
     void statisticsRepository.increment('total_hp_regen', healed);
     return true;
 }

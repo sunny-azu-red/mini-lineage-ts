@@ -4,12 +4,12 @@ import { minify } from 'terser';
 
 const SOCKET_IO_CLIENT = path.resolve(process.cwd(), 'node_modules/socket.io/client-dist/socket.io.min.js');
 const JS_ORDER = [
+    'common.js',
     'socket.js',
     'sidebar.js',
     'home.js',
     'suicide.js',
     'shop.js',
-    'back.js',
 ];
 
 const SRC_DIR = path.resolve(process.cwd(), 'public/js');

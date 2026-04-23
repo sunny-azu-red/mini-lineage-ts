@@ -1,28 +1,6 @@
 (function () {
     const socket = io();
 
-    // helpers — shared animation logic with sidebar.js
-    // --------
-    const formatNumber = (num) => num.toLocaleString('en-US');
-
-    function animateValue(el, start, end, duration) {
-        let startTimestamp = null;
-        const step = (timestamp) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            const easeProgress = 1 - Math.pow(1 - progress, 3);
-            if (progress < 1) {
-                el.innerText = formatNumber(Math.round(easeProgress * (end - start) + start));
-                window.requestAnimationFrame(step);
-            } else {
-                el.innerText = formatNumber(end);
-            }
-        };
-        window.requestAnimationFrame(step);
-    }
-
-    // --------
-
     // listen for server-pushed HP updates (regen ticks, future buff/debuff ticks)
     socket.on('player_update', (data) => {
         if (!data || data.health == null)

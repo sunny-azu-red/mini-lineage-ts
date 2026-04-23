@@ -8,8 +8,6 @@ import { PlayerState } from '@/interface';
 import { logger } from '@/config/logger.config';
 
 const GRACE_PERIOD_MS = 10_000;
-
-// Track active sessions and their associated sockets
 const sessionTracker = new Map<string, { socketIds: Set<string>, lastSeen: number }>();
 
 let io: SocketIOServer;
@@ -19,7 +17,6 @@ export function initSocketService(server: HttpServer, sessionMiddleware: Request
         cors: { origin: false },
     });
 
-    // Share the Express session with Socket.IO
     io.use((socket, next) => {
         (sessionMiddleware as any)(socket.request, {}, next);
     });
@@ -34,6 +31,7 @@ export function initSocketService(server: HttpServer, sessionMiddleware: Request
                 tracker = { socketIds: new Set(), lastSeen: Date.now() };
                 sessionTracker.set(sessionId, tracker);
             }
+
             tracker.socketIds.add(socket.id);
             tracker.lastSeen = Date.now();
         }
@@ -49,19 +47,19 @@ export function initSocketService(server: HttpServer, sessionMiddleware: Request
         });
     });
 
-    // Global tick — runs every TICK_CONFIG.intervalMs on the server
+    // global tick — runs every TICK_CONFIG.intervalMs on the server
     setInterval(() => {
         const now = Date.now();
 
         sessionTracker.forEach((tracker, sessionId) => {
-            // 1. Clean up stale sessions (no sockets and beyond grace period)
+            // clean up stale sessions (no sockets and beyond grace period)
             if (tracker.socketIds.size === 0 && now - tracker.lastSeen > GRACE_PERIOD_MS) {
                 logger.debug(`[SOCKET] Cleaning up stale "${sessionId}"`);
                 sessionTracker.delete(sessionId);
                 return;
             }
 
-            // 2. Load session from store to get latest player state and flags
+            // load session from store to get latest player state and flags
             sessionStore.get(sessionId, (err, session) => {
                 if (err || !session)
                     return;
@@ -72,19 +70,19 @@ export function initSocketService(server: HttpServer, sessionMiddleware: Request
 
                 logger.debug(`[TICK] ${player.name} "${sessionId}"`);
 
-                // 3. Only tick if the player is in a resting state (set by zoneMiddleware)
+                // only tick if the player is in a resting state (set by zoneMiddleware)
                 if (!player.isResting)
                     return;
 
-                // 4. Apply regeneration logic
+                // apply regeneration logic
                 const oldHp = player.health;
                 const changed = processTick(player);
                 if (!changed)
                     return;
 
-                logger.debug(`[REGEN] ${player.name} | HP: ${oldHp} -> ${player.health}`);
+                logger.debug(`[REGEN] ${player.name} | HPR: +${player.health - oldHp} | HP: ${oldHp} -> ${player.health}`);
 
-                // 5. Persist the updated session and notify all connected clients
+                // persist the updated session and notify all connected clients
                 sessionStore.set(sessionId, session, (saveErr) => {
                     if (saveErr)
                         return;
