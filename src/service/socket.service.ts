@@ -6,6 +6,8 @@ import { TICK_CONFIG, RACES } from '@/constant/game.constant';
 import { processTick, isGameStarted } from '@/service/player.service';
 import { PlayerState } from '@/interface';
 import { logger } from '@/config/logger.config';
+import { z } from 'zod';
+import { SocketPingEventSchema } from '@/schema/socket.schema';
 
 const GRACE_PERIOD_MS = 10_000;
 const sessionTracker = new Map<string, { socketIds: Set<string>, lastSeen: number }>();
@@ -20,6 +22,35 @@ export function initSocketService(server: HttpServer, sessionMiddleware: Request
     io.use((socket, next) => {
         (sessionMiddleware as any)(socket.request, {}, next);
     });
+
+    /**
+     * Helper to securely register socket events with Zod validation.
+     * Prevents malicious clients from bypassing HTTP validation by sending fake WebSocket events.
+     */
+    function registerSecureEvent<T>(
+        socket: Socket,
+        eventName: string,
+        schema: z.ZodType<T>,
+        handler: (data: T, sessionId: string) => void
+    ) {
+        socket.on(eventName, (payload) => {
+            const parsed = schema.safeParse(payload);
+            if (!parsed.success) {
+                logger.warn({ err: parsed.error }, `[SOCKET] Invalid payload for event '${eventName}' from socket ${socket.id}`);
+                return;
+            }
+
+            const req = socket.request as any;
+            const sessionId: string | undefined = req.session?.id;
+
+            if (!sessionId) {
+                logger.warn(`[SOCKET] Unauthenticated event '${eventName}' from socket ${socket.id}`);
+                return;
+            }
+
+            handler(parsed.data, sessionId);
+        });
+    }
 
     io.on('connection', (socket: Socket) => {
         const req = socket.request as any;
@@ -44,6 +75,12 @@ export function initSocketService(server: HttpServer, sessionMiddleware: Request
                     tracker.lastSeen = Date.now();
                 }
             }
+        });
+
+        // example of a secure event listener
+        registerSecureEvent(socket, 'ping', SocketPingEventSchema, (data, sid) => {
+            logger.debug(`[SOCKET] Ping received from ${sid} with timestamp ${data.timestamp}`);
+            socket.emit('pong', { timestamp: data.timestamp });
         });
     });
 

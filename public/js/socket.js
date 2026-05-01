@@ -33,4 +33,10 @@
                 barRow.classList.remove('danger');
         }
     });
+
+    // development test: emit a secure ping event
+    socket.emit('ping', { timestamp: Date.now() });
+    socket.on('pong', (data) => {
+        console.log(`[SOCKET] Secure Pong received:`, data);
+    });
 })();

@@ -18,7 +18,7 @@ vi.mock('express-session', () => ({
     default: vi.fn(() => mockExpressSession)
 }));
 
-import { sessionMiddleware } from './session.middleware';
+import { sessionMiddleware, saveAndRedirect } from './session.middleware';
 
 describe('sessionMiddleware', () => {
     beforeEach(() => {
@@ -40,7 +40,7 @@ describe('sessionMiddleware', () => {
     it('should handle errors from expressSession', () => {
         const error = new Error('Session error');
         mockExpressSession.mockImplementationOnce((req: any, res: any, next: any) => next(error));
-        
+
         const req = {} as any;
         const res = { locals: {} } as any;
         const next = vi.fn();
@@ -49,6 +49,7 @@ describe('sessionMiddleware', () => {
 
         expect(next).toHaveBeenCalledWith(error);
     });
+
 
     it('should skip res.locals population if res is a mock object (Socket.IO case)', () => {
         const req = { session: { name: 'Test Player' } } as any;
@@ -60,5 +61,38 @@ describe('sessionMiddleware', () => {
         expect(mockExpressSession).toHaveBeenCalled();
         expect(res.locals).toBeUndefined();
         expect(next).toHaveBeenCalled();
+    });
+});
+
+describe('saveAndRedirect', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
+    it('should save the session and redirect on success', () => {
+        const req = { session: { save: vi.fn((cb) => cb()) } } as any;
+        const res = { redirect: vi.fn() } as any;
+        const next = vi.fn();
+        const url = '/test-url';
+
+        saveAndRedirect(req, res, next, url);
+
+        expect(req.session.save).toHaveBeenCalled();
+        expect(res.redirect).toHaveBeenCalledWith(url);
+        expect(next).not.toHaveBeenCalled();
+    });
+
+    it('should call next with error if session.save fails', () => {
+        const error = new Error('Save failed');
+        const req = { session: { save: vi.fn((cb) => cb(error)) } } as any;
+        const res = { redirect: vi.fn() } as any;
+        const next = vi.fn();
+        const url = '/test-url';
+
+        saveAndRedirect(req, res, next, url);
+
+        expect(req.session.save).toHaveBeenCalled();
+        expect(res.redirect).not.toHaveBeenCalled();
+        expect(next).toHaveBeenCalledWith(error);
     });
 });

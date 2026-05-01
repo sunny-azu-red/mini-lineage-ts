@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { ShopWeaponSchema, ShopArmorSchema, ShopFoodSchema } from './shop.schema';
 import { GameStartSchema } from './game.schema';
 import { SuicideSchema, HighscoreNameSchema } from './player.schema';
+import { SocketPingEventSchema } from './socket.schema';
 
 // ---------------------------------------------------------------------------
 // Shop schemas
@@ -108,5 +109,25 @@ describe('HighscoreNameSchema', () => {
         const result = HighscoreNameSchema.safeParse({});
         expect(result.success).toBe(true);
         if (result.success) expect(result.data.name).toBeNull();
+    });
+});
+
+// ---------------------------------------------------------------------------
+// Socket schemas
+// ---------------------------------------------------------------------------
+
+describe('SocketPingEventSchema', () => {
+    it('accepts a valid timestamp', () => {
+        const result = SocketPingEventSchema.safeParse({ timestamp: Date.now() });
+        expect(result.success).toBe(true);
+    });
+    it('rejects a non-numeric timestamp', () => {
+        expect(SocketPingEventSchema.safeParse({ timestamp: 'now' }).success).toBe(false);
+    });
+    it('rejects a negative timestamp', () => {
+        expect(SocketPingEventSchema.safeParse({ timestamp: -1 }).success).toBe(false);
+    });
+    it('rejects a non-integer timestamp', () => {
+        expect(SocketPingEventSchema.safeParse({ timestamp: 123.456 }).success).toBe(false);
     });
 });

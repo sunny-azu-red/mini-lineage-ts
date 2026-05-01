@@ -21,7 +21,10 @@ describe('playerController', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
-        req = { body: {} };
+        req = {
+            body: {},
+            session: { save: vi.fn((cb) => cb()) }
+        };
         res = {
             locals: { player: {} },
             redirect: vi.fn(),

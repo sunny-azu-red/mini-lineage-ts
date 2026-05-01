@@ -23,7 +23,7 @@ const { mockIo, mockSocket } = vi.hoisted(() => {
 });
 
 vi.mock('socket.io', () => {
-    const MockServer = vi.fn(function() {
+    const MockServer = vi.fn(function () {
         return mockIo;
     });
     return {
@@ -33,7 +33,7 @@ vi.mock('socket.io', () => {
 
 vi.mock('@/config/database.config', () => ({
     sessionStore: {
-        get: vi.fn((_id: string, _cb: (err: any, session: any) => void) => {}),
+        get: vi.fn((_id: string, _cb: (err: any, session: any) => void) => { }),
         set: vi.fn((_id: string, _sess: any, cb: (err: any) => void) => cb(null)),
     }
 }));
@@ -84,7 +84,7 @@ describe('socketService', () => {
         vi.advanceTimersByTime(TICK_CONFIG.intervalMs);
 
         // The sessionStore.get and set are callbacks, so we need to wait for them to resolve
-        await vi.runAllTicks(); 
+        await vi.runAllTicks();
 
         expect(sessionStore.get).toHaveBeenCalledWith('session-1', expect.any(Function));
         expect(playerService.processTick).toHaveBeenCalledWith(player);
@@ -109,17 +109,17 @@ describe('socketService', () => {
 
     it('should clean up stale sessions after grace period', async () => {
         initSocketService(mockServer, mockMiddleware);
-        
+
         // Connect and then disconnect
         const connectionHandler = (mockIo.on as any).mock.calls.find((c: any) => c[0] === 'connection')[1];
         connectionHandler(mockSocket);
-        
+
         const disconnectHandler = (mockSocket.on as any).mock.calls.find((c: any) => c[0] === 'disconnect')[1];
         disconnectHandler();
 
         // Advance beyond grace period (10s)
         vi.advanceTimersByTime(11_000);
-        
+
         // Trigger the tick check
         vi.advanceTimersByTime(TICK_CONFIG.intervalMs);
         await vi.runAllTicks();
@@ -128,5 +128,22 @@ describe('socketService', () => {
         vi.clearAllMocks();
         vi.advanceTimersByTime(TICK_CONFIG.intervalMs);
         expect(sessionStore.get).not.toHaveBeenCalled();
+    });
+    it('should register secure events and validate payloads', () => {
+        initSocketService(mockServer, mockMiddleware);
+
+        const connectionHandler = (mockIo.on as any).mock.calls.find((c: any) => c[0] === 'connection')[1];
+        connectionHandler(mockSocket);
+
+        const pingHandler = (mockSocket.on as any).mock.calls.find((c: any) => c[0] === 'ping')[1];
+        expect(pingHandler).toBeDefined();
+
+        // Test invalid payload
+        pingHandler({ timestamp: 'not-a-number' });
+        expect(mockSocket.emit).not.toHaveBeenCalledWith('pong', expect.any(Object));
+
+        // Test valid payload
+        pingHandler({ timestamp: 12345 });
+        expect(mockSocket.emit).toHaveBeenCalledWith('pong', { timestamp: 12345 });
     });
 });
