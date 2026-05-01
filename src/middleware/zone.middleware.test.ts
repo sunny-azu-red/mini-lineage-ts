@@ -10,7 +10,7 @@ vi.mock('@/service/player.service', () => ({
 describe('zoneMiddleware', () => {
     it('should set isResting to true if path is in restingZones', () => {
         const player = { isResting: false, inCombat: false };
-        const req = { method: 'GET', path: '/' };
+        const req = { method: 'GET', path: '/', headers: { accept: 'text/html' } };
         const res = { locals: { player } };
         const next = vi.fn();
 
@@ -25,7 +25,7 @@ describe('zoneMiddleware', () => {
 
     it('should set inCombat to true if path is in combatZones', () => {
         const player = { isResting: false, inCombat: false };
-        const req = { method: 'GET', path: '/battle' };
+        const req = { method: 'GET', path: '/battle', headers: { accept: 'text/html' } };
         const res = { locals: { player } };
         const next = vi.fn();
 
@@ -75,6 +75,20 @@ describe('zoneMiddleware', () => {
 
         zoneMiddleware(req as any, res as any, next);
 
+        expect(next).toHaveBeenCalled();
+    });
+    it('should do nothing if Accept header does not include text/html', () => {
+        const player = { isResting: true, inCombat: false };
+        const req = { method: 'GET', path: '/battle', headers: { accept: 'application/json' } };
+        const res = { locals: { player } };
+        const next = vi.fn();
+
+        vi.mocked(playerService.isGameStarted).mockReturnValue(true);
+
+        zoneMiddleware(req as any, res as any, next);
+
+        // Should NOT change from true to false because it's not an HTML request
+        expect(player.isResting).toBe(true);
         expect(next).toHaveBeenCalled();
     });
 });

@@ -8,7 +8,7 @@ import { isGameStarted } from '@/service/player.service';
  */
 export const zoneMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const player = res.locals.player;
-    const isPageRequest = req.headers.accept?.includes('text/html'); // only update zone on HTML GETs to protect the "Resting" state from background noise.
+    const isPageRequest = req.headers?.accept?.includes('text/html'); // only update zone on HTML GETs to protect the "Resting" state from background noise.
 
     if (req.method === 'GET' && isPageRequest && player && isGameStarted(player)) {
         const path = req.path;
