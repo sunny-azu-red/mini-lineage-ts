@@ -4,6 +4,7 @@ import { renderSuicideView, renderDeathView, renderXpTableView } from '@/view/pl
 import { commitSuicide } from '@/service/player.service';
 import { SuicideSchema } from '@/schema/player.schema';
 import { statisticsRepository } from '@/repository/statistics.repository';
+import { saveAndRedirect } from '@/middleware/session.middleware';
 
 export const getSuicide = (req: Request, res: Response) => {
     res.send(renderSuicideView(res.locals.player, res.locals.flash));
@@ -17,7 +18,8 @@ export const postSuicide = (req: Request, res: Response, next: NextFunction) => 
     if (parsed.data.suicide === 'yes') {
         void statisticsRepository.increment('total_players_suicided');
         commitSuicide(res.locals.player);
-        return res.redirect('/death');
+
+        return saveAndRedirect(req, res, next, '/death');
     }
 
     res.redirect('/');

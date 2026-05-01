@@ -4,6 +4,7 @@ import { makePurchaseFlash } from '@/util';
 import { renderWeaponsShopView, renderArmorsShopView, renderInnView } from '@/view/shop.view';
 import { purchaseItem } from '@/service/player.service';
 import { ShopWeaponSchema, ShopArmorSchema, ShopFoodSchema } from '@/schema/shop.schema';
+import { saveAndRedirect } from '@/middleware/session.middleware';
 
 export const getWeaponsShop = (req: Request, res: Response) => {
     res.send(renderWeaponsShopView(res.locals.player, res.locals.flash));
@@ -22,7 +23,7 @@ export const postWeaponsShop = (req: Request, res: Response, next: NextFunction)
     if (result)
         player.flash = makePurchaseFlash(result);
 
-    res.redirect('/shop/weapons');
+    saveAndRedirect(req, res, next, '/shop/weapons');
 };
 
 export const getArmorsShop = (req: Request, res: Response) => {
@@ -42,7 +43,7 @@ export const postArmorsShop = (req: Request, res: Response, next: NextFunction) 
     if (result)
         player.flash = makePurchaseFlash(result);
 
-    res.redirect('/shop/armors');
+    saveAndRedirect(req, res, next, '/shop/armors');
 };
 
 export const getInn = (req: Request, res: Response) => {
@@ -62,5 +63,5 @@ export const postInn = (req: Request, res: Response, next: NextFunction) => {
     if (result)
         player.flash = makePurchaseFlash(result);
 
-    res.redirect('/inn');
+    saveAndRedirect(req, res, next, '/inn');
 };

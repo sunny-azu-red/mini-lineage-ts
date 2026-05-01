@@ -4,6 +4,7 @@ import { initializePlayer, isGameStarted } from '@/service/player.service';
 import { makeFlash } from '@/util';
 import { RACES } from '@/constant/game.constant';
 import { GameStartSchema } from '@/schema/game.schema';
+import { saveAndRedirect } from '@/middleware/session.middleware';
 
 export const getHome = (req: Request, res: Response) => {
     const player = res.locals.player;
@@ -23,5 +24,5 @@ export const postGameStart = (req: Request, res: Response, next: NextFunction) =
     const flash = initializePlayer(player, race, parsed.data.name);
     player.flash = makeFlash(flash.text, flash.type);
 
-    res.redirect('/');
+    saveAndRedirect(req, res, next, '/');
 };
