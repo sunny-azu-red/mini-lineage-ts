@@ -169,6 +169,39 @@
     pointer-events: none;
 }
 
+/* ===== HP Regen Shine ===== */
+.hp-regen-shine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.hp-regen-shine.regen-active {
+    opacity: 1;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(88, 214, 141, 0.35) 40%,
+            rgba(255, 255, 255, 0.25) 50%,
+            rgba(88, 214, 141, 0.35) 60%,
+            transparent 100%);
+    background-size: 200% 100%;
+    animation: regen-sweep 0.8s ease-out;
+}
+
+@keyframes regen-sweep {
+    from {
+        background-position: 200% 0;
+    }
+
+    to {
+        background-position: -200% 0;
+    }
+}
+
 /* ===== Alerts ===== */
 .alert {
     border-radius: var(--radius);

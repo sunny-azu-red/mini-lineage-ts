@@ -11,10 +11,10 @@
 
         // animate the HP value counter
         const hpEl = document.querySelector('#hp-bar ~ .bar-text .animate-val');
-        if (hpEl) {
-            const prevHp = parseInt(hpEl.innerText.replace(/,/g, '')) || newHp;
-            animateValue(hpEl, prevHp, newHp, 600);
+        const prevHp = hpEl ? (parseInt(hpEl.innerText.replace(/,/g, '')) || newHp) : newHp;
 
+        if (hpEl) {
+            animateValue(hpEl, prevHp, newHp, 600);
             hpEl.dataset.val = newHp;
             hpEl.dataset.prev = prevHp;
         }
@@ -31,6 +31,17 @@
             const barRow = document.querySelector('.stat-row.bar.danger');
             if (barRow && newHp / maxHp > 0.25)
                 barRow.classList.remove('danger');
+        }
+
+        // trigger regen shine animation when HP increases
+        if (newHp > prevHp) {
+            const shine = document.querySelector('.hp-regen-shine');
+            if (shine) {
+                shine.classList.remove('regen-active');
+                void shine.offsetWidth; // force reflow to restart the animation
+                shine.classList.add('regen-active');
+                setTimeout(() => shine.classList.remove('regen-active'), 800);
+            }
         }
     });
 
