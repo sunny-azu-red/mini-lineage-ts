@@ -35,12 +35,12 @@
 
         // trigger regen shine animation when HP increases
         if (newHp > prevHp) {
-            const shine = document.querySelector('.hp-regen-shine');
-            if (shine) {
-                shine.classList.remove('regen-active');
-                void shine.offsetWidth; // force reflow to restart the animation
-                shine.classList.add('regen-active');
-                setTimeout(() => shine.classList.remove('regen-active'), 800);
+            const hpBar = document.getElementById('hp-bar');
+            if (hpBar) {
+                hpBar.classList.remove('regen-active');
+                void hpBar.offsetWidth; // force reflow to restart the animation
+                hpBar.classList.add('regen-active');
+                setTimeout(() => hpBar.classList.remove('regen-active'), 500);
             }
         }
     });

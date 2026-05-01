@@ -8,8 +8,9 @@ import { isGameStarted } from '@/service/player.service';
  */
 export const zoneMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const player = res.locals.player;
+    const isPageRequest = req.headers.accept?.includes('text/html'); // only update zone on HTML GETs to protect the "Resting" state from background noise.
 
-    if (req.method === 'GET' && player && isGameStarted(player)) {
+    if (req.method === 'GET' && isPageRequest && player && isGameStarted(player)) {
         const path = req.path;
 
         player.isResting = (TICK_CONFIG.restingZones as readonly string[]).includes(path);
