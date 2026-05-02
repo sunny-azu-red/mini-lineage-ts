@@ -11,7 +11,7 @@ export const debugMiddleware = (req: Request, res: Response, next: NextFunction)
             return;
 
         const duration = Date.now() - start;
-        const message = `[${req.method}] ${req.url} = ${res.statusCode} (${duration}ms) ${req.sessionID}`;
+        const message = `[${req.method}] ${req.url} = ${res.statusCode} (${duration}ms) "${req.sessionID}"`;
 
         let logData = {};
         if (req.session) {

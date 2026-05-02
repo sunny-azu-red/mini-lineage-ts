@@ -4,4 +4,6 @@ export interface BattleResult {
     damageBlocked: number;
     xpGained: number;
     adenaGained: number;
+    isCritical: boolean;
+    isLevelUp: boolean;
 }

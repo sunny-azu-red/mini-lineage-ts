@@ -1,3 +1,10 @@
+export const RACE_TRAITS_TEMPLATES: Record<number, string> = {
+    0: `They embark with a versatile <span class="hp">{hp} HP</span> and a starting inheritance of <span class="gold">🪙 {adena} Adena</span>, striking with a steady <span class="crit">{crit}% Critical Chance</span>. Their adaptable biology allows for <span class="heal">+{regen} Regeneration</span> during moments of rest, while their vigilant focus maintains a balanced <span class="muted">{ambush}% Ambush Risk</span>.`,
+    1: `They embark with a fortified <span class="hp">{hp} HP</span> and a starting tribute of <span class="gold">🪙 {adena} Adena</span>, though their raw, unweighted strikes offer a <span class="crit">{crit}% Critical Chance</span>. Their iron-like biology denies them natural mending, requiring constant sustenance to fuel their recovery, while their unmistakable presence yields a <span class="muted">{ambush}% Ambush Risk</span>.`,
+    2: `They embark with a slight <span class="hp">{hp} HP</span> but a vast ancestral treasury of <span class="gold">🪙 {adena} Adena</span>, striking with a graceful <span class="crit">{crit}% Critical Chance</span>. Their spiritual biology allows for a potent <span class="heal">+{regen} Regeneration</span> during moments of rest, while their ethereal nature limits the threat of the shadows to a mere <span class="muted">{ambush}% Ambush Risk</span>.`,
+    3: `They embark with a tempered <span class="hp">{hp} HP</span> and a starting wealth of <span class="gold">🪙 {adena} Adena</span>, striking with a lethal <span class="crit">{crit}% Critical Chance</span>. Their shadow-touched biology allows for a swift <span class="heal">+{regen} Regeneration</span> during moments of rest, while their predatory focus keeps the danger of the road at a low <span class="muted">{ambush}% Ambush Risk</span>.`
+};
+
 export const WELCOME_MESSAGES: string[] = [
     `your destiny awaits in the dark!`,
     `the fires of fate burn for you...`,
@@ -58,17 +65,32 @@ export const BATTLE_DEFLECTION_TEMPLATES: string[] = [
 export const BATTLE_OUTCOME_TEMPLATES: string[] = [
     `You limp away with <span class="hp">{hp} HP</span> remaining and <span class="gold">🪙 {adenaGained} Adena</span> to show for it.`,
     `The skirmish leaves you at <span class="hp">{hp} HP</span>, but richer by <span class="gold">🪙 {adenaGained} Adena</span>.`,
-    `Breathing heavily, you stand with <span class="hp">{hp} HP</span> left and pocket <span class="gold">🪙 {adenaGained} Adena</span>.`
+    `Breathing heavily, you stand with <span class="hp">{hp} HP</span> left and pocket <span class="gold">🪙 {adenaGained} Adena</span>.`,
+    `Wiping the grime of battle away, you survive with <span class="hp">{hp} HP</span> and claim the spoils of <span class="gold">🪙 {adenaGained} Adena</span>.`
 ];
 
-export const BATTLE_SURPRISE_TEMPLATES: string[] = [
-    `Out of the blue {surpriseEnemyGroup} {isSingleSurprise ? 'surrounds' : 'surround'} you and you can't escape.`,
-    `You forgot to check your back and you get stormed by {surpriseEnemyGroup}.`,
+export const BATTLE_LEVEL_UP_TEMPLATES: string[] = [
+    `A surge of divine energy washes over you! Your wounds vanish instantly as you stand tall with <span class="hp">{hp} HP</span> and <span class="gold">🪙 {adenaGained} Adena</span>.`,
+    `Victory has sharpened your soul. You feel completely restored, clutching <span class="gold">🪙 {adenaGained} Adena</span> with <span class="hp">{hp} HP</span>.`,
+    `You have transcended your limits! Your body mends in a flash of light, leaving you invigorated at <span class="hp">{hp} HP</span> with <span class="gold">🪙 {adenaGained} Adena</span>.`,
+    `The clash has awakened new strength within you. Wounds close and fatigue fades, topping you up to <span class="hp">{hp} HP</span> and gaining <span class="gold">🪙 {adenaGained} Adena</span>.`
+];
+
+export const BATTLE_AMBUSH_TEMPLATES: string[] = [
+    `Out of the blue {ambushEnemyGroup} {isSingleAmbush ? 'surrounds' : 'surround'} you and you can't escape.`,
+    `You forgot to check your back and you get stormed by {ambushEnemyGroup}.`,
     `You find yourself in a delicate position, the {enemyEmoji} {enemyName} leader has come with reinforcements.`,
-    `As you were walking along {surpriseEnemyGroup} jumped out of the bushes.`,
-    `You reached a dead-end and while turning around, you find yourself cornered by {surpriseEnemyGroup}.`,
-    `The ground trembles! Suddenly, {surpriseEnemyGroup} {isSingleSurprise ? 'stands' : 'stand'} before you!`,
-    `An arrow whistles past your ear... ambush! {surpriseEnemyGroupCap} {isSingleSurprise ? 'emerges' : 'emerge'} from the shadows!`
+    `As you were walking along {ambushEnemyGroup} jumped out of the bushes.`,
+    `You reached a dead-end and while turning around, you find yourself cornered by {ambushEnemyGroup}.`,
+    `The ground trembles! Suddenly, {ambushEnemyGroup} {isSingleAmbush ? 'stands' : 'stand'} before you!`,
+    `An arrow whistles past your ear... ambush! {ambushEnemyGroupCap} {isSingleAmbush ? 'emerges' : 'emerge'} from the shadows!`
+];
+
+export const BATTLE_CRITICAL_TEMPLATES: string[] = [
+    `💥 <span class="crit">CRITICAL HIT!</span> 💥`,
+    `🌪️ <span class="crit">DEVASTATING BLOW!</span> 🌪️`,
+    `🔥 <span class="crit">ABSOLUTE CARNAGE!</span> 🔥`,
+    `🎯 <span class="crit">FATAL STRIKE!</span> 🎯`
 ];
 
 export const BATTLE_MOVES: string[] = [

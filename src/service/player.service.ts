@@ -1,6 +1,6 @@
 import { PlayerState, Race, FlashMessage, PurchaseResult, ItemType } from '@/interface';
 import { RACES, ARMORS, WEAPONS, FOODS } from '@/constant/game.constant';
-import { calculateLevel, isLevelUp, randomInt } from '@/service/math.service';
+import { isLevelUp, randomInt } from '@/service/math.service';
 import { formatAdena, formatNumber, randomElement, fillTemplate } from '@/util';
 import { WELCOME_MESSAGES } from '@/constant/narratives.constant';
 import { statisticsRepository } from '@/repository/statistics.repository';
@@ -66,7 +66,7 @@ export function restoreHealth(player: PlayerState, amount: number): number {
     return player.health - oldHealth;
 }
 
-export function applyBattleResult(player: PlayerState, hpLost: number, xpGained: number, adenaGained: number, enemiesKilled: number, damageBlocked: number): FlashMessage | null {
+export function resolveBattleOutcome(player: PlayerState, hpLost: number, xpGained: number, adenaGained: number, enemiesKilled: number, damageBlocked: number, isCritical: boolean): boolean {
     // hpLost = 0; // DEBUG: never die
     // xpGained = xpGained * 250; // DEBUG: level up faster
     // adenaGained = adenaGained * 500; // DEBUG: get adena faster
@@ -74,7 +74,7 @@ export function applyBattleResult(player: PlayerState, hpLost: number, xpGained:
     player.health -= hpLost;
     if (player.health <= 0) {
         killPlayer(player);
-        return null;
+        return false;
     }
 
     player.adena += adenaGained;
@@ -82,6 +82,9 @@ export function applyBattleResult(player: PlayerState, hpLost: number, xpGained:
     player.experience += xpGained;
     player.totalBattles = (player.totalBattles ?? 0) + 1;
     player.totalEnemiesKilled = (player.totalEnemiesKilled ?? 0) + enemiesKilled;
+
+    if (isCritical)
+        void statisticsRepository.increment('total_critical_hits');
 
     void statisticsRepository.increment('total_battles');
     void statisticsRepository.increment('total_enemies_killed', enemiesKilled);
@@ -92,14 +95,13 @@ export function applyBattleResult(player: PlayerState, hpLost: number, xpGained:
     void statisticsRepository.increment('total_damage_blocked', damageBlocked);
 
     if (isLevelUp(oldXp, player.experience)) {
-        const newLevel = calculateLevel(player.experience);
         const hpHealed = restoreHealth(player, RACES[player.raceId].startHealth);
         void statisticsRepository.increment('total_levels_gained');
         void statisticsRepository.increment('total_hp_healed', hpHealed);
-        return { text: `🎉 Congratulations! You have reached level ${formatNumber(newLevel)}.`, type: 'warning' };
+        return true;
     }
 
-    return null;
+    return false;
 }
 
 export function purchaseItem(player: PlayerState, itemType: ItemType, itemId: number): PurchaseResult | null {
@@ -132,4 +134,29 @@ export function purchaseItem(player: PlayerState, itemType: ItemType, itemId: nu
         void statisticsRepository.increment('total_hp_healed', hpHealed);
         return { success: true, text: `You have bought ${item.emoji} ${item.name}.\nYou feel your strength returning, bringing you to ${formatNumber(player.health)} HP.`, item };
     }
+}
+
+/**
+ * processTick — entry point for all time-based passive effects (regen, future buffs/debuffs).
+ * Called by SocketService on every TICK_CONFIG.intervalMs tick.
+ * Returns true if the player state was modified (so the socket knows to emit).
+ */
+export function processTick(player: PlayerState): boolean {
+    if (player.dead)
+        return false;
+
+    const race = RACES[player.raceId];
+    const armor = ARMORS[player.armorId];
+    const totalRegen = race.regen + (armor.regen ?? 0);
+    if (totalRegen <= 0)
+        return false;
+
+    const healed = restoreHealth(player, totalRegen);
+    if (healed <= 0)
+        return false;
+
+    player.prevHealth = player.health;
+
+    void statisticsRepository.increment('total_hp_regen', healed);
+    return true;
 }

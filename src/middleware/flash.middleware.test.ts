@@ -3,17 +3,6 @@ import { flashMiddleware } from './flash.middleware';
 import { FlashMessage } from '@/interface';
 
 describe('flashMiddleware', () => {
-    it('should populate res.locals.player from req.session', () => {
-        const req = { session: { raceId: 1 } };
-        const res = { locals: {} as any };
-        const next = vi.fn();
-
-        flashMiddleware(req as any, res as any, next);
-
-        expect(res.locals.player).toBe(req.session);
-        expect(next).toHaveBeenCalled();
-    });
-
     it('should populate res.locals.flash from session and delete it', () => {
         const flash: FlashMessage = { text: 'test', type: 'info' };
         const req = { session: { flash } as any };

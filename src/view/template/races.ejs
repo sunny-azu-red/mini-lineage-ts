@@ -1,0 +1,9 @@
+<% races.forEach(race => { %>
+    <h2><%= race.emoji %> <%= race.label %></h2>
+    <p><%- race.backstory %></p>
+    <p><%- race.traits %></p>
+<% }) %>
+
+<p class="last">
+    <a href="/">Go back to game start</a>
+</p>

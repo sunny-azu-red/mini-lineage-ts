@@ -7,7 +7,8 @@
     <thead>
         <tr>
             <th>Name</th>
-            <th>P. Attack</th>
+            <th title="Critical Hit Chance">C. Hit %</th>
+            <th title="Physical Attack">P. Attack</th>
             <th>Adena</th>
         </tr>
     </thead>
@@ -15,6 +16,7 @@
         <% items.forEach(function(weapon) { %>
             <tr>
                 <td><%= weapon.emoji %> <%= weapon.name %></td>
+                <td><% if (weapon.crit > 0) { %><%= weapon.crit%>%<% } else { %><span class="muted">-</span><% } %></td>
                 <td><%= weapon.statFormatted %></td>
                 <td class="gold">🪙 <%= weapon.costFormatted %></td>
             </tr>

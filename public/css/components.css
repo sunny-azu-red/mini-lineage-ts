@@ -148,6 +148,32 @@
 .hp-bar {
     background: linear-gradient(90deg, var(--hp-color) 0%, var(--hp-glow) 100%);
     box-shadow: 0 0 8px rgba(231, 76, 60, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.hp-bar.regen-active::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100px;
+    width: 100px;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.15) 50%,
+            transparent);
+    animation: regen-sweep 0.5s ease-out;
+}
+
+@keyframes regen-sweep {
+    from {
+        left: -100px;
+    }
+
+    to {
+        left: 100%;
+    }
 }
 
 .xp-bar {

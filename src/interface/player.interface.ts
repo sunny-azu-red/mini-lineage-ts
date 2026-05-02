@@ -20,6 +20,8 @@ export interface PlayerState {
     totalBattles?: number;
     totalAmbushes?: number;
     totalEnemiesKilled?: number;
+    isResting?: boolean;
+    inCombat?: boolean;
 }
 
 export interface FlashMessage {

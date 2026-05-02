@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
     calculateXpForLevel,
     calculateLevel,
@@ -8,9 +8,12 @@ import {
     isLowHealth,
     getLowHealthThreshold,
     getXpNeededToLevelUp,
-    calculateSurpriseCount,
+    getAmbushEnemyCount,
     getEnemyCountRange,
     calculateDamageBlocked,
+    rollChance,
+    calculateCritChance,
+    calculateAmbushChance,
 } from './math.service';
 
 describe('calculateXpForLevel', () => {
@@ -67,10 +70,10 @@ describe('getXpNeededToLevelUp', () => {
     it('returns a positive number mid-level', () => expect(getXpNeededToLevelUp(0)).toBeGreaterThan(0));
 });
 
-describe('calculateSurpriseCount', () => {
-    it('divides enemies by divisor', () => expect(calculateSurpriseCount(8, 4)).toBe(2));
-    it('returns minimum 1 when enemies < divisor', () => expect(calculateSurpriseCount(2, 4)).toBe(1));
-    it('returns minimum 1 at 0', () => expect(calculateSurpriseCount(0)).toBe(1));
+describe('getAmbushEnemyCount', () => {
+    it('divides enemies by divisor', () => expect(getAmbushEnemyCount(8, 4)).toBe(2));
+    it('returns minimum 1 when enemies < divisor', () => expect(getAmbushEnemyCount(2, 4)).toBe(1));
+    it('returns minimum 1 at 0', () => expect(getAmbushEnemyCount(0)).toBe(1));
 });
 
 describe('getEnemyCountRange', () => {
@@ -85,5 +88,38 @@ describe('calculateDamageBlocked', () => {
     it('is always at least 1', () => expect(calculateDamageBlocked(1)).toBeGreaterThanOrEqual(1));
     it('higher armor stat blocks more', () => {
         expect(calculateDamageBlocked(88)).toBeGreaterThan(calculateDamageBlocked(2));
+    });
+});
+
+describe('rollChance', () => {
+    it('returns false when chance is 0', () => expect(rollChance(0)).toBe(false));
+    it('returns false when chance is negative', () => expect(rollChance(-10)).toBe(false));
+    it('returns true when chance is 100', () => expect(rollChance(100)).toBe(true));
+    it('returns true when chance is above 100', () => expect(rollChance(150)).toBe(true));
+    
+    it('handles decimal precision (hit)', () => {
+        vi.spyOn(Math, 'random').mockReturnValue(0.1666); // 16.66%
+        expect(rollChance(16.67)).toBe(true);
+        vi.restoreAllMocks();
+    });
+    
+    it('handles decimal precision (miss)', () => {
+        vi.spyOn(Math, 'random').mockReturnValue(0.1668); // 16.68%
+        expect(rollChance(16.67)).toBe(false);
+        vi.restoreAllMocks();
+    });
+});
+
+describe('calculateCritChance', () => {
+    it('behaves exactly like rollChance', () => {
+        expect(calculateCritChance(0)).toBe(false);
+        expect(calculateCritChance(100)).toBe(true);
+    });
+});
+
+describe('calculateAmbushChance', () => {
+    it('behaves exactly like rollChance', () => {
+        expect(calculateAmbushChance(0)).toBe(false);
+        expect(calculateAmbushChance(100)).toBe(true);
     });
 });

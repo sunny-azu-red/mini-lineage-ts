@@ -83,10 +83,10 @@ export function renderInventory(player: PlayerState): string {
     const armor = ARMORS[player.armorId];
 
     return render(inventoryTpl, {
-        weaponStr: weapon.name,
+        armorEmoji: armor.emoji,
         armorStr: armor.name,
         weaponEmoji: weapon.emoji,
-        armorEmoji: armor.emoji,
+        weaponStr: weapon.name,
     });
 }
 

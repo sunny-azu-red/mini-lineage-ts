@@ -7,7 +7,8 @@
     <thead>
         <tr>
             <th>Name</th>
-            <th>P. Defense</th>
+            <th title="Health Point Regeneration">HP Regen</th>
+            <th title="Physical Defense">P. Defense</th>
             <th>Adena</th>
         </tr>
     </thead>
@@ -15,6 +16,7 @@
         <% items.forEach(function(armor) { %>
             <tr>
                 <td><%= armor.emoji %> <%= armor.name %></td>
+                <td><% if (armor.regen > 0) { %>+<%= armor.regen%><% } else { %><span class="muted">-</span><% } %></td>
                 <td><%= armor.statFormatted %></td>
                 <td class="gold">🪙 <%= armor.costFormatted %></td>
             </tr>

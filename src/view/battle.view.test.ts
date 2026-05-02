@@ -19,6 +19,8 @@ const makeResults = (overrides: Partial<BattleResult> = {}): BattleResult => ({
     damageBlocked: 5,
     xpGained: 100,
     adenaGained: 50,
+    isCritical: false,
+    isLevelUp: false,
     ...overrides,
 });
 
@@ -40,7 +42,7 @@ describe('battle.view', () => {
             
             const renderMock = vi.mocked(baseView.render);
             const lastCallArgs = renderMock.mock.calls[renderMock.mock.calls.length - 1][1] as any;
-            expect(lastCallArgs?.battleText).toContain('Orc');
+            expect(lastCallArgs?.killLine).toContain('Orc');
         });
 
         it('assigns Humans as opponents for Orcs', () => {
@@ -49,7 +51,7 @@ describe('battle.view', () => {
             
             const renderMock = vi.mocked(baseView.render);
             const lastCallArgs = renderMock.mock.calls[renderMock.mock.calls.length - 1][1] as any;
-            expect(lastCallArgs?.battleText).toContain('Human');
+            expect(lastCallArgs?.killLine).toContain('Human');
         });
 
         it('assigns Dark Elves as opponents for Elves', () => {
@@ -58,7 +60,7 @@ describe('battle.view', () => {
             
             const renderMock = vi.mocked(baseView.render);
             const lastCallArgs = renderMock.mock.calls[renderMock.mock.calls.length - 1][1] as any;
-            expect(lastCallArgs?.battleText).toContain('Dark Elf');
+            expect(lastCallArgs?.killLine).toContain('Dark Elf');
         });
     });
 });

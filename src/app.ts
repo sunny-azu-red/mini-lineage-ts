@@ -1,17 +1,16 @@
 import express from 'express';
 import path from 'path';
-import session from 'express-session';
 import helmet from 'helmet';
 import compression from 'compression';
+import router from '@/route';
+import { sessionMiddleware } from '@/middleware/session.middleware';
+import { zoneMiddleware } from '@/middleware/zone.middleware';
 import { cheatMiddleware } from '@/middleware/cheat.middleware';
 import { flashMiddleware } from '@/middleware/flash.middleware';
 import { debugMiddleware } from '@/middleware/debug.middleware';
 import { errorMiddleware } from '@/middleware/error.middleware';
-import { env } from '@/config/env.config';
-import { sessionStore } from '@/config/database.config';
-import { GAME_VERSION } from '@/constant/game.constant';
 import { isRelease } from '@/util/version';
-import router from '@/route';
+import { GAME_VERSION } from '@/constant/game.constant';
 
 const app = express();
 const staticPath = isRelease(GAME_VERSION)
@@ -23,17 +22,8 @@ app.use(helmet());
 app.use(compression());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(staticPath));
-app.use(session({
-    secret: env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    store: sessionStore,
-    cookie: {
-        sameSite: 'lax',
-        httpOnly: true,
-        secure: env.IN_DOCKER,
-    },
-}));
+app.use(sessionMiddleware);
+app.use(zoneMiddleware);
 app.use(debugMiddleware);
 app.use(flashMiddleware);
 app.use(cheatMiddleware);
