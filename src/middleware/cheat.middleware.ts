@@ -28,13 +28,13 @@ export const cheatMiddleware = (req: Request, res: Response, next: NextFunction)
         return res.redirect('/death');
     }
 
-    // prevent already initialized players from accessing start and statistics routes
-    if (isGameStarted(player) && ['/start', '/statistics'].includes(req.path))
+    // prevent already initialized players from accessing start, statistics and races routes
+    if (isGameStarted(player) && ['/start', '/statistics', '/races'].includes(req.path))
         return res.redirect('/');
 
     // additional sanity checks for routes that require an initialized character
     if (!isGameStarted(player)) {
-        const isUninitializedSafePath = ['/', '/start', '/statistics'].includes(req.path) || isHighscores;
+        const isUninitializedSafePath = ['/', '/start', '/statistics', '/races'].includes(req.path) || isHighscores;
         if (!isUninitializedSafePath)
             return res.redirect('/');
     }

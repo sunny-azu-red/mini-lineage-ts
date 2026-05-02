@@ -7,10 +7,26 @@ export const REPO_COMMIT_URL = 'https://github.com/sunny-azu-red/mini-lineage-re
 export const MAX_LEVEL = 80;
 
 export const RACES = [
-    { id: RaceType.Human, label: 'Human', plural: 'Humans', emoji: '🧙', enemyRaceId: RaceType.Orc, startHealth: 100, startAdena: 300, ambushOdds: 12, regen: 1, crit: 5 },
-    { id: RaceType.Orc, label: 'Orc', plural: 'Orcs', emoji: '🧟', enemyRaceId: RaceType.Human, startHealth: 150, startAdena: 250, ambushOdds: 6, regen: 0, crit: 0 },
-    { id: RaceType.Elf, label: 'Elf', plural: 'Elves', emoji: '🧝', enemyRaceId: RaceType.DarkElf, startHealth: 75, startAdena: 450, ambushOdds: 25, regen: 2, crit: 10 },
-    { id: RaceType.DarkElf, label: 'Dark Elf', plural: 'Dark Elves', emoji: '🧛', enemyRaceId: RaceType.Elf, startHealth: 85, startAdena: 350, ambushOdds: 20, regen: 2, crit: 10 },
+    {
+        id: RaceType.Human, label: `Human`, plural: `Humans`, emoji: `🧙`, enemyRaceId: RaceType.Orc,
+        startHealth: 100, startAdena: 300, ambushOdds: 12, regen: 1, crit: 5,
+        backstory: `The most adaptable of all lineages. Humans possess a balanced constitution and steady precision, making them versatile survivors in a world that offers no quarter. They start with a modest inheritance and maintain a vigilant awareness of their surroundings.`
+    },
+    {
+        id: RaceType.Orc, label: `Orc`, plural: `Orcs`, emoji: `🧟`, enemyRaceId: RaceType.Human,
+        startHealth: 150, startAdena: 250, ambushOdds: 6, regen: 0, crit: 0,
+        backstory: `Towering warriors of immense physical resilience. Orcs possess the highest vitality at birth, but their massive presence makes them easy targets for ambushes. They lack natural regeneration and precision, relying instead on pure, unadulterated strength to crush their foes.`
+    },
+    {
+        id: RaceType.Elf, label: `Elf`, plural: `Elves`, emoji: `🧝`, enemyRaceId: RaceType.DarkElf,
+        startHealth: 75, startAdena: 450, ambushOdds: 25, regen: 2, crit: 10,
+        backstory: `Swift, wealthy, and favored by nature. Elves start their journey with significant gold and possess extraordinary natural healing and precision. They are incredibly difficult to surprise, though their physical frames are the most fragile of all the races.`
+    },
+    {
+        id: RaceType.DarkElf, label: `Dark Elf`, plural: `Dark Elves`, emoji: `🧛`, enemyRaceId: RaceType.Elf,
+        startHealth: 85, startAdena: 350, ambushOdds: 20, regen: 2, crit: 10,
+        backstory: `Lethal stalkers of the night. Dark Elves strike a deadly balance between physical power and supernatural resilience. They possess high precision and regeneration, with sturdier constitutions than their lighter cousins and a sharper edge in combat.`
+    },
 ] satisfies Race[];
 
 /**

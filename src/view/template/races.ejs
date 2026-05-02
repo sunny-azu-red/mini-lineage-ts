@@ -1,0 +1,12 @@
+<% races.forEach(race => { %>
+    <h2><%= race.emoji %> <%= race.label %></h2>
+    <p><%- race.backstory %></p>
+    <p>
+        They embark with <span class="hp"><%= race.startHealthFormatted %> HP</span> and a starting wealth of <span class="gold">🪙 <%= race.startAdenaFormatted %> Adena</span>, striking with a <span class="crit"><%= race.critFormatted %>% Critical Chance</span>.
+        Their balanced biology allows for <span class="heal">+<%= race.regenFormatted %> Regeneration</span> during moments of rest, while their steady focus maintains a <span class="muted"><%= race.ambushRiskFormatted %>% Ambush Risk</span>.
+    </p>
+<% }) %>
+
+<p class="last">
+    <a href="/">Go back to game start</a>
+</p>

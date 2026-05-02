@@ -22,6 +22,7 @@ export interface Race {
     ambushOdds: number;
     regen: number;
     crit: number;
+    backstory: string;
 }
 
 export interface Item {
