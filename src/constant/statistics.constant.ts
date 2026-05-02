@@ -5,6 +5,7 @@ export const ALL_STAT_FIELDS = [
     'total_ambushes',
     'total_armors_bought',
     'total_battles',
+    'total_critical_hits',
     'total_damage_blocked',
     'total_deaths',
     'total_enemies_killed',

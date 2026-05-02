@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
-import { randomInt } from '@/service/math.service';
+import { randomInt, calculateLevel } from '@/service/math.service';
+import { formatNumber, makeFlash } from '@/util';
 import { renderBattlegroundView } from '@/view/battle.view';
 import { simulateBattle } from '@/service/battle.service';
-import { applyBattleResult } from '@/service/player.service';
+import { resolveBattleOutcome } from '@/service/player.service';
 import { RACES } from '@/constant/game.constant';
 import { statisticsRepository } from '@/repository/statistics.repository';
 
@@ -12,7 +13,7 @@ export const getBattle = (req: Request, res: Response) => {
         player.ambushed = false;
 
     const results = simulateBattle(player.raceId, player.weaponId, player.armorId);
-    const levelUpFlash = applyBattleResult(player, results.hpLost, results.xpGained, results.adenaGained, results.enemiesKilled, results.damageBlocked);
+    results.isLevelUp = resolveBattleOutcome(player, results.hpLost, results.xpGained, results.adenaGained, results.enemiesKilled, results.damageBlocked, results.isCritical);
     if (player.dead)
         return res.redirect('/death');
 
@@ -24,6 +25,9 @@ export const getBattle = (req: Request, res: Response) => {
         void statisticsRepository.increment('total_ambushes');
     }
 
-    const flashToRender = levelUpFlash || res.locals.flash;
-    res.send(renderBattlegroundView(player, results, flashToRender));
+    const flash = results.isLevelUp
+        ? makeFlash(`🎉 Congratulations! You have reached level ${formatNumber(calculateLevel(player.experience))}.`, 'warning')
+        : res.locals.flash;
+
+    res.send(renderBattlegroundView(player, results, flash));
 };

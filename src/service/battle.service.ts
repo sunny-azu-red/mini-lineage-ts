@@ -29,5 +29,13 @@ export function simulateBattle(raceId: number, weaponId: number, armorId: number
         adenaGained = Math.ceil(adenaGained * BATTLE_CONFIG.critChance.multiplier);
     }
 
-    return { enemiesKilled, hpLost, damageBlocked, xpGained, adenaGained, isCritical };
+    return {
+        enemiesKilled,
+        hpLost,
+        damageBlocked,
+        xpGained,
+        adenaGained,
+        isCritical,
+        isLevelUp: false
+    };
 }

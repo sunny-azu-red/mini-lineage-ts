@@ -18,6 +18,7 @@ export function renderStatisticsView(stats: Statistics | null): string {
             total_hp_regen_formatted: formatNumber(stats.total_hp_regen),
             total_adena_generated_formatted: formatAdena(stats.total_adena_generated),
             total_adena_spent_formatted: formatAdena(stats.total_adena_spent),
+            total_critical_hits_formatted: formatNumber(stats.total_critical_hits),
             total_adena_formatted: formatAdena(stats.total_adena),
         };
     }

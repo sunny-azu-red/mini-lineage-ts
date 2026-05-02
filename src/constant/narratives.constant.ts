@@ -58,7 +58,15 @@ export const BATTLE_DEFLECTION_TEMPLATES: string[] = [
 export const BATTLE_OUTCOME_TEMPLATES: string[] = [
     `You limp away with <span class="hp">{hp} HP</span> remaining and <span class="gold">🪙 {adenaGained} Adena</span> to show for it.`,
     `The skirmish leaves you at <span class="hp">{hp} HP</span>, but richer by <span class="gold">🪙 {adenaGained} Adena</span>.`,
-    `Breathing heavily, you stand with <span class="hp">{hp} HP</span> left and pocket <span class="gold">🪙 {adenaGained} Adena</span>.`
+    `Breathing heavily, you stand with <span class="hp">{hp} HP</span> left and pocket <span class="gold">🪙 {adenaGained} Adena</span>.`,
+    `Wiping the grime of battle away, you survive with <span class="hp">{hp} HP</span> and claim the spoils of <span class="gold">🪙 {adenaGained} Adena</span>.`
+];
+
+export const BATTLE_LEVEL_UP_TEMPLATES: string[] = [
+    `A surge of divine energy washes over you! Your wounds vanish instantly as you stand tall with <span class="hp">{hp} HP</span> and <span class="gold">🪙 {adenaGained} Adena</span>.`,
+    `Victory has sharpened your soul. You feel completely restored, clutching <span class="gold">🪙 {adenaGained} Adena</span> with <span class="hp">{hp} HP</span>.`,
+    `You have transcended your limits! Your body mends in a flash of light, leaving you invigorated at <span class="hp">{hp} HP</span> with <span class="gold">🪙 {adenaGained} Adena</span>.`,
+    `The clash has awakened new strength within you. Wounds close and fatigue fades, topping you up to <span class="hp">{hp} HP</span> and gaining <span class="gold">🪙 {adenaGained} Adena</span>.`
 ];
 
 export const BATTLE_AMBUSH_TEMPLATES: string[] = [

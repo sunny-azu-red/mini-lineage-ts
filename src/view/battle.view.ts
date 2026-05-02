@@ -2,7 +2,7 @@ import { readTemplate, render } from './base.view';
 import { renderPage } from './layout.view';
 import { PlayerState, BattleResult, FlashMessage } from '@/interface';
 import { WEAPONS, ARMORS, RACES } from '@/constant/game.constant';
-import { BATTLE_DEFLECTION_TEMPLATES, BATTLE_KILL_TEMPLATES, BATTLE_MOVES, BATTLE_OUTCOME_TEMPLATES, BATTLE_AMBUSH_TEMPLATES, BATTLE_CRITICAL_TEMPLATES } from '@/constant/narratives.constant';
+import { BATTLE_DEFLECTION_TEMPLATES, BATTLE_KILL_TEMPLATES, BATTLE_MOVES, BATTLE_OUTCOME_TEMPLATES, BATTLE_AMBUSH_TEMPLATES, BATTLE_CRITICAL_TEMPLATES, BATTLE_LEVEL_UP_TEMPLATES } from '@/constant/narratives.constant';
 import { fillTemplate, formatAdena, formatNumber, randomElement, pluralize } from '@/util';
 import { calculateAmbushCount } from '@/service/math.service';
 
@@ -38,7 +38,7 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
     const critText = results.isCritical ? fillTemplate(randomElement(BATTLE_CRITICAL_TEMPLATES), templateData) : '';
     const killText = fillTemplate(randomElement(BATTLE_KILL_TEMPLATES), templateData);
     const deflectionText = fillTemplate(randomElement(BATTLE_DEFLECTION_TEMPLATES), templateData);
-    const outcomeText = fillTemplate(randomElement(BATTLE_OUTCOME_TEMPLATES), templateData);
+    const outcomeText = fillTemplate(randomElement(results.isLevelUp ? BATTLE_LEVEL_UP_TEMPLATES : BATTLE_OUTCOME_TEMPLATES), templateData);
 
     // ambush
     const ambushEnemies = calculateAmbushCount(enemies, 4);

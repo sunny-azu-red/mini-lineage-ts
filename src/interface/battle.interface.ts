@@ -5,4 +5,5 @@ export interface BattleResult {
     xpGained: number;
     adenaGained: number;
     isCritical: boolean;
+    isLevelUp: boolean;
 }

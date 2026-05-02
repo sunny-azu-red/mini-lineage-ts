@@ -11,7 +11,7 @@ vi.mock('@/service/battle.service', () => ({
 }));
 
 vi.mock('@/service/player.service', () => ({
-    applyBattleResult: vi.fn(),
+    resolveBattleOutcome: vi.fn(),
 }));
 
 vi.mock('@/service/math.service', () => ({
@@ -56,9 +56,10 @@ describe('battleController', () => {
             xpGained: 100,
             adenaGained: 50,
             enemiesKilled: 5,
-            damageBlocked: 5
+            damageBlocked: 5,
+            isCritical: false
         } as any);
-        vi.mocked(playerService.applyBattleResult).mockReturnValue(null);
+        vi.mocked(playerService.resolveBattleOutcome).mockReturnValue(false);
         vi.mocked(mathService.randomInt).mockReturnValue(2); // No ambush by default
     });
 
@@ -71,14 +72,14 @@ describe('battleController', () => {
     it('should simulate battle and apply results', () => {
         getBattle(req, res);
         expect(battleService.simulateBattle).toHaveBeenCalledWith(player.raceId, player.weaponId, player.armorId);
-        expect(playerService.applyBattleResult).toHaveBeenCalledWith(player, 10, 100, 50, 5, 5);
+        expect(playerService.resolveBattleOutcome).toHaveBeenCalledWith(player, 10, 100, 50, 5, 5, false);
         expect(res.send).toHaveBeenCalledWith('rendered-view');
     });
 
     it('should redirect home if player is dead', () => {
-        vi.mocked(playerService.applyBattleResult).mockImplementation((p: any) => {
+        vi.mocked(playerService.resolveBattleOutcome).mockImplementation((p: any) => {
             p.dead = true;
-            return null;
+            return false;
         });
         getBattle(req, res);
         expect(res.redirect).toHaveBeenCalledWith('/death');
