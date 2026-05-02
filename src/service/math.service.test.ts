@@ -8,7 +8,7 @@ import {
     isLowHealth,
     getLowHealthThreshold,
     getXpNeededToLevelUp,
-    calculateSurpriseCount,
+    calculateAmbushCount,
     getEnemyCountRange,
     calculateDamageBlocked,
     calculateCritChance,
@@ -68,10 +68,10 @@ describe('getXpNeededToLevelUp', () => {
     it('returns a positive number mid-level', () => expect(getXpNeededToLevelUp(0)).toBeGreaterThan(0));
 });
 
-describe('calculateSurpriseCount', () => {
-    it('divides enemies by divisor', () => expect(calculateSurpriseCount(8, 4)).toBe(2));
-    it('returns minimum 1 when enemies < divisor', () => expect(calculateSurpriseCount(2, 4)).toBe(1));
-    it('returns minimum 1 at 0', () => expect(calculateSurpriseCount(0)).toBe(1));
+describe('calculateAmbushCount', () => {
+    it('divides enemies by divisor', () => expect(calculateAmbushCount(8, 4)).toBe(2));
+    it('returns minimum 1 when enemies < divisor', () => expect(calculateAmbushCount(2, 4)).toBe(1));
+    it('returns minimum 1 at 0', () => expect(calculateAmbushCount(0)).toBe(1));
 });
 
 describe('getEnemyCountRange', () => {

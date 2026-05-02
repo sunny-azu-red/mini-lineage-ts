@@ -15,7 +15,7 @@ export function simulateBattle(raceId: number, weaponId: number, armorId: number
     const { min: minEnemies, max: maxEnemies } = getEnemyCountRange(weapon, BATTLE_CONFIG.enemyCount.minMult, BATTLE_CONFIG.enemyCount.maxMult);
     let enemiesKilled = randomInt(minEnemies, maxEnemies);
     if (isCritical)
-        enemiesKilled = Math.max(1, Math.ceil(enemiesKilled * BATTLE_CONFIG.critChance.multiplier));
+        enemiesKilled = Math.max(BATTLE_CONFIG.critChance.floor, Math.ceil(enemiesKilled * BATTLE_CONFIG.critChance.multiplier));
 
     // hp lost: danger scales linearly, armor scales sub-linearly to prevent invincibility
     const dangerLevel = calculateDangerLevel(weapon, BATTLE_CONFIG.dangerLevel.scaling);

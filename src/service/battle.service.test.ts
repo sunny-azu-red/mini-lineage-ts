@@ -65,6 +65,6 @@ describe('simulateBattle', () => {
         expect(result.isCritical).toBe(true);
         // We know randomInt returns min, which for weapon stat 16 is min=4.
         // Multiplier is 1.5, so 4 * 1.5 = 6.
-        expect(result.enemiesKilled).toBe(Math.max(1, Math.ceil(4 * BATTLE_CONFIG.critChance.multiplier)));
+        expect(result.enemiesKilled).toBe(Math.max(BATTLE_CONFIG.critChance.floor, Math.ceil(4 * BATTLE_CONFIG.critChance.multiplier)));
     });
 });

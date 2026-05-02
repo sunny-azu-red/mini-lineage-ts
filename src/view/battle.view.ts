@@ -2,9 +2,9 @@ import { readTemplate, render } from './base.view';
 import { renderPage } from './layout.view';
 import { PlayerState, BattleResult, FlashMessage } from '@/interface';
 import { WEAPONS, ARMORS, RACES } from '@/constant/game.constant';
-import { BATTLE_DEFLECTION_TEMPLATES, BATTLE_KILL_TEMPLATES, BATTLE_MOVES, BATTLE_OUTCOME_TEMPLATES, BATTLE_SURPRISE_TEMPLATES, BATTLE_CRITICAL_TEMPLATES } from '@/constant/narratives.constant';
+import { BATTLE_DEFLECTION_TEMPLATES, BATTLE_KILL_TEMPLATES, BATTLE_MOVES, BATTLE_OUTCOME_TEMPLATES, BATTLE_AMBUSH_TEMPLATES, BATTLE_CRITICAL_TEMPLATES } from '@/constant/narratives.constant';
 import { fillTemplate, formatAdena, formatNumber, randomElement, pluralize } from '@/util';
-import { calculateSurpriseCount } from '@/service/math.service';
+import { calculateAmbushCount } from '@/service/math.service';
 
 const battlegroundTpl = readTemplate('battleground.ejs');
 
@@ -35,33 +35,30 @@ export function renderBattlegroundView(player: PlayerState, results: BattleResul
         isSingleEnemy: enemies === 1,
     };
 
+    const critText = results.isCritical ? fillTemplate(randomElement(BATTLE_CRITICAL_TEMPLATES), templateData) : '';
     const killText = fillTemplate(randomElement(BATTLE_KILL_TEMPLATES), templateData);
     const deflectionText = fillTemplate(randomElement(BATTLE_DEFLECTION_TEMPLATES), templateData);
     const outcomeText = fillTemplate(randomElement(BATTLE_OUTCOME_TEMPLATES), templateData);
-    
-    let fullBattleText = `${killText} ${deflectionText}`;
-    if (results.isCritical) {
-        const critText = fillTemplate(randomElement(BATTLE_CRITICAL_TEMPLATES), templateData);
-        fullBattleText = `${critText} ${fullBattleText}`;
-    }
 
-    // surprises
-    const surpriseEnemies = calculateSurpriseCount(enemies, 4);
-    const surpriseEnemyGroup = pluralize(opponentRace.label, opponentRace.plural, surpriseEnemies, enemyEmoji);
-    const surpriseData = {
+    // ambush
+    const ambushEnemies = calculateAmbushCount(enemies, 4);
+    const ambushEnemyGroup = pluralize(opponentRace.label, opponentRace.plural, ambushEnemies, enemyEmoji);
+    const ambushData = {
         ...templateData,
-        surpriseEnemyGroup,
-        surpriseEnemyGroupCap: surpriseEnemyGroup.charAt(0).toUpperCase() + surpriseEnemyGroup.slice(1),
-        isSingleSurprise: surpriseEnemies === 1
+        ambushEnemyGroup,
+        ambushEnemyGroupCap: ambushEnemyGroup.charAt(0).toUpperCase() + ambushEnemyGroup.slice(1),
+        isSingleAmbush: ambushEnemies === 1
     };
-    const surpriseText = fillTemplate(randomElement(BATTLE_SURPRISE_TEMPLATES), surpriseData);
+    const ambushText = fillTemplate(randomElement(BATTLE_AMBUSH_TEMPLATES), ambushData);
 
     const content = render(battlegroundTpl, {
-        battleText: fullBattleText,
+        critLine: critText,
+        killLine: killText,
+        deflectionLine: deflectionText,
         outcomeLine: outcomeText,
         ambushed: player.ambushed,
-        ambushedMessage: surpriseText,
-        fightText: surpriseEnemies === 1 ? `Face your Foe!` : `Fight them!`,
+        ambushedLine: ambushText,
+        fightText: ambushEnemies === 1 ? `Face your Foe!` : `Fight them!`,
         nextMove: randomElement(BATTLE_MOVES),
     });
 

@@ -11,7 +11,7 @@ export function calculateCritChance(chance: number): boolean {
     return randomInt(1, 100) <= chance;
 }
 
-export function calculateSurpriseCount(enemiesKilled: number, divisor: number = 4): number {
+export function calculateAmbushCount(enemiesKilled: number, divisor: number = 4): number {
     return Math.max(1, Math.floor(enemiesKilled / divisor));
 }
 

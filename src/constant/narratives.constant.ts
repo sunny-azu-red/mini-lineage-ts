@@ -61,14 +61,14 @@ export const BATTLE_OUTCOME_TEMPLATES: string[] = [
     `Breathing heavily, you stand with <span class="hp">{hp} HP</span> left and pocket <span class="gold">🪙 {adenaGained} Adena</span>.`
 ];
 
-export const BATTLE_SURPRISE_TEMPLATES: string[] = [
-    `Out of the blue {surpriseEnemyGroup} {isSingleSurprise ? 'surrounds' : 'surround'} you and you can't escape.`,
-    `You forgot to check your back and you get stormed by {surpriseEnemyGroup}.`,
+export const BATTLE_AMBUSH_TEMPLATES: string[] = [
+    `Out of the blue {ambushEnemyGroup} {isSingleAmbush ? 'surrounds' : 'surround'} you and you can't escape.`,
+    `You forgot to check your back and you get stormed by {ambushEnemyGroup}.`,
     `You find yourself in a delicate position, the {enemyEmoji} {enemyName} leader has come with reinforcements.`,
-    `As you were walking along {surpriseEnemyGroup} jumped out of the bushes.`,
-    `You reached a dead-end and while turning around, you find yourself cornered by {surpriseEnemyGroup}.`,
-    `The ground trembles! Suddenly, {surpriseEnemyGroup} {isSingleSurprise ? 'stands' : 'stand'} before you!`,
-    `An arrow whistles past your ear... ambush! {surpriseEnemyGroupCap} {isSingleSurprise ? 'emerges' : 'emerge'} from the shadows!`
+    `As you were walking along {ambushEnemyGroup} jumped out of the bushes.`,
+    `You reached a dead-end and while turning around, you find yourself cornered by {ambushEnemyGroup}.`,
+    `The ground trembles! Suddenly, {ambushEnemyGroup} {isSingleAmbush ? 'stands' : 'stand'} before you!`,
+    `An arrow whistles past your ear... ambush! {ambushEnemyGroupCap} {isSingleAmbush ? 'emerges' : 'emerge'} from the shadows!`
 ];
 
 export const BATTLE_CRITICAL_TEMPLATES: string[] = [
