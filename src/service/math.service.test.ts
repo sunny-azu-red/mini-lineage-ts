@@ -11,6 +11,7 @@ import {
     getAmbushEnemyCount,
     getEnemyCountRange,
     calculateDamageBlocked,
+    rollChance,
     calculateCritChance,
     calculateAmbushChance,
 } from './math.service';
@@ -90,28 +91,35 @@ describe('calculateDamageBlocked', () => {
     });
 });
 
-describe('calculateCritChance', () => {
-    it('returns false when chance is 0', () => expect(calculateCritChance(0)).toBe(false));
-    it('returns false when chance is negative', () => expect(calculateCritChance(-10)).toBe(false));
-    it('returns true when chance is 100', () => expect(calculateCritChance(100)).toBe(true));
+describe('rollChance', () => {
+    it('returns false when chance is 0', () => expect(rollChance(0)).toBe(false));
+    it('returns false when chance is negative', () => expect(rollChance(-10)).toBe(false));
+    it('returns true when chance is 100', () => expect(rollChance(100)).toBe(true));
+    it('returns true when chance is above 100', () => expect(rollChance(150)).toBe(true));
+    
     it('handles decimal precision (hit)', () => {
         vi.spyOn(Math, 'random').mockReturnValue(0.1666); // 16.66%
-        expect(calculateCritChance(16.67)).toBe(true);
+        expect(rollChance(16.67)).toBe(true);
         vi.restoreAllMocks();
     });
+    
     it('handles decimal precision (miss)', () => {
         vi.spyOn(Math, 'random').mockReturnValue(0.1668); // 16.68%
-        expect(calculateCritChance(16.67)).toBe(false);
+        expect(rollChance(16.67)).toBe(false);
         vi.restoreAllMocks();
     });
 });
 
+describe('calculateCritChance', () => {
+    it('behaves exactly like rollChance', () => {
+        expect(calculateCritChance(0)).toBe(false);
+        expect(calculateCritChance(100)).toBe(true);
+    });
+});
+
 describe('calculateAmbushChance', () => {
-    it('returns false when chance is 0', () => expect(calculateAmbushChance(0)).toBe(false));
-    it('returns true when chance is 100', () => expect(calculateAmbushChance(100)).toBe(true));
-    it('handles decimal precision (hit)', () => {
-        vi.spyOn(Math, 'random').mockReturnValue(0.0832); // 8.32%
-        expect(calculateAmbushChance(8.33)).toBe(true);
-        vi.restoreAllMocks();
+    it('behaves exactly like rollChance', () => {
+        expect(calculateAmbushChance(0)).toBe(false);
+        expect(calculateAmbushChance(100)).toBe(true);
     });
 });
