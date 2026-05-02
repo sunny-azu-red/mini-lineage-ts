@@ -11,6 +11,7 @@ import {
     calculateSurpriseCount,
     getEnemyCountRange,
     calculateDamageBlocked,
+    calculateCritChance,
 } from './math.service';
 
 describe('calculateXpForLevel', () => {
@@ -86,4 +87,10 @@ describe('calculateDamageBlocked', () => {
     it('higher armor stat blocks more', () => {
         expect(calculateDamageBlocked(88)).toBeGreaterThan(calculateDamageBlocked(2));
     });
+});
+
+describe('calculateCritChance', () => {
+    it('returns false when chance is 0', () => expect(calculateCritChance(0)).toBe(false));
+    it('returns false when chance is negative', () => expect(calculateCritChance(-10)).toBe(false));
+    it('returns true when chance is 100', () => expect(calculateCritChance(100)).toBe(true));
 });
