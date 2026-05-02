@@ -7,11 +7,22 @@ export function randomInt(min: number, max: number): number {
 export function calculateCritChance(chance: number): boolean {
     if (chance <= 0)
         return false;
+    if (chance >= 100)
+        return true;
 
-    return randomInt(1, 100) <= chance;
+    return Math.random() * 100 <= chance;
 }
 
-export function calculateAmbushCount(enemiesKilled: number, divisor: number = 4): number {
+export function calculateAmbushChance(chance: number): boolean {
+    if (chance <= 0)
+        return false;
+    if (chance >= 100)
+        return true;
+
+    return Math.random() * 100 <= chance;
+}
+
+export function getAmbushEnemyCount(enemiesKilled: number, divisor: number = 4): number {
     return Math.max(1, Math.floor(enemiesKilled / divisor));
 }
 

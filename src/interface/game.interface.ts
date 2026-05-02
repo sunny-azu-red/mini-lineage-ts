@@ -19,7 +19,7 @@ export interface Race {
     enemyRaceId: RaceType;
     startHealth: number;
     startAdena: number;
-    ambushOdds: number;
+    ambushChance: number;
     regen: number;
     crit: number;
     backstory: string;

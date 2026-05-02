@@ -231,12 +231,12 @@ describe('resolveBattleOutcome', () => {
 });
 
 describe('processTick', () => {
-    it('heals an Elf (regen 2) with no regen armor by 2 and returns true', () => {
+    it('heals an Elf (regen 3) with no regen armor by 3 and returns true', () => {
         const p = makePlayer({ raceId: 2, health: 50, armorId: 0 }); // Elf, Peasant's Tunic
         const result = processTick(p);
         expect(result).toBe(true);
-        expect(p.health).toBe(52);
-        expect(statisticsRepository.increment).toHaveBeenCalledWith('total_hp_regen', 2);
+        expect(p.health).toBe(53);
+        expect(statisticsRepository.increment).toHaveBeenCalledWith('total_hp_regen', 3);
     });
 
     it('heals a Human (regen 1) with Knight\'s Plate (regen 1) by 2 total and returns true', () => {

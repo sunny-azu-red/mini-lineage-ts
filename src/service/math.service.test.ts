@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
     calculateXpForLevel,
     calculateLevel,
@@ -8,10 +8,11 @@ import {
     isLowHealth,
     getLowHealthThreshold,
     getXpNeededToLevelUp,
-    calculateAmbushCount,
+    getAmbushEnemyCount,
     getEnemyCountRange,
     calculateDamageBlocked,
     calculateCritChance,
+    calculateAmbushChance,
 } from './math.service';
 
 describe('calculateXpForLevel', () => {
@@ -68,10 +69,10 @@ describe('getXpNeededToLevelUp', () => {
     it('returns a positive number mid-level', () => expect(getXpNeededToLevelUp(0)).toBeGreaterThan(0));
 });
 
-describe('calculateAmbushCount', () => {
-    it('divides enemies by divisor', () => expect(calculateAmbushCount(8, 4)).toBe(2));
-    it('returns minimum 1 when enemies < divisor', () => expect(calculateAmbushCount(2, 4)).toBe(1));
-    it('returns minimum 1 at 0', () => expect(calculateAmbushCount(0)).toBe(1));
+describe('getAmbushEnemyCount', () => {
+    it('divides enemies by divisor', () => expect(getAmbushEnemyCount(8, 4)).toBe(2));
+    it('returns minimum 1 when enemies < divisor', () => expect(getAmbushEnemyCount(2, 4)).toBe(1));
+    it('returns minimum 1 at 0', () => expect(getAmbushEnemyCount(0)).toBe(1));
 });
 
 describe('getEnemyCountRange', () => {
@@ -93,4 +94,24 @@ describe('calculateCritChance', () => {
     it('returns false when chance is 0', () => expect(calculateCritChance(0)).toBe(false));
     it('returns false when chance is negative', () => expect(calculateCritChance(-10)).toBe(false));
     it('returns true when chance is 100', () => expect(calculateCritChance(100)).toBe(true));
+    it('handles decimal precision (hit)', () => {
+        vi.spyOn(Math, 'random').mockReturnValue(0.1666); // 16.66%
+        expect(calculateCritChance(16.67)).toBe(true);
+        vi.restoreAllMocks();
+    });
+    it('handles decimal precision (miss)', () => {
+        vi.spyOn(Math, 'random').mockReturnValue(0.1668); // 16.68%
+        expect(calculateCritChance(16.67)).toBe(false);
+        vi.restoreAllMocks();
+    });
+});
+
+describe('calculateAmbushChance', () => {
+    it('returns false when chance is 0', () => expect(calculateAmbushChance(0)).toBe(false));
+    it('returns true when chance is 100', () => expect(calculateAmbushChance(100)).toBe(true));
+    it('handles decimal precision (hit)', () => {
+        vi.spyOn(Math, 'random').mockReturnValue(0.0832); // 8.32%
+        expect(calculateAmbushChance(8.33)).toBe(true);
+        vi.restoreAllMocks();
+    });
 });

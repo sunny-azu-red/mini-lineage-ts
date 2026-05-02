@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { randomInt, calculateLevel } from '@/service/math.service';
+import { calculateLevel, calculateAmbushChance } from '@/service/math.service';
 import { formatNumber, makeFlash } from '@/util';
 import { renderBattlegroundView } from '@/view/battle.view';
 import { simulateBattle } from '@/service/battle.service';
@@ -18,7 +18,7 @@ export const getBattle = (req: Request, res: Response) => {
         return res.redirect('/death');
 
     const race = RACES[player.raceId];
-    let isAmbushed = randomInt(1, race.ambushOdds) === 1;
+    let isAmbushed = calculateAmbushChance(race.ambushChance);
     if (isAmbushed) {
         player.ambushed = true;
         player.totalAmbushes = (player.totalAmbushes ?? 0) + 1;

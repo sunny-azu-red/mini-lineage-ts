@@ -16,7 +16,7 @@ export function renderRacesView(player: PlayerState | null = null): string {
                 adena: formatAdena(race.startAdena),
                 crit: formatNumber(race.crit),
                 regen: formatNumber(race.regen),
-                ambush: formatNumber(Number((100 / race.ambushOdds).toFixed(2)))
+                ambush: formatNumber(race.ambushChance)
             })
         };
     });

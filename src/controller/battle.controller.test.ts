@@ -16,6 +16,7 @@ vi.mock('@/service/player.service', () => ({
 
 vi.mock('@/service/math.service', () => ({
     randomInt: vi.fn(),
+    calculateAmbushChance: vi.fn(),
 }));
 
 vi.mock('@/repository/statistics.repository', () => ({
@@ -60,7 +61,7 @@ describe('battleController', () => {
             isCritical: false
         } as any);
         vi.mocked(playerService.resolveBattleOutcome).mockReturnValue(false);
-        vi.mocked(mathService.randomInt).mockReturnValue(2); // No ambush by default
+        vi.mocked(mathService.calculateAmbushChance).mockReturnValue(false); // No ambush by default
     });
 
     it('should reset ambushed state if it was true at start', () => {
@@ -86,7 +87,7 @@ describe('battleController', () => {
     });
 
     it('should increment totalAmbushes and statisticsRepository when ambush occurs', () => {
-        vi.mocked(mathService.randomInt).mockReturnValue(1); // Ambush trigger
+        vi.mocked(mathService.calculateAmbushChance).mockReturnValue(true); // Ambush trigger
         getBattle(req, res);
 
         expect(player.ambushed).toBe(true);
@@ -95,7 +96,7 @@ describe('battleController', () => {
     });
 
     it('should not increment totalAmbushes when ambush does not occur', () => {
-        vi.mocked(mathService.randomInt).mockReturnValue(2); // No ambush
+        vi.mocked(mathService.calculateAmbushChance).mockReturnValue(false); // No ambush
         getBattle(req, res);
 
         expect(player.ambushed).toBe(false);
