@@ -67,7 +67,7 @@ export function restoreHealth(player: PlayerState, amount: number): number {
 }
 
 export function applyBattleResult(player: PlayerState, hpLost: number, xpGained: number, adenaGained: number, enemiesKilled: number, damageBlocked: number): FlashMessage | null {
-    // hpLost = 0; // DEBUG: never die
+    hpLost = 0; // DEBUG: never die
     // xpGained = xpGained * 250; // DEBUG: level up faster
     // adenaGained = adenaGained * 500; // DEBUG: get adena faster
 

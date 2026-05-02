@@ -75,7 +75,7 @@ export const BATTLE_CRITICAL_TEMPLATES: string[] = [
     `💥 <span class="crit">CRITICAL HIT!</span> 💥`,
     `🌪️ <span class="crit">DEVASTATING BLOW!</span> 🌪️`,
     `🔥 <span class="crit">ABSOLUTE CARNAGE!</span> 🔥`,
-    `💀 <span class="crit">FATAL STRIKE!</span> 💀`
+    `🎯 <span class="crit">FATAL STRIKE!</span> 🎯`
 ];
 
 export const BATTLE_MOVES: string[] = [
