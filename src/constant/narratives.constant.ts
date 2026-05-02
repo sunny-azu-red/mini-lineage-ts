@@ -71,6 +71,13 @@ export const BATTLE_SURPRISE_TEMPLATES: string[] = [
     `An arrow whistles past your ear... ambush! {surpriseEnemyGroupCap} {isSingleSurprise ? 'emerges' : 'emerge'} from the shadows!`
 ];
 
+export const BATTLE_CRITICAL_TEMPLATES: string[] = [
+    `💥 <span class="critical">CRITICAL HIT!</span> 💥`,
+    `🌪️ <span class="critical">DEVASTATING BLOW!</span> 🌪️`,
+    `🔥 <span class="critical">ABSOLUTE CARNAGE!</span> 🔥`,
+    `💀 <span class="critical">FATAL STRIKE!</span> 💀`
+];
+
 export const BATTLE_MOVES: string[] = [
     `Investigate the shimmering lake`,
     `Search the hollow log`,

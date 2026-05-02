@@ -4,6 +4,13 @@ export function randomInt(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+export function calculateCritChance(chance: number): boolean {
+    if (chance <= 0)
+        return false;
+
+    return randomInt(1, 100) <= chance;
+}
+
 export function calculateSurpriseCount(enemiesKilled: number, divisor: number = 4): number {
     return Math.max(1, Math.floor(enemiesKilled / divisor));
 }
@@ -32,6 +39,7 @@ export function calculateLevel(xp: number): number {
     let level = 1;
     while (!isMaxLevel(level) && calculateXpForLevel(level + 1) <= xp)
         level++;
+
     return level;
 }
 
@@ -40,10 +48,14 @@ export function isMaxLevel(level: number): boolean {
 }
 
 export function calculatePercentage(value: number, total: number, precision: number = 0): number {
-    if (total <= 0) return 0;
+    if (total <= 0)
+        return 0;
+
     let p = (value / total) * 100;
     p = Math.max(0, Math.min(100, p));
-    if (precision === 0) return Math.round(p);
+    if (precision === 0)
+        return Math.round(p);
+
     const factor = Math.pow(10, precision);
     return Math.round(p * factor) / factor;
 }
@@ -71,7 +83,9 @@ export function getXpProgress(xp: number) {
 
 export function getXpNeededToLevelUp(xp: number): number {
     const level = calculateLevel(xp);
-    if (isMaxLevel(level)) return 0;
+    if (isMaxLevel(level))
+        return 0;
+
     return calculateXpForLevel(level + 1) - xp;
 }
 
