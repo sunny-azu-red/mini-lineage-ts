@@ -4,7 +4,7 @@ import * as battleService from '@/service/battle.service';
 import * as playerService from '@/service/player.service';
 import * as mathService from '@/service/math.service';
 import { statisticsRepository } from '@/repository/statistics.repository';
-import * as battleView from '@/view/battle.view';
+import * as sessionMiddleware from '@/middleware/session.middleware';
 
 vi.mock('@/service/battle.service', () => ({
     simulateBattle: vi.fn(),
@@ -29,9 +29,14 @@ vi.mock('@/view/battle.view', () => ({
     renderBattlegroundView: vi.fn().mockReturnValue('rendered-view'),
 }));
 
+vi.mock('@/middleware/session.middleware', () => ({
+    saveAndRedirect: vi.fn().mockImplementation((req, res, next, url) => res.redirect(url)),
+}));
+
 describe('battleController', () => {
     let req: any;
     let res: any;
+    let next: any;
     let player: any;
 
     beforeEach(() => {
@@ -51,6 +56,7 @@ describe('battleController', () => {
             redirect: vi.fn(),
             send: vi.fn()
         };
+        next = vi.fn();
 
         vi.mocked(battleService.simulateBattle).mockReturnValue({
             hpLost: 10,
@@ -66,12 +72,12 @@ describe('battleController', () => {
 
     it('should reset ambushed state if it was true at start', () => {
         player.ambushed = true;
-        getBattle(req, res);
+        getBattle(req, res, next);
         expect(player.ambushed).toBe(false);
     });
 
     it('should simulate battle and apply results', () => {
-        getBattle(req, res);
+        getBattle(req, res, next);
         expect(battleService.simulateBattle).toHaveBeenCalledWith(player.raceId, player.weaponId, player.armorId);
         expect(playerService.resolveBattleOutcome).toHaveBeenCalledWith(player, 10, 100, 50, 5, 5, false);
         expect(res.send).toHaveBeenCalledWith('rendered-view');
@@ -82,13 +88,13 @@ describe('battleController', () => {
             p.dead = true;
             return false;
         });
-        getBattle(req, res);
-        expect(res.redirect).toHaveBeenCalledWith('/death');
+        getBattle(req, res, next);
+        expect(sessionMiddleware.saveAndRedirect).toHaveBeenCalledWith(req, res, next, '/death');
     });
 
     it('should increment totalAmbushes and statisticsRepository when ambush occurs', () => {
         vi.mocked(mathService.calculateAmbushChance).mockReturnValue(true); // Ambush trigger
-        getBattle(req, res);
+        getBattle(req, res, next);
 
         expect(player.ambushed).toBe(true);
         expect(player.totalAmbushes).toBe(1);
@@ -97,7 +103,7 @@ describe('battleController', () => {
 
     it('should not increment totalAmbushes when ambush does not occur', () => {
         vi.mocked(mathService.calculateAmbushChance).mockReturnValue(false); // No ambush
-        getBattle(req, res);
+        getBattle(req, res, next);
 
         expect(player.ambushed).toBe(false);
         expect(player.totalAmbushes).toBe(0);

@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { calculateLevel, calculateAmbushChance } from '@/service/math.service';
 import { formatNumber, makeFlash } from '@/util';
 import { renderBattlegroundView } from '@/view/battle.view';
@@ -6,8 +6,9 @@ import { simulateBattle } from '@/service/battle.service';
 import { resolveBattleOutcome } from '@/service/player.service';
 import { RACES } from '@/constant/game.constant';
 import { statisticsRepository } from '@/repository/statistics.repository';
+import { saveAndRedirect } from '@/middleware/session.middleware';
 
-export const getBattle = (req: Request, res: Response) => {
+export const getBattle = (req: Request, res: Response, next: NextFunction) => {
     const player = res.locals.player;
     if (player.ambushed)
         player.ambushed = false;
@@ -15,7 +16,7 @@ export const getBattle = (req: Request, res: Response) => {
     const results = simulateBattle(player.raceId, player.weaponId, player.armorId);
     results.isLevelUp = resolveBattleOutcome(player, results.hpLost, results.xpGained, results.adenaGained, results.enemiesKilled, results.damageBlocked, results.isCritical);
     if (player.dead)
-        return res.redirect('/death');
+        return saveAndRedirect(req, res, next, '/death');
 
     const race = RACES[player.raceId];
     let isAmbushed = calculateAmbushChance(race.ambushChance);
