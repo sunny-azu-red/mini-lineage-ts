@@ -19,6 +19,7 @@ const makeResults = (overrides: Partial<BattleResult> = {}): BattleResult => ({
     damageBlocked: 5,
     xpGained: 100,
     adenaGained: 50,
+    isCritical: false,
     ...overrides,
 });
 

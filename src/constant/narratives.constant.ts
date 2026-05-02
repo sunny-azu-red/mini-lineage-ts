@@ -72,10 +72,10 @@ export const BATTLE_SURPRISE_TEMPLATES: string[] = [
 ];
 
 export const BATTLE_CRITICAL_TEMPLATES: string[] = [
-    `💥 <span class="critical">CRITICAL HIT!</span> 💥`,
-    `🌪️ <span class="critical">DEVASTATING BLOW!</span> 🌪️`,
-    `🔥 <span class="critical">ABSOLUTE CARNAGE!</span> 🔥`,
-    `💀 <span class="critical">FATAL STRIKE!</span> 💀`
+    `💥 <span class="crit">CRITICAL HIT!</span> 💥`,
+    `🌪️ <span class="crit">DEVASTATING BLOW!</span> 🌪️`,
+    `🔥 <span class="crit">ABSOLUTE CARNAGE!</span> 🔥`,
+    `💀 <span class="crit">FATAL STRIKE!</span> 💀`
 ];
 
 export const BATTLE_MOVES: string[] = [
