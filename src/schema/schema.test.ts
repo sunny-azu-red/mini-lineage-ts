@@ -1,8 +1,35 @@
 import { describe, it, expect } from 'vitest';
+import { itemIdSchema } from './common.schema';
 import { ShopWeaponSchema, ShopArmorSchema, ShopFoodSchema } from './shop.schema';
 import { GameStartSchema } from './game.schema';
 import { SuicideSchema, HighscoreNameSchema } from './player.schema';
 import { SocketPingEventSchema } from './socket.schema';
+
+// ---------------------------------------------------------------------------
+// Common schemas
+// ---------------------------------------------------------------------------
+
+describe('itemIdSchema', () => {
+    const schema = itemIdSchema([1, 2, 3]);
+
+    it('accepts a valid id from the whitelist', () => {
+        const result = schema.safeParse('2');
+        expect(result.success).toBe(true);
+        if (result.success) expect(result.data).toBe(2);
+    });
+
+    it('rejects a non-numeric string', () => {
+        expect(schema.safeParse('abc').success).toBe(false);
+    });
+
+    it('rejects an id not in the whitelist', () => {
+        expect(schema.safeParse('4').success).toBe(false);
+    });
+
+    it('rejects an empty string', () => {
+        expect(schema.safeParse('').success).toBe(false);
+    });
+});
 
 // ---------------------------------------------------------------------------
 // Shop schemas

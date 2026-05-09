@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { debugMiddleware } from './debug.middleware';
 import { logger } from '@/config/logger.config';
-import * as version from '@/util/version';
+import * as version from '@/util/version.util';
 
 vi.mock('@/config/logger.config', () => ({
     logger: {

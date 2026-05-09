@@ -15,6 +15,7 @@ import {
     rollChance,
     calculateCritChance,
     calculateAmbushChance,
+    getXpProgress,
 } from './math.service';
 
 describe('calculateXpForLevel', () => {
@@ -130,5 +131,24 @@ describe('calculateAmbushChance', () => {
     it('behaves exactly like rollChance', () => {
         expect(calculateAmbushChance(0)).toBe(false);
         expect(calculateAmbushChance(100)).toBe(true);
+    });
+});
+
+describe('getXpProgress', () => {
+    it('returns 100% and 0 current/required at max level', () => {
+        const progress = getXpProgress(calculateXpForLevel(80));
+        expect(progress.percent).toBe(100);
+        expect(progress.current).toBe(0);
+        expect(progress.required).toBe(0);
+    });
+
+    it('returns correct progress mid-level', () => {
+        const level2 = calculateXpForLevel(2); // 780
+        const level3 = calculateXpForLevel(3); // 130*9 + 130*3 = 1170 + 390 = 1560
+        const xp = level2 + 390; // 780 + 390 = 1170 (exactly 50% towards level 3)
+        const progress = getXpProgress(xp);
+        expect(progress.percent).toBe(50);
+        expect(progress.current).toBe(390);
+        expect(progress.required).toBe(1560 - 780); // 780
     });
 });

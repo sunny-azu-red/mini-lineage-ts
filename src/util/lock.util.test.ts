@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { acquireSessionLock } from './lock';
+import { acquireSessionLock } from './lock.util';
 
-describe('SessionLock (util/lock.ts)', () => {
+describe('SessionLock (util/lock.util.ts)', () => {
     beforeEach(() => {
         // Since the lock map is module-level, it persists between tests.
         // We could export it for testing or just rely on new session IDs.

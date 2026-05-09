@@ -1,7 +1,8 @@
 import { PlayerState, Race, FlashMessage, PurchaseResult, ItemType } from '@/interface';
 import { RACES, ARMORS, WEAPONS, FOODS } from '@/constant/game.constant';
 import { isLevelUp, randomInt } from '@/service/math.service';
-import { formatAdena, formatNumber, randomElement, fillTemplate } from '@/util';
+import { formatAdena, formatNumber, fillTemplate } from '@/util/format.util';
+import { randomElement } from '@/util/game.util';
 import { WELCOME_MESSAGES } from '@/constant/narratives.constant';
 import { statisticsRepository } from '@/repository/statistics.repository';
 

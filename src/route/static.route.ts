@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getSharedConfig } from '@/util/config';
+import { getSharedConfig } from '@/util/config.util';
 
 const router = Router();
 

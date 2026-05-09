@@ -43,7 +43,7 @@ vi.mock('@/service/player.service', () => ({
     isGameStarted: vi.fn(),
 }));
 
-vi.mock('@/util/lock', () => ({
+vi.mock('@/util/lock.util', () => ({
     acquireSessionLock: vi.fn().mockResolvedValue(() => {}),
 }));
 
@@ -149,5 +149,128 @@ describe('socketService', () => {
         // Test valid payload
         pingHandler({ timestamp: 12345 });
         expect(mockSocket.emit).toHaveBeenCalledWith('pong', { timestamp: 12345 });
+    });
+
+    it('should gracefully handle session reload errors', async () => {
+        initSocketService(mockServer, mockMiddleware);
+        const connectionHandler = (mockIo.on as any).mock.calls.find((c: any) => c[0] === 'connection')[1];
+        connectionHandler(mockSocket);
+
+        vi.mocked(sessionStore.get as any).mockImplementation((_id: string, cb: any) => cb(new Error('Reload fail')));
+        
+        vi.advanceTimersByTime(TICK_CONFIG.intervalMs);
+        await vi.runAllTicks();
+
+        expect(playerService.processTick).not.toHaveBeenCalled();
+    });
+
+    it('should skip tick if player is missing from session', async () => {
+        initSocketService(mockServer, mockMiddleware);
+        const connectionHandler = (mockIo.on as any).mock.calls.find((c: any) => c[0] === 'connection')[1];
+        connectionHandler(mockSocket);
+
+        vi.mocked(sessionStore.get as any).mockImplementation((_id: string, cb: any) => cb(null, null));
+        
+        vi.advanceTimersByTime(TICK_CONFIG.intervalMs);
+        await vi.runAllTicks();
+
+        expect(playerService.processTick).not.toHaveBeenCalled();
+    });
+
+    it('should skip connection handling if session is missing', () => {
+        initSocketService(mockServer, mockMiddleware);
+        const connectionHandler = (mockIo.on as any).mock.calls.find((c: any) => c[0] === 'connection')[1];
+        
+        const socketWithoutSession = { ...mockSocket, request: {} };
+        expect(() => connectionHandler(socketWithoutSession)).not.toThrow();
+    });
+
+    it('should skip secure event if session is missing', () => {
+        initSocketService(mockServer, mockMiddleware);
+        const connectionHandler = (mockIo.on as any).mock.calls.find((c: any) => c[0] === 'connection')[1];
+        connectionHandler(mockSocket);
+
+        const pingHandler = (mockSocket.on as any).mock.calls.find((c: any) => c[0] === 'ping')[1];
+        
+        // Mock socket.request to have no session
+        const originalRequest = mockSocket.request;
+        (mockSocket as any).request = {};
+        
+        pingHandler({ timestamp: 12345 });
+        expect(mockSocket.emit).not.toHaveBeenCalledWith('pong', expect.any(Object));
+        
+        (mockSocket as any).request = originalRequest;
+    });
+
+    it('should handle tick when game is not started', async () => {
+        initSocketService(mockServer, mockMiddleware);
+        const connectionHandler = (mockIo.on as any).mock.calls.find((c: any) => c[0] === 'connection')[1];
+        connectionHandler(mockSocket);
+
+        vi.mocked(sessionStore.get as any).mockImplementation((_id: string, cb: any) => cb(null, {}));
+        vi.mocked(playerService.isGameStarted).mockReturnValue(false);
+
+        vi.advanceTimersByTime(TICK_CONFIG.intervalMs);
+        await vi.runAllTicks();
+
+        expect(playerService.processTick).not.toHaveBeenCalled();
+    });
+
+    it('should handle tick when no changes occur', async () => {
+        initSocketService(mockServer, mockMiddleware);
+        const connectionHandler = (mockIo.on as any).mock.calls.find((c: any) => c[0] === 'connection')[1];
+        connectionHandler(mockSocket);
+
+        const player = { isResting: true };
+        vi.mocked(sessionStore.get as any).mockImplementation((_id: string, cb: any) => cb(null, player));
+        vi.mocked(playerService.isGameStarted).mockReturnValue(true);
+        vi.mocked(playerService.processTick).mockReturnValue(false);
+
+        vi.advanceTimersByTime(TICK_CONFIG.intervalMs);
+        await vi.runAllTicks();
+
+        expect(sessionStore.set).not.toHaveBeenCalled();
+    });
+
+    it('should handle session store save errors gracefully', async () => {
+        initSocketService(mockServer, mockMiddleware);
+        const connectionHandler = (mockIo.on as any).mock.calls.find((c: any) => c[0] === 'connection')[1];
+        connectionHandler(mockSocket);
+        
+        // Clear initial connection emit
+        mockSocket.emit.mockClear();
+
+        const player = { isResting: true };
+        vi.mocked(sessionStore.get as any).mockImplementation((_id: string, cb: any) => cb(null, player));
+        vi.mocked(sessionStore.set as any).mockImplementation((_id: string, _sess: any, cb: any) => cb(new Error('Save failed')));
+        vi.mocked(playerService.isGameStarted).mockReturnValue(true);
+        vi.mocked(playerService.processTick).mockReturnValue(true);
+
+        vi.advanceTimersByTime(TICK_CONFIG.intervalMs);
+        await vi.runAllTicks();
+
+        expect(mockSocket.emit).not.toHaveBeenCalledWith('player_update', expect.any(Object));
+    });
+
+    it('should handle ping with missing payload', () => {
+        initSocketService(mockServer, mockMiddleware);
+        const connectionHandler = (mockIo.on as any).mock.calls.find((c: any) => c[0] === 'connection')[1];
+        connectionHandler(mockSocket);
+
+        const pingHandler = (mockSocket.on as any).mock.calls.find((c: any) => c[0] === 'ping')[1];
+        pingHandler(undefined);
+        expect(mockSocket.emit).not.toHaveBeenCalledWith('pong', expect.any(Object));
+    });
+
+    it('should execute socket middleware', () => {
+        initSocketService(mockServer, mockMiddleware);
+        const middleware = (mockIo.use as any).mock.calls[0][0];
+        const next = vi.fn();
+        middleware(mockSocket, next);
+        expect(mockMiddleware).toHaveBeenCalled();
+    });
+
+    it('should do nothing if initialized with null server', () => {
+        expect(() => initSocketService(null as any, mockMiddleware)).not.toThrow();
     });
 });

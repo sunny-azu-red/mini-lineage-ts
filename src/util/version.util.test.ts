@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { isRelease, getVersion } from './version';
+import * as fs from 'fs';
+import { isRelease, getVersion } from './version.util';
 import { env } from '@/config/env.config';
 
 vi.mock('@/config/env.config', () => ({
@@ -12,6 +13,15 @@ describe('version utility', () => {
     afterEach(() => {
         vi.restoreAllMocks();
         vi.mocked(env).NODE_ENV = 'development';
+    });
+
+    vi.mock('fs', async (importOriginal) => {
+        const actual = await importOriginal<typeof import('fs')>();
+        return {
+            ...actual,
+            existsSync: vi.fn(),
+            readFileSync: vi.fn(),
+        };
     });
 
     describe('isRelease', () => {
@@ -53,6 +63,19 @@ describe('version utility', () => {
 
     describe('getVersion', () => {
         it('returns ⚡ development if the version file is missing', () => {
+            vi.mocked(fs.existsSync).mockReturnValue(false);
+            expect(getVersion()).toBe('⚡ development');
+        });
+
+        it('returns the content of version.txt if it exists', () => {
+            vi.mocked(fs.existsSync).mockReturnValue(true);
+            vi.mocked(fs.readFileSync).mockReturnValue('abc1234');
+            expect(getVersion()).toBe('abc1234');
+        });
+
+        it('returns ⚡ development if reading fails', () => {
+            vi.mocked(fs.existsSync).mockReturnValue(true);
+            vi.mocked(fs.readFileSync).mockImplementation(() => { throw new Error('fail'); });
             expect(getVersion()).toBe('⚡ development');
         });
     });

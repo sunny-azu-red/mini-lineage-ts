@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { lockMiddleware } from './lock.middleware';
-import { acquireSessionLock } from '@/util/lock';
+import { acquireSessionLock } from '@/util/lock.util';
 
-vi.mock('@/util/lock', () => ({
+vi.mock('@/util/lock.util', () => ({
     acquireSessionLock: vi.fn()
 }));
 

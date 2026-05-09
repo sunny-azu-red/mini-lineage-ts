@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { acquireSessionLock } from '@/util/lock';
+import { acquireSessionLock } from '@/util/lock.util';
 import { PlayerState } from '@/interface';
 
 /**

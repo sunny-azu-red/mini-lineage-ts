@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { calculateLevel, calculateAmbushChance } from '@/service/math.service';
-import { formatNumber, makeFlash } from '@/util';
+import { formatNumber } from '@/util/format.util';
+import { makeFlash } from '@/util/game.util';
 import { renderBattlegroundView } from '@/view/battle.view';
 import { simulateBattle } from '@/service/battle.service';
 import { resolveBattleOutcome } from '@/service/player.service';

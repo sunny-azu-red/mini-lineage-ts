@@ -2,7 +2,7 @@ import { readTemplate, render } from './base.view';
 import { renderPage } from './layout.view';
 import { PlayerState, FlashMessage } from '@/interface';
 import { WEAPONS, ARMORS, FOODS } from '@/constant/game.constant';
-import { formatShopItems } from '@/util';
+import { formatShopItems } from '@/util/format.util';
 
 const weaponsShopTpl = readTemplate('weapons-shop.ejs');
 const armorsShopTpl = readTemplate('armors-shop.ejs');

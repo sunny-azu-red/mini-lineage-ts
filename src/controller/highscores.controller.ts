@@ -3,7 +3,7 @@ import { calculateLevel } from '@/service/math.service';
 import { renderHighscoresView } from '@/view/highscores.view';
 import { highscoreRepository } from '@/repository/highscore.repository';
 import { RACES } from '@/constant/game.constant';
-import { slugify } from '@/util';
+import { slugify } from '@/util/format.util';
 
 export const postHighscores = async (req: Request, res: Response) => {
     const player = res.locals.player;

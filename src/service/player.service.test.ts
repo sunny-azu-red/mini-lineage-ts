@@ -158,6 +158,19 @@ describe('purchaseItem — armor', () => {
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_armors_bought');
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_adena_spent', 500);
     });
+
+    it('fails when already owning the armor', () => {
+        const p = makePlayer({ adena: 1000, armorId: 1 });
+        const result = purchaseItem(p, ItemType.Armor, 1);
+        expect(result?.success).toBe(false);
+        expect(p.adena).toBe(1000);
+    });
+
+    it('returns null when item ID is invalid', () => {
+        const p = makePlayer();
+        const result = purchaseItem(p, ItemType.Weapon, 999);
+        expect(result).toBeNull();
+    });
 });
 describe('purchaseItem — food', () => {
     it('heals the player on purchase and increments stats', () => {

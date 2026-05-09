@@ -1,6 +1,6 @@
 import { readTemplate, render } from './base.view';
 import { renderSimplePage } from './layout.view';
-import { formatAdena, formatNumber, slugify } from '@/util';
+import { formatAdena, formatNumber, slugify } from '@/util/format.util';
 import { RACES } from '@/constant/game.constant';
 import { HighscoreEntry } from '@/interface';
 

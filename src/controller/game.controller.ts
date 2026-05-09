@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { renderGameStartView, renderHomeView } from '@/view/game.view';
 import { initializePlayer, isGameStarted } from '@/service/player.service';
-import { makeFlash } from '@/util';
+import { makeFlash } from '@/util/game.util';
 import { RACES } from '@/constant/game.constant';
 import { GameStartSchema } from '@/schema/game.schema';
 import { saveAndRedirect } from '@/middleware/session.middleware';

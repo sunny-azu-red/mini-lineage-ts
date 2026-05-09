@@ -1,6 +1,6 @@
 import { readTemplate, render } from './base.view';
 import { renderSimplePage } from './layout.view';
-import { formatAdena, pluralize, formatNumber, fillTemplate } from '@/util';
+import { formatAdena, pluralize, formatNumber, fillTemplate } from '@/util/format.util';
 import { Statistics } from '@/interface';
 
 const statisticsTpl = readTemplate('statistics.ejs');

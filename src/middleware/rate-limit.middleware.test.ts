@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { skipIfDev, battleRateLimitHandler, shopRateLimitHandler } from './rate-limit.middleware';
-import * as version from '@/util/version';
+import * as version from '@/util/version.util';
 import * as rateLimitView from '@/view/rate-limit.view';
 
 // mock the constant as it might be 'development' or a real SHA

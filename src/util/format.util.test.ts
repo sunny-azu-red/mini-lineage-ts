@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatAdena, formatNumber, pluralize, fillTemplate, makeFlash, makePurchaseFlash, slugify } from './index';
+import { formatAdena, formatNumber, pluralize, fillTemplate, slugify, formatShopItems } from './format.util';
 
 describe('formatAdena', () => {
     it('returns plain number below 1k', () => expect(formatAdena(999)).toBe('999'));
@@ -25,7 +25,12 @@ describe('formatNumber', () => {
 
 describe('pluralize', () => {
     it('uses "a" for consonant-starting words', () => expect(pluralize('Human', 'Humans', 1)).toBe('a Human'));
-    it('uses "an" for vowel-starting words', () => expect(pluralize('Elf', 'Elves', 1)).toBe('an Elf'));
+    it('uses "an" for vowel-starting words (e, i, o, u)', () => {
+        expect(pluralize('Elf', 'Elves', 1)).toBe('an Elf');
+        expect(pluralize('Imp', 'Imps', 1)).toBe('an Imp');
+        expect(pluralize('Orc', 'Orcs', 1)).toBe('an Orc');
+        expect(pluralize('Undead', 'Undead', 1)).toBe('an Undead');
+    });
     it('uses count + plural for multiple', () => expect(pluralize('Human', 'Humans', 3)).toBe('3 Humans'));
     it('includes emoji when provided', () => expect(pluralize('Human', 'Humans', 2, '🧙')).toBe('2 🧙 Humans'));
     it('includes emoji in singular', () => expect(pluralize('Elf', 'Elves', 1, '🧝')).toBe('an 🧝 Elf'));
@@ -38,35 +43,16 @@ describe('fillTemplate', () => {
     it('leaves missing keys as-is', () => {
         expect(fillTemplate('{missing}', {})).toBe('{missing}');
     });
-    it('handles ternary with truthy condition', () => {
+    it('handles ternary with single quotes', () => {
         expect(fillTemplate("{flag ? 'yes' : 'no'}", { flag: true })).toBe('yes');
-    });
-    it('handles ternary with falsy condition', () => {
         expect(fillTemplate("{flag ? 'yes' : 'no'}", { flag: false })).toBe('no');
+    });
+    it('handles ternary with double quotes', () => {
+        expect(fillTemplate('{flag ? "yes" : "no"}', { flag: true })).toBe('yes');
+        expect(fillTemplate('{flag ? "yes" : "no"}', { flag: false })).toBe('no');
     });
     it('returns empty string for empty template', () => {
         expect(fillTemplate('', {})).toBe('');
-    });
-});
-
-describe('makeFlash', () => {
-    it('converts newlines to <br>', () => {
-        const flash = makeFlash('line1\nline2', 'info');
-        expect(flash.text).toBe('line1<br>line2');
-    });
-    it('forwards the type', () => {
-        expect(makeFlash('msg', 'danger').type).toBe('danger');
-    });
-});
-
-describe('makePurchaseFlash', () => {
-    it('returns success type on success', () => {
-        const flash = makePurchaseFlash({ success: true, text: 'bought!' });
-        expect(flash.type).toBe('success');
-    });
-    it('returns danger type on failure', () => {
-        const flash = makePurchaseFlash({ success: false, text: 'not enough adena' });
-        expect(flash.type).toBe('danger');
     });
 });
 
@@ -74,4 +60,22 @@ describe('slugify', () => {
     it('lowercases and replaces spaces', () => expect(slugify('Hello World')).toBe('hello-world'));
     it('removes special characters', () => expect(slugify('Orcs & Humans!')).toBe('orcs-humans'));
     it('collapses multiple dashes', () => expect(slugify('test---test')).toBe('test-test'));
+});
+
+describe('formatShopItems', () => {
+    it('formats a list of shop items correctly', () => {
+        const items = [
+            { id: 0, emoji: '🗡️', name: 'Dagger', stat: 10, cost: 100, regen: 0, crit: 5 }
+        ] as any;
+        const formatted = formatShopItems(items);
+        expect(formatted[0]).toEqual({
+            id: 0,
+            emoji: '🗡️',
+            name: 'Dagger',
+            regen: 0,
+            crit: 5,
+            statFormatted: '10',
+            costFormatted: '100'
+        });
+    });
 });
