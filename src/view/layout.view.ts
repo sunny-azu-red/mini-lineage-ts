@@ -85,8 +85,10 @@ export function renderInventory(player: PlayerState): string {
     return render(inventoryTpl, {
         armorEmoji: armor.emoji,
         armorStr: armor.name,
+        armorStat: armor.regen,
         weaponEmoji: weapon.emoji,
         weaponStr: weapon.name,
+        weaponStat: weapon.crit,
     });
 }
 

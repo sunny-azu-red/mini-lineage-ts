@@ -1,7 +1,21 @@
 <div class="panel" style="margin-top: 12px;">
     <div class="panel-header">Inventory</div>
     <div class="panel-body small">
-        <div class="stat-row"><span class="stat-value" title="Equipped Armor"><%= armorEmoji %> <%= armorStr %></span></div>
-        <div class="stat-row"><span class="stat-value" title="Equipped Weapon"><%= weaponEmoji %> <%= weaponStr %></span></div>
+        <div class="stat-row">
+            <span class="stat-value" title="Equipped Armor">
+                <%= armorEmoji %> <%= armorStr %>
+                <% if (armorStat > 0) { %>
+                    <span class="heal">+<%= armorStat %></span>
+                <% } %>
+            </span>
+        </div>
+        <div class="stat-row">
+            <span class="stat-value" title="Equipped Weapon">
+                <%= weaponEmoji %> <%= weaponStr %>
+                <% if (weaponStat > 0) { %>
+                    <span class="crit"><%= weaponStat %>%</span>
+                <% } %>
+            </span>
+        </div>
     </div>
 </div>
