@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { lockMiddleware } from './lock.middleware';
-import { acquireSessionLock } from '@/util/lock.util';
+import { acquireSessionLock } from '@/util/lock';
 
-vi.mock('@/util/lock.util', () => ({
+vi.mock('@/util/lock', () => ({
     acquireSessionLock: vi.fn()
 }));
 
@@ -40,9 +40,15 @@ describe('lockMiddleware', () => {
         await lockMiddleware(req, res, next);
 
         expect(acquireSessionLock).toHaveBeenCalledWith('test-session-id');
-        expect(res.on).toHaveBeenCalledWith('finish', release);
+        expect(res.on).toHaveBeenCalledWith('finish', expect.any(Function));
+        expect(res.on).toHaveBeenCalledWith('close', expect.any(Function));
         expect(req.session.reload).toHaveBeenCalled();
         expect(next).toHaveBeenCalled();
+    });
+
+    it('should populate res.locals.player after reload', async () => {
+        await lockMiddleware(req, res, next);
+        expect(res.locals.player).toBe(req.session);
     });
 
     it('should handle session reload error and release lock', async () => {
@@ -64,5 +70,34 @@ describe('lockMiddleware', () => {
         await lockMiddleware(req, res, next);
 
         expect(next).toHaveBeenCalledWith(error);
+    });
+
+    it('should only release the lock once even if both finish and close fire', async () => {
+        const eventHandlers: Record<string, Function> = {};
+        res.on = vi.fn((event: string, handler: Function) => {
+            eventHandlers[event] = handler;
+        });
+
+        await lockMiddleware(req, res, next);
+
+        // simulate both events firing (e.g. normal completion then socket close)
+        eventHandlers['finish']();
+        eventHandlers['close']();
+
+        expect(release).toHaveBeenCalledTimes(1);
+    });
+
+    it('should release lock on close even if finish never fires (client abort)', async () => {
+        const eventHandlers: Record<string, Function> = {};
+        res.on = vi.fn((event: string, handler: Function) => {
+            eventHandlers[event] = handler;
+        });
+
+        await lockMiddleware(req, res, next);
+
+        // simulate only close firing (client disconnected)
+        eventHandlers['close']();
+
+        expect(release).toHaveBeenCalledTimes(1);
     });
 });

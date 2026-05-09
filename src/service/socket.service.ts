@@ -2,7 +2,7 @@ import { Server as HttpServer } from 'http';
 import { Server as SocketIOServer, Socket } from 'socket.io';
 import { RequestHandler } from 'express';
 import { sessionStore } from '@/config/database.config';
-import { acquireSessionLock } from '@/util/lock.util';
+import { acquireSessionLock } from '@/util/lock';
 import { TICK_CONFIG, RACES } from '@/constant/game.constant';
 import { processTick, isGameStarted } from '@/service/player.service';
 import { PlayerState } from '@/interface';

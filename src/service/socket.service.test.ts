@@ -43,7 +43,7 @@ vi.mock('@/service/player.service', () => ({
     isGameStarted: vi.fn(),
 }));
 
-vi.mock('@/util/lock.util', () => ({
+vi.mock('@/util/lock', () => ({
     acquireSessionLock: vi.fn().mockResolvedValue(() => {}),
 }));
 

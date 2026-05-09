@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { acquireSessionLock } from '@/util/lock.util';
+import { acquireSessionLock } from '@/util/lock';
 import { PlayerState } from '@/interface';
 
 /**
@@ -14,13 +14,22 @@ export const lockMiddleware = (req: Request, res: Response, next: NextFunction) 
         return next();
 
     return acquireSessionLock(sessionId).then((release) => {
-        // release the lock when the response is finished (success or error)
-        res.on('finish', release);
+        // wrap release so it can only fire once per request
+        let released = false;
+        const safeRelease = () => {
+            if (released) return;
+            released = true;
+            release();
+        };
+
+        // release on normal completion or client disconnect
+        res.on('finish', safeRelease);
+        res.on('close', safeRelease);
 
         // reload the session from the store to get the absolute latest data
         req.session.reload((err) => {
             if (err) {
-                release(); // Ensure lock is released if reload fails
+                safeRelease();
                 return next(err);
             }
 

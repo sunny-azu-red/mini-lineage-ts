@@ -41,13 +41,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const actionables = document.querySelectorAll('button, input[type="submit"], a.btn');
 
     actionables.forEach(el => {
-        el.addEventListener('click', () => {
-            if (el.classList.contains('btn-disabled'))
+        el.addEventListener('click', (e) => {
+            if (el.classList.contains('btn-disabled')) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
                 return;
+            }
 
-            el.classList.add('btn-disabled');
-            if (el instanceof HTMLButtonElement || el instanceof HTMLInputElement)
-                el.disabled = true;
+            // Defer disabling to the next tick so the browser can process 
+            // the current click (e.g. form submission, link navigation)
+            setTimeout(() => {
+                el.classList.add('btn-disabled');
+                if (el instanceof HTMLButtonElement || el instanceof HTMLInputElement)
+                    el.disabled = true;
+            }, 0);
 
             // safety re-enable in case the page doesn't navigate (e.g. error, SPA)
             setTimeout(() => {
