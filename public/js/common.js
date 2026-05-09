@@ -1,4 +1,6 @@
 const formatNumber = (num) => num.toLocaleString('en-US');
+const getLowHealthThreshold = (maxHp) => Math.floor(maxHp * 0.25);
+const isLowHealth = (health, maxHp) => health > 0 && health <= getLowHealthThreshold(maxHp);
 
 function animateValue(el, start, end, duration) {
     let startTimestamp = null;
@@ -48,8 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Defer disabling to the next tick so the browser can process 
-            // the current click (e.g. form submission, link navigation)
+            // defer disabling to the next tick so the browser can process the current click (e.g. form submission, link navigation)
             setTimeout(() => {
                 el.classList.add('btn-disabled');
                 if (el instanceof HTMLButtonElement || el instanceof HTMLInputElement)

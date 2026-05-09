@@ -57,7 +57,19 @@ export function initSocketService(server: HttpServer, sessionMiddleware: Request
         const req = socket.request as any;
         const sessionId: string | undefined = req.session?.id;
 
+        // sync state and track this socket for this session ID
         if (sessionId) {
+            // initial update to sync state after page load (prevents stale UI)
+            sessionStore.get(sessionId, (err, session) => {
+                if (err || !session) return;
+                const player = session as PlayerState;
+                socket.emit('player_update', {
+                    health: player.health,
+                    maxHealth: player.raceId !== undefined ? RACES[player.raceId].startHealth : null,
+                });
+            });
+
+            // tracker logic
             let tracker = sessionTracker.get(sessionId);
             if (!tracker) {
                 tracker = { socketIds: new Set(), lastSeen: Date.now() };

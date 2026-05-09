@@ -9,10 +9,15 @@
         const newHp = data.health;
         const maxHp = data.maxHealth;
 
-        // animate the HP value counter
+        // read the currently displayed HP from the DOM
         const hpEl = document.querySelector('#hp-bar ~ .bar-text .animate-val');
         const prevHp = hpEl ? (parseInt(hpEl.innerText.replace(/,/g, '')) || newHp) : newHp;
 
+        // skip if the HP hasn't actually changed (e.g. initial sync matches server-rendered HTML)
+        if (newHp === prevHp)
+            return;
+
+        // animate the HP value counter
         if (hpEl) {
             animateValue(hpEl, prevHp, newHp, 600);
             hpEl.dataset.val = newHp;
@@ -27,10 +32,16 @@
                 hpBar.style.width = pct + '%';
             }
 
-            // remove the danger class if HP is no longer critically low (below 25%)
-            const barRow = document.querySelector('.stat-row.bar.danger');
-            if (barRow && newHp / maxHp > 0.25)
-                barRow.classList.remove('danger');
+            // remove the danger class and low-HP warning if HP is no longer critically low
+            if (maxHp && !isLowHealth(newHp, maxHp)) {
+                const barRow = document.querySelector('.stat-row.bar.danger');
+                if (barRow)
+                    barRow.classList.remove('danger');
+
+                const lowHpAlert = document.getElementById('low-health-alert');
+                if (lowHpAlert)
+                    lowHpAlert.remove();
+            }
         }
 
         // trigger regen shine animation when HP increases
