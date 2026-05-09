@@ -24,7 +24,7 @@ app.use(helmet());
 app.use(compression());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(staticPath));
-app.use(staticRouter);
+app.use('/', staticRouter);
 app.use(sessionMiddleware);
 app.use(lockMiddleware);
 app.use(zoneMiddleware);

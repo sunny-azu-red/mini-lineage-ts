@@ -29,8 +29,9 @@ export const lockMiddleware = (req: Request, res: Response, next: NextFunction) 
         // reload the session from the store to get the absolute latest data
         req.session.reload((err) => {
             if (err) {
+                // session not yet persisted or expired — continue with in-memory session
                 safeRelease();
-                return next(err);
+                return next();
             }
 
             res.locals.player = req.session as PlayerState;

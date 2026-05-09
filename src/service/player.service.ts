@@ -27,14 +27,14 @@ export function initializePlayer(player: PlayerState, race: Race, name: string):
     void statisticsRepository.increment('total_players');
     void statisticsRepository.increment('total_adena', player.adena);
 
-    const builds = ['a slim', 'a lean', 'an average', 'a fit', 'a stocky', 'a broad', 'a round'];
+    const builds = ['a hardy', 'a wiry', 'a sturdy', 'a fit', 'a rugged', 'a robust', 'a solid'];
     const build = randomElement(builds);
     const age = randomInt(9, 69);
     const definition = age <= 23 ? 'youth' : (age <= 54 ? 'adult' : 'elder');
     const welcome = fillTemplate(randomElement(WELCOME_MESSAGES), { raceLabel: race.label });
 
-    const text = `You have selected to be ${race.emoji} ${race.label}, ${welcome}\n` +
-        `You are ${build} ${definition}, aged ${age}, and you came here with 🪙 ${formatAdena(player.adena)} Adena.`;
+    const text = `You have chosen the ${race.emoji} ${race.label}, ${welcome}\n` +
+        `You are ${build} ${definition} of ${age} seasons, bearing a 🪙 ${formatAdena(player.adena)} Adena tribute.`;
 
     return { text, type: 'info' };
 }

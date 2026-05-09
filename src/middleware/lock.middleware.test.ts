@@ -51,7 +51,7 @@ describe('lockMiddleware', () => {
         expect(res.locals.player).toBe(req.session);
     });
 
-    it('should handle session reload error and release lock', async () => {
+    it('should gracefully handle session reload error and continue', async () => {
         const error = new Error('Reload failed');
         req.session.reload.mockImplementationOnce((cb: any) => cb(error));
 
@@ -60,7 +60,7 @@ describe('lockMiddleware', () => {
         expect(acquireSessionLock).toHaveBeenCalled();
         expect(req.session.reload).toHaveBeenCalled();
         expect(release).toHaveBeenCalled();
-        expect(next).toHaveBeenCalledWith(error);
+        expect(next).toHaveBeenCalledWith();
     });
 
     it('should handle acquireSessionLock error', async () => {
