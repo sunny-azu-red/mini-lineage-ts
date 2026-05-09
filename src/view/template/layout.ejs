@@ -21,7 +21,6 @@
             <link href="/css/buttons.css" rel="stylesheet" type="text/css">
             <link href="/css/components.css" rel="stylesheet" type="text/css">
         <% } %>
-        <script>window.CONFIG = <%- JSON.stringify(config) %>;</script>
     </head>
 
     <body>
@@ -74,6 +73,7 @@
 
             </div>
         </div>
+        <script src="/js/config.js"></script>
         <% if (isRelease) { %>
             <script src="/script.js"></script>
         <% } else { %>

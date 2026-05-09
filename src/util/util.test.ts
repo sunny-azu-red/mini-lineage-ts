@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatAdena, formatNumber, pluralize, fillTemplate, makeFlash, makePurchaseFlash, slugify, getSharedConfig } from './index';
+import { formatAdena, formatNumber, pluralize, fillTemplate, makeFlash, makePurchaseFlash, slugify } from './index';
 
 describe('formatAdena', () => {
     it('returns plain number below 1k', () => expect(formatAdena(999)).toBe('999'));
@@ -74,14 +74,4 @@ describe('slugify', () => {
     it('lowercases and replaces spaces', () => expect(slugify('Hello World')).toBe('hello-world'));
     it('removes special characters', () => expect(slugify('Orcs & Humans!')).toBe('orcs-humans'));
     it('collapses multiple dashes', () => expect(slugify('test---test')).toBe('test-test'));
-});
-
-describe('getSharedConfig', () => {
-    it('returns an object with lowHealthThreshold and locale', () => {
-        const config = getSharedConfig();
-        expect(config).toHaveProperty('lowHealthThreshold');
-        expect(config).toHaveProperty('locale');
-        expect(typeof config.lowHealthThreshold).toBe('number');
-        expect(typeof config.locale).toBe('string');
-    });
 });
