@@ -1,5 +1,5 @@
-const formatNumber = (num) => num.toLocaleString('en-US');
-const getLowHealthThreshold = (maxHp) => Math.floor(maxHp * 0.25);
+const formatNumber = (num) => num.toLocaleString(window.CONFIG.locale);
+const getLowHealthThreshold = (maxHp) => Math.floor(maxHp * window.CONFIG.lowHealthThreshold);
 const isLowHealth = (health, maxHp) => health > 0 && health <= getLowHealthThreshold(maxHp);
 
 function animateValue(el, start, end, duration) {

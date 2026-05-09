@@ -5,6 +5,7 @@ export const GAME_VERSION = getVersion();
 export const REPO_COMMIT_URL = 'https://github.com/sunny-azu-red/mini-lineage-remastered/commit/';
 
 export const MAX_LEVEL = 80;
+export const LOCALE = 'en-US';
 
 export const RACES = [
     {
@@ -91,4 +92,11 @@ export const TICK_CONFIG = {
     intervalMs: 5_000,
     combatZones: ['/battle', '/suicide', '/death'],
     restingZones: ['/', '/shop/weapons', '/shop/armors', '/inn'],
+} as const;
+
+/**
+ * HP Configuration
+ */
+export const HP_CONFIG = {
+    lowHealthThreshold: 0.25,
 } as const;

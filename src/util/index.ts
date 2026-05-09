@@ -1,4 +1,5 @@
 import { FlashMessage, Item, PurchaseResult } from '@/interface';
+import { LOCALE, HP_CONFIG } from '@/constant/game.constant';
 import { randomInt } from '@/service/math.service';
 
 export function randomElement<T>(array: T[]): T {
@@ -24,7 +25,7 @@ export function formatAdena(adena: number): string {
 }
 
 export function formatNumber(num: number): string {
-    return num.toLocaleString('en-US');
+    return num.toLocaleString(LOCALE);
 }
 
 export function pluralize(singular: string, plural: string, count: number, emoji?: string): string {
@@ -82,3 +83,8 @@ export function slugify(text: string): string {
         .replace(/[^\w-]+/g, '')  // Remove all non-word chars
         .replace(/--+/g, '-');    // Replace multiple - with single -
 }
+
+export const getSharedConfig = () => ({
+    lowHealthThreshold: HP_CONFIG.lowHealthThreshold,
+    locale: LOCALE,
+});

@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
+import { HP_CONFIG } from '@/constant/game.constant';
 import {
     calculateXpForLevel,
     calculateLevel,
@@ -54,13 +55,21 @@ describe('calculatePercentage', () => {
 });
 
 describe('getLowHealthThreshold', () => {
-    it('returns 25 for maxHp 100', () => expect(getLowHealthThreshold(100)).toBe(25));
-    it('returns 37 for maxHp 150', () => expect(getLowHealthThreshold(150)).toBe(37));
+    it('returns correctly based on HP_CONFIG', () => {
+        expect(getLowHealthThreshold(100)).toBe(Math.floor(100 * HP_CONFIG.lowHealthThreshold));
+        expect(getLowHealthThreshold(150)).toBe(Math.floor(150 * HP_CONFIG.lowHealthThreshold));
+    });
 });
 
 describe('isLowHealth', () => {
-    it('returns true at exactly the threshold', () => expect(isLowHealth(25, 100)).toBe(true));
-    it('returns false one above threshold', () => expect(isLowHealth(26, 100)).toBe(false));
+    it('returns true at exactly the threshold', () => {
+        const threshold = getLowHealthThreshold(100);
+        expect(isLowHealth(threshold, 100)).toBe(true);
+    });
+    it('returns false one above threshold', () => {
+        const threshold = getLowHealthThreshold(100);
+        expect(isLowHealth(threshold + 1, 100)).toBe(false);
+    });
     it('returns false at 0 hp (dead, not low)', () => expect(isLowHealth(0, 100)).toBe(false));
     it('returns false at full hp', () => expect(isLowHealth(100, 100)).toBe(false));
 });
