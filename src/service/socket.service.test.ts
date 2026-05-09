@@ -43,6 +43,10 @@ vi.mock('@/service/player.service', () => ({
     isGameStarted: vi.fn(),
 }));
 
+vi.mock('@/util/lock.util', () => ({
+    acquireSessionLock: vi.fn().mockResolvedValue(() => {}),
+}));
+
 import { initSocketService } from './socket.service';
 import { sessionStore } from '@/config/database.config';
 import * as playerService from '@/service/player.service';

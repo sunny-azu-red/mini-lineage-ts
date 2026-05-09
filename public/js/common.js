@@ -31,4 +31,30 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    /**
+     * Global debouncing — prevents double-clicks on any actionable element.
+     * Targets all <button>, <input[type=submit]>, and <a class="btn"> elements.
+     * Disables the element on first click and re-enables after a safety timeout.
+     */
+    const SAFETY_TIMEOUT_MS = 5000;
+    const actionables = document.querySelectorAll('button, input[type="submit"], a.btn');
+
+    actionables.forEach(el => {
+        el.addEventListener('click', () => {
+            if (el.classList.contains('btn-disabled'))
+                return;
+
+            el.classList.add('btn-disabled');
+            if (el instanceof HTMLButtonElement || el instanceof HTMLInputElement)
+                el.disabled = true;
+
+            // safety re-enable in case the page doesn't navigate (e.g. error, SPA)
+            setTimeout(() => {
+                el.classList.remove('btn-disabled');
+                if (el instanceof HTMLButtonElement || el instanceof HTMLInputElement)
+                    el.disabled = false;
+            }, SAFETY_TIMEOUT_MS);
+        });
+    });
 });
