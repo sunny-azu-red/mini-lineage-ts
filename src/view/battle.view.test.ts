@@ -71,10 +71,23 @@ describe('battle.view', () => {
             
             const renderMock = vi.mocked(baseView.render);
             const lastCallArgs = renderMock.mock.calls[renderMock.mock.calls.length - 1][1] as any;
-            // The mock returns fixed string, but we can verify the logic by checking if randomElement was called with level up templates
-            // Since we can't easily check internal calls to randomElement without more mocks, 
-            // we at least ensure it doesn't crash and returns the expected structure.
             expect(lastCallArgs?.outcomeLine).toBeDefined();
+        });
+
+        it('uses "Face your Foe!" text for single ambush enemy', () => {
+            const p = makePlayer({ ambushed: true });
+            renderBattlegroundView(p, makeResults({ enemiesKilled: 1 }));
+            const renderMock = vi.mocked(baseView.render);
+            const lastCallArgs = renderMock.mock.calls[renderMock.mock.calls.length - 1][1] as any;
+            expect(lastCallArgs?.fightText).toBe('Face your Foe!');
+        });
+
+        it('uses "Fight them!" text for multiple ambush enemies', () => {
+            const p = makePlayer({ ambushed: true });
+            renderBattlegroundView(p, makeResults({ enemiesKilled: 10 }));
+            const renderMock = vi.mocked(baseView.render);
+            const lastCallArgs = renderMock.mock.calls[renderMock.mock.calls.length - 1][1] as any;
+            expect(lastCallArgs?.fightText).toBe('Fight them!');
         });
     });
 });

@@ -60,4 +60,36 @@ describe('debugMiddleware', () => {
 
         expect(logger.debug).not.toHaveBeenCalled();
     });
+
+    it('should handle missing session during debug log', () => {
+        vi.spyOn(version, 'isRelease').mockReturnValue(false);
+        const req = { method: 'GET', url: '/', sessionID: 'xyz' }; // No session
+        let finishHandler: Function = () => { };
+        const res = {
+            on: vi.fn((event, handler) => { if (event === 'finish') finishHandler = handler; }),
+            statusCode: 200
+        };
+        const next = vi.fn();
+
+        debugMiddleware(req as any, res as any, next);
+        finishHandler();
+
+        expect(logger.debug).toHaveBeenCalledWith({}, expect.any(String));
+    });
+
+    it('should handle empty session during debug log', () => {
+        vi.spyOn(version, 'isRelease').mockReturnValue(false);
+        const req = { method: 'GET', url: '/', sessionID: 'xyz', session: {} };
+        let finishHandler: Function = () => { };
+        const res = {
+            on: vi.fn((event, handler) => { if (event === 'finish') finishHandler = handler; }),
+            statusCode: 200
+        };
+        const next = vi.fn();
+
+        debugMiddleware(req as any, res as any, next);
+        finishHandler();
+
+        expect(logger.debug).toHaveBeenCalledWith({}, expect.any(String));
+    });
 });

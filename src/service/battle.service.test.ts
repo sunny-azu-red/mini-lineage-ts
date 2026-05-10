@@ -45,6 +45,26 @@ describe('simulateBattle', () => {
 
     it('falls back gracefully on invalid weapon/armor ids', () => {
         expect(() => simulateBattle(0, 999, 999)).not.toThrow();
+        const result = simulateBattle(0, 999, 999);
+        expect(result.enemiesKilled).toBeGreaterThan(0);
+        
+        // Also test just one invalid to ensure individual fallbacks are hit
+        const result2 = simulateBattle(0, 1, 999);
+        expect(result2.damageBlocked).toBeGreaterThanOrEqual(0);
+        const result3 = simulateBattle(0, 999, 1);
+        expect(result3.enemiesKilled).toBeGreaterThan(0);
+    });
+
+    it('falls back gracefully on invalid raceId', () => {
+        expect(() => simulateBattle(999, 0, 0)).not.toThrow();
+        const result = simulateBattle(999, 0, 0);
+        expect(result.enemiesKilled).toBeGreaterThan(0);
+    });
+
+    it('covers crit fallbacks for races and weapons with no crit stat', () => {
+        // Orc has crit: 0, Brawler's Fists has crit: undefined
+        const result = simulateBattle(1, 0, 0);
+        expect(result.isCritical).toBeDefined();
     });
 
     it('sets isCritical to false and does not multiply enemiesKilled on normal hit', () => {

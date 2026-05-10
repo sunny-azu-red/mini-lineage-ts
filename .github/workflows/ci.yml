@@ -21,7 +21,7 @@ jobs:
     env:
       NODE_ENV: test
       PORT: 3000
-      SESSION_SECRET: ci-secret-not-used-in-tests
+      SESSION_SECRET: your-secret-here
       DB_HOST: 127.0.0.1
       DB_PORT: 3306
       DB_DATABASE: lineage_remastered

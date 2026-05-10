@@ -49,5 +49,15 @@ describe('statisticsRepository', () => {
             const stats = await statisticsRepository.getAll();
             expect(stats?.total_deaths).toBe(0);
         });
+
+        it('should ignore unknown fields from database', async () => {
+            vi.mocked(dbPool.execute).mockResolvedValue([[
+                { name: 'total_players', value: 5 },
+                { name: 'unknown_field', value: 99 }
+            ]] as any);
+            const stats = await statisticsRepository.getAll();
+            expect((stats as any).unknown_field).toBeUndefined();
+        });
+
     });
 });

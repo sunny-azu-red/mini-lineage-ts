@@ -273,4 +273,68 @@ describe('socketService', () => {
     it('should do nothing if initialized with null server', () => {
         expect(() => initSocketService(null as any, mockMiddleware)).not.toThrow();
     });
+
+    it('should handle disconnect without sessionId', () => {
+        initSocketService(mockServer, mockMiddleware);
+        const connectionHandler = (mockIo.on as any).mock.calls.find((c: any) => c[0] === 'connection')[1];
+        
+        // Mock socket without session
+        const socketNoSession = { ...mockSocket, id: 'no-sid', on: vi.fn(), request: {} };
+        connectionHandler(socketNoSession);
+        
+        const disconnectHandler = (socketNoSession.on as any).mock.calls.find((c: any) => c[0] === 'disconnect')[1];
+        expect(() => disconnectHandler()).not.toThrow();
+    });
+
+    it('should handle disconnect with sessionId and existing tracker', () => {
+        initSocketService(mockServer, mockMiddleware);
+        const connectionHandler = (mockIo.on as any).mock.calls.find((c: any) => c[0] === 'connection')[1];
+        connectionHandler(mockSocket);
+
+        const disconnectHandler = (mockSocket.on as any).mock.calls.find((c: any) => c[0] === 'disconnect')[1];
+        expect(() => disconnectHandler()).not.toThrow();
+    });
+
+    it('should handle disconnect with sessionId but missing tracker', () => {
+        initSocketService(mockServer, mockMiddleware);
+        const connectionHandler = (mockIo.on as any).mock.calls.find((c: any) => c[0] === 'connection')[1];
+        connectionHandler(mockSocket);
+        
+        // This is a bit tricky since tracker is private. 
+        // But we can just call disconnect twice to simulate it being gone or similar.
+        const disconnectHandler = (mockSocket.on as any).mock.calls.find((c: any) => c[0] === 'disconnect')[1];
+        disconnectHandler();
+        expect(() => disconnectHandler()).not.toThrow();
+    });
+
+    it('should skip update if target socket is missing during tick', async () => {
+        initSocketService(mockServer, mockMiddleware);
+        // Simulate connection and clear initial emit
+        const connectionHandler = (mockIo.on as any).mock.calls.find((c: any) => c[0] === 'connection')[1];
+        connectionHandler(mockSocket);
+        
+        // Add a second socket that will be missing
+        const secondSocket = { ...mockSocket, id: 'socket-2' };
+        connectionHandler(secondSocket);
+        
+        mockSocket.emit.mockClear();
+
+        // Mock io.sockets.sockets.get to return undefined for socket-2
+        vi.mocked(mockIo.sockets.sockets.get).mockImplementation(((id: string) => {
+            if (id === 'socket-2') return undefined as any;
+            return mockSocket as any;
+        }) as any);
+
+        const player = { isResting: true, health: 50, raceId: 0 };
+        const session = { player };
+        vi.mocked(sessionStore.get as any).mockImplementation((_id: string, cb: any) => cb(null, session));
+        vi.mocked(playerService.isGameStarted).mockReturnValue(true);
+        vi.mocked(playerService.processTick).mockReturnValue(true);
+
+        vi.advanceTimersByTime(TICK_CONFIG.intervalMs);
+        await vi.runAllTicks();
+
+        expect(mockSocket.emit).toHaveBeenCalledWith('player_update', expect.any(Object));
+        // We hit the targetSocket check branch!
+    });
 });
