@@ -13,5 +13,6 @@ export const errorMiddleware = (err: any, req: Request, res: Response, next: Nex
     const detail = !isRelease(GAME_VERSION) ? (err?.message ?? String(err)) : null;
     const content = render(errorTpl, { detail });
 
-    res.status(500).send(renderSimplePage('Something went wrong', content, null, res.locals.player));
+    const status = err.status || 500;
+    res.status(status).send(renderSimplePage('Something went wrong', content, null, res.locals.player));
 };

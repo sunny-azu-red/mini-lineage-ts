@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import compression from 'compression';
 import staticRouter from '@/route/static.route';
 import gameRouter from '@/route/game.route';
+import errorRouter from '@/route/error.route';
 import { sessionMiddleware } from '@/middleware/session.middleware';
 import { lockMiddleware } from '@/middleware/lock.middleware';
 import { zoneMiddleware } from '@/middleware/zone.middleware';
@@ -32,6 +33,7 @@ app.use(debugMiddleware);
 app.use(flashMiddleware);
 app.use(cheatMiddleware);
 app.use('/', gameRouter);
+app.use('/', errorRouter);
 app.use(errorMiddleware);
 
 export default app;
