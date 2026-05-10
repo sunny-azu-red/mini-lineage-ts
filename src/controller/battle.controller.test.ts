@@ -5,6 +5,7 @@ import * as playerService from '@/service/player.service';
 import * as mathService from '@/service/math.service';
 import { statisticsRepository } from '@/repository/statistics.repository';
 import * as sessionMiddleware from '@/middleware/session.middleware';
+import * as battleView from '@/view/battle.view';
 
 vi.mock('@/service/battle.service', () => ({
     simulateBattle: vi.fn(),
@@ -14,10 +15,14 @@ vi.mock('@/service/player.service', () => ({
     resolveBattleOutcome: vi.fn(),
 }));
 
-vi.mock('@/service/math.service', () => ({
-    randomInt: vi.fn(),
-    calculateAmbushChance: vi.fn(),
-}));
+vi.mock('@/service/math.service', async (importOriginal) => {
+    const actual = await importOriginal<typeof import('@/service/math.service')>();
+    return {
+        ...actual,
+        randomInt: vi.fn(),
+        calculateAmbushChance: vi.fn(),
+    };
+});
 
 vi.mock('@/repository/statistics.repository', () => ({
     statisticsRepository: {
@@ -101,6 +106,13 @@ describe('battleController', () => {
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_ambushes');
     });
 
+    it('should handle missing totalAmbushes property during ambush', () => {
+        delete player.totalAmbushes;
+        vi.mocked(mathService.calculateAmbushChance).mockReturnValue(true);
+        getBattle(req, res, next);
+        expect(player.totalAmbushes).toBe(1);
+    });
+
     it('should not increment totalAmbushes when ambush does not occur', () => {
         vi.mocked(mathService.calculateAmbushChance).mockReturnValue(false); // No ambush
         getBattle(req, res, next);
@@ -108,5 +120,15 @@ describe('battleController', () => {
         expect(player.ambushed).toBe(false);
         expect(player.totalAmbushes).toBe(0);
         expect(statisticsRepository.increment).not.toHaveBeenCalledWith('total_ambushes');
+    });
+
+    it('should pass success flash to view on level up', () => {
+        vi.mocked(playerService.resolveBattleOutcome).mockReturnValue(true);
+        getBattle(req, res, next);
+        expect(battleView.renderBattlegroundView).toHaveBeenCalledWith(
+            player,
+            expect.any(Object),
+            expect.objectContaining({ type: 'warning' })
+        );
     });
 });

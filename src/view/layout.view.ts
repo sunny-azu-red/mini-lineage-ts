@@ -2,8 +2,9 @@ import { readTemplate, render } from './base.view';
 import { WEAPONS, ARMORS, RACES, GAME_VERSION, REPO_COMMIT_URL } from '@/constant/game.constant';
 import { calculateLevel, isLowHealth, calculatePercentage, getXpProgress, isMaxLevel } from '@/service/math.service';
 import { isGameStarted } from '@/service/player.service';
-import { formatAdena, formatNumber, randomElement } from '@/util';
-import { isRelease } from '@/util/version';
+import { formatAdena, formatNumber } from '@/util/format.util';
+import { randomElement } from '@/util/game.util';
+import { isRelease } from '@/util/version.util';
 import { AMBUSH_LOW_HEALTH_MESSAGES } from '@/constant/narratives.constant';
 import { PlayerState, RenderOptions, FlashMessage } from '@/interface';
 
@@ -85,8 +86,10 @@ export function renderInventory(player: PlayerState): string {
     return render(inventoryTpl, {
         armorEmoji: armor.emoji,
         armorStr: armor.name,
+        armorStat: armor.regen,
         weaponEmoji: weapon.emoji,
         weaponStr: weapon.name,
+        weaponStat: weapon.crit,
     });
 }
 

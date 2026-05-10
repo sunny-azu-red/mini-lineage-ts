@@ -56,7 +56,7 @@
 
                             <div class="panel-body">
                                 <% if (lowHealthAlert) { %>
-                                    <div class="alert alert-danger">
+                                    <div id="low-health-alert" class="alert alert-danger">
                                         <%- lowHealthAlert %>
                                     </div>
                                 <% } %>
@@ -73,6 +73,7 @@
 
             </div>
         </div>
+        <script src="/js/config.js"></script>
         <% if (isRelease) { %>
             <script src="/script.js"></script>
         <% } else { %>

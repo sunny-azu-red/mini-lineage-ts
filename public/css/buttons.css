@@ -239,3 +239,10 @@
     height: 26px;
     font-size: 11px;
 }
+
+/* ===== Disabled State (applied by JS debouncing) ===== */
+.btn-disabled {
+    opacity: 0.45;
+    pointer-events: none;
+    cursor: not-allowed;
+}

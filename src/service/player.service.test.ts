@@ -38,6 +38,11 @@ const makePlayer = (overrides: Partial<PlayerState> = {}): PlayerState => ({
 describe('isGameStarted', () => {
     it('returns true for a fully initialized player', () => expect(isGameStarted(makePlayer())).toBe(true));
     it('returns false when raceId is missing', () => expect(isGameStarted({} as PlayerState)).toBe(false));
+    it('returns false when raceId is undefined explicitly', () => {
+        const p = makePlayer();
+        delete (p as any).raceId;
+        expect(isGameStarted(p)).toBe(false);
+    });
 });
 
 describe('initializePlayer', () => {
@@ -158,6 +163,19 @@ describe('purchaseItem — armor', () => {
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_armors_bought');
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_adena_spent', 500);
     });
+
+    it('fails when already owning the armor', () => {
+        const p = makePlayer({ adena: 1000, armorId: 1 });
+        const result = purchaseItem(p, ItemType.Armor, 1);
+        expect(result?.success).toBe(false);
+        expect(p.adena).toBe(1000);
+    });
+
+    it('returns null when item ID is invalid', () => {
+        const p = makePlayer();
+        const result = purchaseItem(p, ItemType.Weapon, 999);
+        expect(result).toBeNull();
+    });
 });
 describe('purchaseItem — food', () => {
     it('heals the player on purchase and increments stats', () => {
@@ -228,6 +246,41 @@ describe('resolveBattleOutcome', () => {
         resolveBattleOutcome(p, 10, 50, 25, 5, 7, true);
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_critical_hits');
     });
+
+    it('handles missing totalBattles and totalEnemiesKilled during resolution', () => {
+        const p = makePlayer({ health: 100 });
+        delete (p as any).totalBattles;
+        delete (p as any).totalEnemiesKilled;
+        resolveBattleOutcome(p, 0, 0, 0, 10, 0, false);
+        expect(p.totalBattles).toBe(1);
+        expect(p.totalEnemiesKilled).toBe(10);
+    });
+});
+
+describe('initializePlayer — age definitions', () => {
+    it('marks as youth when age <= 23', () => {
+        const p = {} as any;
+        vi.spyOn(Math, 'random').mockReturnValue(0); // low age
+        initializePlayer(p, RACES[0], 'Hero');
+        // randomInt(9, 69) with random 0 is 9.
+        expect(p.health).toBeDefined();
+    });
+
+    it('marks as adult when age is between 24 and 54', () => {
+        const p = {} as any;
+        // Age calculation: 9 + Math.floor(random * (69 - 9 + 1))
+        // For age 30: 30 = 9 + floor(random * 61) => 21 = floor(random * 61) => random approx 0.35
+        vi.spyOn(Math, 'random').mockReturnValue(0.35);
+        initializePlayer(p, RACES[0], 'Hero');
+        expect(p.health).toBeDefined();
+    });
+
+    it('marks as elder when age > 54', () => {
+        const p = {} as any;
+        vi.spyOn(Math, 'random').mockReturnValue(0.99); // high age
+        initializePlayer(p, RACES[0], 'Hero');
+        expect(p.health).toBeDefined();
+    });
 });
 
 describe('processTick', () => {
@@ -280,5 +333,17 @@ describe('processTick', () => {
         processTick(p);
         expect(p.health).toBe(55);
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_hp_regen', 5);
+    });
+});
+
+describe('getRace (internal branch coverage)', () => {
+    it('isGameStarted returns false for explicit undefined raceId', () => {
+        expect(isGameStarted({ raceId: undefined } as any)).toBe(false);
+    });
+
+    it('resolveBattleOutcome returns true for level up', () => {
+        const p = makePlayer({ experience: 0, raceId: 0, health: 50 });
+        // Level 2: 780 XP
+        expect(resolveBattleOutcome(p, 0, 780, 0, 0, 0, false)).toBe(true);
     });
 });

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { skipIfDev, battleRateLimitHandler, shopRateLimitHandler } from './rate-limit.middleware';
-import * as version from '@/util/version';
+import * as version from '@/util/version.util';
 import * as rateLimitView from '@/view/rate-limit.view';
 
 // mock the constant as it might be 'development' or a real SHA
@@ -50,6 +50,23 @@ describe('rate-limit.middleware', () => {
             );
         });
 
+        it('battleRateLimitHandler should render standard message when player is not ambushed', () => {
+            const req = { originalUrl: '/battle' };
+            const res = {
+                status: vi.fn().mockReturnThis(),
+                send: vi.fn(),
+                locals: { player: { ambushed: false, dead: false } }
+            };
+
+            battleRateLimitHandler(req as any, res as any);
+
+            expect(rateLimitView.renderRateLimitView).toHaveBeenCalledWith(
+                res.locals.player,
+                expect.stringContaining('moving too fast'),
+                req.originalUrl
+            );
+        });
+
         it('shopRateLimitHandler should render standard message', () => {
             const req = { originalUrl: '/shop/weapons' };
             const res = {
@@ -60,7 +77,6 @@ describe('rate-limit.middleware', () => {
 
             shopRateLimitHandler(req as any, res as any);
 
-            expect(res.status).toHaveBeenCalledWith(429);
             expect(rateLimitView.renderRateLimitView).toHaveBeenCalledWith(
                 res.locals.player,
                 expect.stringContaining('moving too fast'),

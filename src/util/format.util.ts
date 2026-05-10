@@ -1,9 +1,5 @@
-import { FlashMessage, Item, PurchaseResult } from '@/interface';
-import { randomInt } from '@/service/math.service';
-
-export function randomElement<T>(array: T[]): T {
-    return array[randomInt(0, array.length - 1)];
-}
+import { LOCALE } from '@/constant/game.constant';
+import { Item } from '@/interface';
 
 export function formatAdena(adena: number): string {
     const abs = Math.abs(adena);
@@ -24,7 +20,7 @@ export function formatAdena(adena: number): string {
 }
 
 export function formatNumber(num: number): string {
-    return num.toLocaleString('en-US');
+    return num.toLocaleString(LOCALE);
 }
 
 export function pluralize(singular: string, plural: string, count: number, emoji?: string): string {
@@ -46,17 +42,6 @@ export function formatShopItems(items: Item[]) {
         statFormatted: formatNumber(i.stat),
         costFormatted: formatAdena(i.cost),
     }));
-}
-
-export function makeFlash(text: string, type: FlashMessage['type']): FlashMessage {
-    return {
-        type,
-        text: text.replace(/\n/g, '<br>')
-    };
-}
-
-export function makePurchaseFlash(result: PurchaseResult): FlashMessage {
-    return makeFlash(result.text, result.success ? 'success' : 'danger');
 }
 
 export function fillTemplate(template: string, data: Record<string, any>): string {

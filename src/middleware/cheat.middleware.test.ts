@@ -21,7 +21,7 @@ describe('cheatMiddleware', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
-        req = { path: '/' };
+        req = { path: '/', headers: { accept: 'text/html,application/xhtml+xml' } };
         res = {
             locals: { player: { dead: false, ambushed: false } },
             redirect: vi.fn()
@@ -110,6 +110,17 @@ describe('cheatMiddleware', () => {
         it('should allow ambushed player on valid path', () => {
             res.locals.player.ambushed = true;
             req.path = '/battle';
+
+            cheatMiddleware(req, res, next);
+
+            expect(playerService.commitSuicide).not.toHaveBeenCalled();
+            expect(next).toHaveBeenCalled();
+        });
+
+        it('should ignore non-HTML requests from ambushed players (e.g. DevTools source maps)', () => {
+            res.locals.player.ambushed = true;
+            req.path = '/socket.io/socket.io.js.map';
+            req.headers = { accept: '*/*' };
 
             cheatMiddleware(req, res, next);
 

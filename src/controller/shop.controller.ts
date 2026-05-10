@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { ItemType } from '@/interface';
-import { makePurchaseFlash } from '@/util';
+import { makePurchaseFlash } from '@/util/game.util';
 import { renderWeaponsShopView, renderArmorsShopView, renderInnView } from '@/view/shop.view';
 import { purchaseItem } from '@/service/player.service';
 import { ShopWeaponSchema, ShopArmorSchema, ShopFoodSchema } from '@/schema/shop.schema';

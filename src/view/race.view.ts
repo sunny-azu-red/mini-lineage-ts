@@ -3,7 +3,7 @@ import { renderSimplePage } from './layout.view';
 import { PlayerState } from '@/interface';
 import { RACES } from '@/constant/game.constant';
 import { RACE_TRAITS_TEMPLATES } from '@/constant/narratives.constant';
-import { formatNumber, formatAdena, fillTemplate } from '@/util';
+import { formatNumber, formatAdena, fillTemplate } from '@/util/format.util';
 
 const racesTpl = readTemplate('races.ejs');
 

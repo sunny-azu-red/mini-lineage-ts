@@ -1,27 +1,59 @@
 import { describe, it, expect, vi } from 'vitest';
-import { renderDeathView } from './player.view';
+import { renderDeathView, renderSuicideView, renderXpTableView } from './player.view';
+import { renderPage, renderSimplePage } from './layout.view';
 import { PlayerState } from '@/interface';
 
 vi.mock('./base.view', () => ({
-    readTemplate: vi.fn().mockReturnValue({ content: '', filename: 'death.ejs' }),
-    render: vi.fn().mockReturnValue('<html>Death View Content</html>')
-}));
-
-vi.mock('./layout.view', () => ({
-    renderPage: vi.fn().mockImplementation((title, player, content) => content),
-    renderSimplePage: vi.fn()
+    readTemplate: vi.fn().mockImplementation((name) => ({ content: '', filename: name })),
+    render: vi.fn().mockImplementation((tpl, locals) => {
+        // Return a string that includes key indicators from locals
+        return JSON.stringify({ tpl: tpl.filename, ...locals });
+    })
 }));
 
 const makePlayer = (overrides: Partial<PlayerState> = {}): PlayerState => ({
+    name: 'Test Hero',
     raceId: 0,
-    health: 0,
+    health: 100,
     adena: 0,
     experience: 0,
     weaponId: 0,
     armorId: 0,
-    dead: true,
+    dead: false,
+    ambushed: false,
     ...overrides,
 } as PlayerState);
+
+describe('layout.view', () => {
+    it('renders low health alert when health is low', () => {
+        const p = makePlayer({ health: 5 }); // Human max HP 100
+        const html = renderPage('Title', p, 'Content');
+        expect(html).toContain('Your HP is dangerously low!');
+    });
+
+    it('renders ambush-specific low health alert', () => {
+        const p = makePlayer({ health: 5, ambushed: true });
+        const html = renderPage('Title', p, 'Content');
+        expect(html).toContain('Your HP is dangerously low!');
+    });
+
+    it('renders XP bar with previous state for animation', () => {
+        const p = makePlayer({ experience: 1000, prevExperience: 500 });
+        const html = renderPage('Title', p, 'Content');
+        expect(html).toBeDefined();
+    });
+
+    it('renders different header clickable status', () => {
+        const p = makePlayer({ ambushed: true });
+        const html = renderPage('Title', p, 'Content');
+        expect(html).toBeDefined();
+    });
+
+    it('renders simple page correctly', () => {
+        const html = renderSimplePage('Simple', 'Content');
+        expect(html).toBeDefined();
+    });
+});
 
 describe('player.view', () => {
     describe('renderDeathView', () => {
@@ -48,6 +80,21 @@ describe('player.view', () => {
             const p = makePlayer({ deathReason: 'Custom Death' });
             renderDeathView(p);
             expect(p.deathReason).toBe('Custom Death');
+        });
+    });
+
+    describe('renderSuicideView', () => {
+        it('returns rendered suicide page', () => {
+            const p = makePlayer();
+            const html = renderSuicideView(p);
+            expect(html).toBeDefined();
+        });
+    });
+
+    describe('renderXpTableView', () => {
+        it('returns rendered XP table page', () => {
+            const html = renderXpTableView(100, 2);
+            expect(html).toBeDefined();
         });
     });
 });

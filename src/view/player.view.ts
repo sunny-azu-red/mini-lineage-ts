@@ -3,7 +3,8 @@ import { renderPage, renderSimplePage } from './layout.view';
 import { PlayerState, FlashMessage } from '@/interface';
 import { calculateXpForLevel, getXpNeededToLevelUp } from '@/service/math.service';
 import { MAX_LEVEL } from '@/constant/game.constant';
-import { randomElement, formatNumber } from '@/util';
+import { formatNumber } from '@/util/format.util';
+import { randomElement } from '@/util/game.util';
 import { DEATH_MESSAGES } from '@/constant/narratives.constant';
 
 const suicideTpl = readTemplate('suicide.ejs');

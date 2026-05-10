@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
+import { HP_CONFIG } from '@/constant/game.constant';
 import {
     calculateXpForLevel,
     calculateLevel,
@@ -14,6 +15,7 @@ import {
     rollChance,
     calculateCritChance,
     calculateAmbushChance,
+    getXpProgress,
 } from './math.service';
 
 describe('calculateXpForLevel', () => {
@@ -54,13 +56,21 @@ describe('calculatePercentage', () => {
 });
 
 describe('getLowHealthThreshold', () => {
-    it('returns 25 for maxHp 100', () => expect(getLowHealthThreshold(100)).toBe(25));
-    it('returns 37 for maxHp 150', () => expect(getLowHealthThreshold(150)).toBe(37));
+    it('returns correctly based on HP_CONFIG', () => {
+        expect(getLowHealthThreshold(100)).toBe(Math.floor(100 * HP_CONFIG.lowHealthThreshold));
+        expect(getLowHealthThreshold(150)).toBe(Math.floor(150 * HP_CONFIG.lowHealthThreshold));
+    });
 });
 
 describe('isLowHealth', () => {
-    it('returns true at exactly the threshold', () => expect(isLowHealth(25, 100)).toBe(true));
-    it('returns false one above threshold', () => expect(isLowHealth(26, 100)).toBe(false));
+    it('returns true at exactly the threshold', () => {
+        const threshold = getLowHealthThreshold(100);
+        expect(isLowHealth(threshold, 100)).toBe(true);
+    });
+    it('returns false one above threshold', () => {
+        const threshold = getLowHealthThreshold(100);
+        expect(isLowHealth(threshold + 1, 100)).toBe(false);
+    });
     it('returns false at 0 hp (dead, not low)', () => expect(isLowHealth(0, 100)).toBe(false));
     it('returns false at full hp', () => expect(isLowHealth(100, 100)).toBe(false));
 });
@@ -121,5 +131,24 @@ describe('calculateAmbushChance', () => {
     it('behaves exactly like rollChance', () => {
         expect(calculateAmbushChance(0)).toBe(false);
         expect(calculateAmbushChance(100)).toBe(true);
+    });
+});
+
+describe('getXpProgress', () => {
+    it('returns 100% and 0 current/required at max level', () => {
+        const progress = getXpProgress(calculateXpForLevel(80));
+        expect(progress.percent).toBe(100);
+        expect(progress.current).toBe(0);
+        expect(progress.required).toBe(0);
+    });
+
+    it('returns correct progress mid-level', () => {
+        const level2 = calculateXpForLevel(2); // 780
+        const level3 = calculateXpForLevel(3); // 130*9 + 130*3 = 1170 + 390 = 1560
+        const xp = level2 + 390; // 780 + 390 = 1170 (exactly 50% towards level 3)
+        const progress = getXpProgress(xp);
+        expect(progress.percent).toBe(50);
+        expect(progress.current).toBe(390);
+        expect(progress.required).toBe(1560 - 780); // 780
     });
 });

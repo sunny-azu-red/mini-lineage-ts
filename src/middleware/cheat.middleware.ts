@@ -22,7 +22,9 @@ export const cheatMiddleware = (req: Request, res: Response, next: NextFunction)
         return res.redirect('/');
 
     // kill ambushed players if they navigate away (cheaters)
-    if (player.ambushed && req.path !== '/battle') {
+    // only enforce on page navigations (HTML requests) — ignore background resource requests
+    const isPageNavigation = req.headers.accept?.includes('text/html');
+    if (player.ambushed && isPageNavigation && req.path !== '/battle') {
         void statisticsRepository.increment('total_players_cheated');
         commitSuicide(player);
         return res.redirect('/death');

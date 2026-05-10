@@ -1,4 +1,4 @@
-import { MAX_LEVEL } from '@/constant/game.constant';
+import { MAX_LEVEL, HP_CONFIG } from '@/constant/game.constant';
 
 export function randomInt(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -30,7 +30,7 @@ export function getAmbushEnemyCount(enemiesKilled: number, divisor: number = 4):
 // -----------
 
 export function getLowHealthThreshold(maxHp: number): number {
-    return Math.floor(maxHp * 0.25);
+    return Math.floor(maxHp * HP_CONFIG.lowHealthThreshold);
 }
 
 export function isLowHealth(health: number, maxHp: number): boolean {

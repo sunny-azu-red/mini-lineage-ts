@@ -1,11 +1,17 @@
 import { Item, Race, RaceType } from '@/interface';
-import { getVersion } from '@/util/version';
+import { getVersion } from '@/util/version.util';
 
 export const GAME_VERSION = getVersion();
 export const REPO_COMMIT_URL = 'https://github.com/sunny-azu-red/mini-lineage-remastered/commit/';
 
 export const MAX_LEVEL = 80;
+export const LOCALE = 'en-US';
 
+/**
+ * Race Data Configurations
+ * 
+ * Starting values for each race
+ */
 export const RACES = [
     {
         id: RaceType.Human, label: `Human`, plural: `Humans`, emoji: `🧙`, enemyRaceId: RaceType.Orc,
@@ -63,6 +69,13 @@ export const FOODS = [
     { id: 3, name: 'Hearty Mash', emoji: '🥔', stat: 25, cost: 57 },
     { id: 4, name: 'Roasted Pheasant', emoji: '🍗', stat: 50, cost: 137 },
 ] satisfies Item[];
+
+/**
+ * HP Configuration
+ */
+export const HP_CONFIG = {
+    lowHealthThreshold: 0.25,
+} as const;
 
 /**
  * Battle Scaling Configuration

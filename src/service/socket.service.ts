@@ -2,6 +2,7 @@ import { Server as HttpServer } from 'http';
 import { Server as SocketIOServer, Socket } from 'socket.io';
 import { RequestHandler } from 'express';
 import { sessionStore } from '@/config/database.config';
+import { acquireSessionLock } from '@/util/lock.util';
 import { TICK_CONFIG, RACES } from '@/constant/game.constant';
 import { processTick, isGameStarted } from '@/service/player.service';
 import { PlayerState } from '@/interface';
@@ -56,7 +57,19 @@ export function initSocketService(server: HttpServer, sessionMiddleware: Request
         const req = socket.request as any;
         const sessionId: string | undefined = req.session?.id;
 
+        // sync state and track this socket for this session ID
         if (sessionId) {
+            // initial update to sync state after page load (prevents stale UI)
+            sessionStore.get(sessionId, (err, session) => {
+                if (err || !session) return;
+                const player = session as PlayerState;
+                socket.emit('player_update', {
+                    health: player.health,
+                    maxHealth: player.raceId !== undefined ? RACES[player.raceId].startHealth : null,
+                });
+            });
+
+            // tracker logic
             let tracker = sessionTracker.get(sessionId);
             if (!tracker) {
                 tracker = { socketIds: new Set(), lastSeen: Date.now() };
@@ -96,42 +109,54 @@ export function initSocketService(server: HttpServer, sessionMiddleware: Request
                 return;
             }
 
-            // load session from store to get latest player state and flags
-            sessionStore.get(sessionId, (err, session) => {
-                if (err || !session)
-                    return;
-
-                const player = session as unknown as PlayerState;
-                if (!isGameStarted(player))
-                    return;
-
-                logger.debug(`[TICK] ${player.name} "${sessionId}"`);
-
-                // only tick if the player is in a resting state (set by zoneMiddleware)
-                if (!player.isResting)
-                    return;
-
-                // apply regeneration logic
-                const oldHp = player.health;
-                const changed = processTick(player);
-                if (!changed)
-                    return;
-
-                logger.debug(`[REGEN] ${player.name} | HPR: +${player.health - oldHp} | HP: ${oldHp} -> ${player.health}`);
-
-                // persist the updated session and notify all connected clients
-                sessionStore.set(sessionId, session, (saveErr) => {
-                    if (saveErr)
+            // acquire session lock to prevent collisions with HTTP requests
+            acquireSessionLock(sessionId).then((release) => {
+                // load session from store to get latest player state and flags
+                sessionStore.get(sessionId, (err, session) => {
+                    if (err || !session) {
+                        release();
                         return;
+                    }
 
-                    tracker.socketIds.forEach(socketId => {
-                        const targetSocket = io.sockets.sockets.get(socketId);
-                        if (targetSocket) {
-                            targetSocket.emit('player_update', {
-                                health: player.health,
-                                maxHealth: player.raceId !== undefined ? RACES[player.raceId].startHealth : null,
-                            });
-                        }
+                    const player = session as unknown as PlayerState;
+                    if (!isGameStarted(player)) {
+                        release();
+                        return;
+                    }
+
+                    logger.debug(`[TICK] ${player.name} "${sessionId}"`);
+
+                    // only tick if the player is in a resting state (set by zoneMiddleware)
+                    if (!player.isResting) {
+                        release();
+                        return;
+                    }
+
+                    // apply regeneration logic
+                    const oldHp = player.health;
+                    const changed = processTick(player);
+                    if (!changed) {
+                        release();
+                        return;
+                    }
+
+                    logger.debug(`[REGEN] ${player.name} | HPR: +${player.health - oldHp} | HP: ${oldHp} -> ${player.health}`);
+
+                    // persist the updated session and notify all connected clients
+                    sessionStore.set(sessionId, session, (saveErr) => {
+                        release();
+                        if (saveErr)
+                            return;
+
+                        tracker.socketIds.forEach(socketId => {
+                            const targetSocket = io.sockets.sockets.get(socketId);
+                            if (targetSocket) {
+                                targetSocket.emit('player_update', {
+                                    health: player.health,
+                                    maxHealth: player.raceId !== undefined ? RACES[player.raceId].startHealth : null,
+                                });
+                            }
+                        });
                     });
                 });
             });

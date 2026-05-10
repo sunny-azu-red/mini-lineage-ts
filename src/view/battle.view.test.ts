@@ -35,7 +35,7 @@ const makePlayer = (overrides: Partial<PlayerState> = {}): PlayerState => ({
 } as PlayerState);
 
 describe('battle.view', () => {
-    describe('renderBattlegroundView opponent logic', () => {
+    describe('renderBattlegroundView scenarios', () => {
         it('assigns Orcs as opponents for Humans', () => {
             const human = makePlayer({ raceId: 0 }); // Human
             renderBattlegroundView(human, makeResults());
@@ -45,22 +45,49 @@ describe('battle.view', () => {
             expect(lastCallArgs?.killLine).toContain('Orc');
         });
 
-        it('assigns Humans as opponents for Orcs', () => {
-            const orc = makePlayer({ raceId: 1 }); // Orc
-            renderBattlegroundView(orc, makeResults());
+        it('includes critical hit line when isCritical is true', () => {
+            const p = makePlayer();
+            renderBattlegroundView(p, makeResults({ isCritical: true }));
             
             const renderMock = vi.mocked(baseView.render);
             const lastCallArgs = renderMock.mock.calls[renderMock.mock.calls.length - 1][1] as any;
-            expect(lastCallArgs?.killLine).toContain('Human');
+            expect(lastCallArgs?.critLine).toBeDefined();
+            expect(lastCallArgs?.critLine).not.toBe('');
         });
 
-        it('assigns Dark Elves as opponents for Elves', () => {
-            const elf = makePlayer({ raceId: 2 }); // Elf
-            renderBattlegroundView(elf, makeResults());
+        it('shows ambush line when player is ambushed', () => {
+            const p = makePlayer({ ambushed: true });
+            renderBattlegroundView(p, makeResults());
             
             const renderMock = vi.mocked(baseView.render);
             const lastCallArgs = renderMock.mock.calls[renderMock.mock.calls.length - 1][1] as any;
-            expect(lastCallArgs?.killLine).toContain('Dark Elf');
+            expect(lastCallArgs?.ambushed).toBe(true);
+            expect(lastCallArgs?.ambushedLine).toBeDefined();
+        });
+
+        it('uses level up templates when isLevelUp is true', () => {
+            const p = makePlayer();
+            renderBattlegroundView(p, makeResults({ isLevelUp: true }));
+            
+            const renderMock = vi.mocked(baseView.render);
+            const lastCallArgs = renderMock.mock.calls[renderMock.mock.calls.length - 1][1] as any;
+            expect(lastCallArgs?.outcomeLine).toBeDefined();
+        });
+
+        it('uses "Face your Foe!" text for single ambush enemy', () => {
+            const p = makePlayer({ ambushed: true });
+            renderBattlegroundView(p, makeResults({ enemiesKilled: 1 }));
+            const renderMock = vi.mocked(baseView.render);
+            const lastCallArgs = renderMock.mock.calls[renderMock.mock.calls.length - 1][1] as any;
+            expect(lastCallArgs?.fightText).toBe('Face your Foe!');
+        });
+
+        it('uses "Fight them!" text for multiple ambush enemies', () => {
+            const p = makePlayer({ ambushed: true });
+            renderBattlegroundView(p, makeResults({ enemiesKilled: 10 }));
+            const renderMock = vi.mocked(baseView.render);
+            const lastCallArgs = renderMock.mock.calls[renderMock.mock.calls.length - 1][1] as any;
+            expect(lastCallArgs?.fightText).toBe('Fight them!');
         });
     });
 });

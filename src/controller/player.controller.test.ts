@@ -1,11 +1,22 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { postSuicide } from './player.controller';
+import { postSuicide, getSuicide, getDeath, getRestart, getXpTable } from './player.controller';
 import { commitSuicide } from '@/service/player.service';
 import { statisticsRepository } from '@/repository/statistics.repository';
+import * as playerView from '@/view/player.view';
 
 vi.mock('@/service/player.service', () => ({
     commitSuicide: vi.fn(),
-    calculateLevel: vi.fn()
+    isGameStarted: vi.fn(),
+}));
+
+vi.mock('@/service/math.service', () => ({
+    calculateLevel: vi.fn().mockReturnValue(1),
+}));
+
+vi.mock('@/view/player.view', () => ({
+    renderSuicideView: vi.fn().mockReturnValue('suicide-view'),
+    renderDeathView: vi.fn().mockReturnValue('death-view'),
+    renderXpTableView: vi.fn().mockReturnValue('xp-table-view'),
 }));
 
 vi.mock('@/repository/statistics.repository', () => ({
@@ -23,14 +34,25 @@ describe('playerController', () => {
         vi.clearAllMocks();
         req = {
             body: {},
-            session: { save: vi.fn((cb) => cb()) }
+            session: { 
+                destroy: vi.fn((cb) => cb()),
+                save: vi.fn((cb) => cb()) 
+            }
         };
         res = {
-            locals: { player: {} },
+            locals: { player: { experience: 100 } },
             redirect: vi.fn(),
             send: vi.fn()
         };
         next = vi.fn();
+    });
+
+    describe('getSuicide', () => {
+        it('should send suicide view', () => {
+            getSuicide(req, res);
+            expect(playerView.renderSuicideView).toHaveBeenCalled();
+            expect(res.send).toHaveBeenCalledWith('suicide-view');
+        });
     });
 
     describe('postSuicide', () => {
@@ -58,6 +80,30 @@ describe('playerController', () => {
 
             expect(next).toHaveBeenCalled();
             expect(res.redirect).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('getDeath', () => {
+        it('should send death view', () => {
+            getDeath(req, res);
+            expect(playerView.renderDeathView).toHaveBeenCalled();
+            expect(res.send).toHaveBeenCalledWith('death-view');
+        });
+    });
+
+    describe('getRestart', () => {
+        it('should destroy session and redirect to home', () => {
+            getRestart(req, res);
+            expect(req.session.destroy).toHaveBeenCalled();
+            expect(res.redirect).toHaveBeenCalledWith('/');
+        });
+    });
+
+    describe('getXpTable', () => {
+        it('should send XP table view', () => {
+            getXpTable(req, res);
+            expect(playerView.renderXpTableView).toHaveBeenCalled();
+            expect(res.send).toHaveBeenCalledWith('xp-table-view');
         });
     });
 });
