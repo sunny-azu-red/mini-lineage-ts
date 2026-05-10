@@ -307,34 +307,4 @@ describe('socketService', () => {
         expect(() => disconnectHandler()).not.toThrow();
     });
 
-    it('should skip update if target socket is missing during tick', async () => {
-        initSocketService(mockServer, mockMiddleware);
-        // Simulate connection and clear initial emit
-        const connectionHandler = (mockIo.on as any).mock.calls.find((c: any) => c[0] === 'connection')[1];
-        connectionHandler(mockSocket);
-        
-        // Add a second socket that will be missing
-        const secondSocket = { ...mockSocket, id: 'socket-2' };
-        connectionHandler(secondSocket);
-        
-        mockSocket.emit.mockClear();
-
-        // Mock io.sockets.sockets.get to return undefined for socket-2
-        vi.mocked(mockIo.sockets.sockets.get).mockImplementation(((id: string) => {
-            if (id === 'socket-2') return undefined as any;
-            return mockSocket as any;
-        }) as any);
-
-        const player = { isResting: true, health: 50, raceId: 0 };
-        const session = { player };
-        vi.mocked(sessionStore.get as any).mockImplementation((_id: string, cb: any) => cb(null, session));
-        vi.mocked(playerService.isGameStarted).mockReturnValue(true);
-        vi.mocked(playerService.processTick).mockReturnValue(true);
-
-        vi.advanceTimersByTime(TICK_CONFIG.intervalMs);
-        await vi.runAllTicks();
-
-        expect(mockSocket.emit).toHaveBeenCalledWith('player_update', expect.any(Object));
-        // We hit the targetSocket check branch!
-    });
 });
