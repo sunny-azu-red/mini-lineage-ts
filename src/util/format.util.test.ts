@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatAdena, formatNumber, pluralize, fillTemplate, slugify, formatShopItems } from './format.util';
+import { formatAdena, formatNumber, pluralize, fillTemplate, slugify, formatShopItems, truncate } from './format.util';
 
 describe('formatAdena', () => {
     it('returns plain number below 1k', () => expect(formatAdena(999)).toBe('999'));
@@ -77,5 +77,27 @@ describe('formatShopItems', () => {
             statFormatted: '10',
             costFormatted: '100'
         });
+    });
+});
+
+describe('truncate', () => {
+    it('returns the same string if it is shorter than the limit', () => {
+        expect(truncate('Hello', 10)).toBe('Hello');
+    });
+
+    it('returns the same string if it is exactly the limit', () => {
+        expect(truncate('Hello', 5)).toBe('Hello');
+    });
+
+    it('truncates and adds ellipsis if it is longer than the limit', () => {
+        expect(truncate('Hello World', 5)).toBe('Hello...');
+    });
+
+    it('handles empty strings', () => {
+        expect(truncate('', 5)).toBe('');
+    });
+
+    it('handles limit of 0', () => {
+        expect(truncate('Hello', 0)).toBe('...');
     });
 });

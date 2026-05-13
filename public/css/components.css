@@ -44,6 +44,16 @@
     font-weight: 500;
     color: var(--text-secondary);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    flex-shrink: 0;
+    margin-left: 8px;
+}
+
+.header-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .header-stats-value {

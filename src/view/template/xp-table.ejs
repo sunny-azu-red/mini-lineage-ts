@@ -9,26 +9,28 @@
 
 <div class="xp-table-grid">
     <% columns.forEach(function(col, ci) { %>
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th class="center">Level</th>
-                    <th>XP</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% col.forEach(function(row) { %>
-                    <tr<% if (row.rowClass === 'row-current') { %> class="row-current"<% } %>>
-                        <td class="center">
-                            <%= row.levelFormatted %>
-                        </td>
-                        <td class="xp">
-                            <%= row.xpReqFormatted %>
-                        </td>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th class="center">Level</th>
+                        <th>XP</th>
                     </tr>
-                <% }); %>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <% col.forEach(function(row) { %>
+                        <tr<% if (row.rowClass === 'row-current') { %> class="row-current"<% } %>>
+                            <td class="center">
+                                <%= row.levelFormatted %>
+                            </td>
+                            <td class="xp">
+                                <%= row.xpReqFormatted %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
     <% }); %>
 </div>
 

@@ -9,9 +9,15 @@
 .data-table {
     width: 100%;
     border-collapse: collapse;
-    border: 1px solid var(--border-dark);
     font-size: 12px;
+}
+
+.table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     margin: 0px 0px 12px 0px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-dark);
 }
 
 .data-table thead tr {
@@ -64,7 +70,7 @@ th.center {
     gap: 12px;
 }
 
-@media (max-width: 580px) {
+@media (max-width: 600px) {
     .xp-table-grid {
         grid-template-columns: repeat(2, 1fr);
     }
