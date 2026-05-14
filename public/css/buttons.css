@@ -32,6 +32,7 @@
     gap: 5px;
     white-space: nowrap;
     vertical-align: middle;
+    flex-shrink: 0;
 
     /* Geometry — padding matches .form-select so heights align */
     padding: 0 16px;

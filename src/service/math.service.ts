@@ -107,25 +107,25 @@ export function isLevelUp(oldXp: number, newXp: number): boolean {
 // battle scaling formulas
 // -----------------------
 
-export function getEnemyCountRange(weaponStat: number, minMult: number = 0.3, maxMult: number = 0.6): { min: number, max: number } {
+export function getEnemyCountRange(attackPower: number, minMult: number = 0.3, maxMult: number = 0.6): { min: number, max: number } {
     return {
-        min: Math.max(1, Math.floor(weaponStat * minMult)),
-        max: Math.max(2, Math.floor(weaponStat * maxMult))
+        min: Math.max(1, Math.floor(attackPower * minMult)),
+        max: Math.max(2, Math.floor(attackPower * maxMult))
     };
 }
 
-export function calculateDangerLevel(weaponStat: number, multiplier: number = 0.6): number {
-    return Math.floor(weaponStat * multiplier);
+export function calculateDangerLevel(attackPower: number, multiplier: number = 0.6): number {
+    return Math.floor(attackPower * multiplier);
 }
 
-export function calculateDamageBlocked(armorStat: number, exponent: number = 0.95, multiplier: number = 0.8): number {
-    return Math.max(1, Math.floor(Math.pow(armorStat, exponent) * multiplier));
+export function calculateDamageBlocked(defensePower: number, exponent: number = 0.95, multiplier: number = 0.8): number {
+    return Math.max(1, Math.floor(Math.pow(defensePower, exponent) * multiplier));
 }
 
-export function calculateBaseXpGained(weaponStat: number, exponent: number = 1.5, multiplier: number = 0.8): number {
-    return Math.floor(Math.pow(weaponStat, exponent) * multiplier);
+export function calculateBaseXpGained(attackPower: number, exponent: number = 1.5, multiplier: number = 0.8): number {
+    return Math.floor(Math.pow(attackPower, exponent) * multiplier);
 }
 
-export function calculateBaseAdenaGained(weaponStat: number, exponent: number = 2.65, multiplier: number = 0.05): number {
-    return Math.floor(Math.pow(weaponStat, exponent) * multiplier);
+export function calculateBaseAdenaGained(attackPower: number, exponent: number = 2.65, multiplier: number = 0.05): number {
+    return Math.floor(Math.pow(attackPower, exponent) * multiplier);
 }

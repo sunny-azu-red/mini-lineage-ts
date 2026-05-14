@@ -41,6 +41,7 @@ vi.mock('@/config/database.config', () => ({
 vi.mock('@/service/player.service', () => ({
     processTick: vi.fn(),
     isGameStarted: vi.fn(),
+    getPlayerAuras: vi.fn().mockReturnValue([]),
 }));
 
 vi.mock('@/util/lock.util', () => ({

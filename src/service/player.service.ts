@@ -1,4 +1,4 @@
-import { PlayerState, Race, FlashMessage, PurchaseResult, ItemType } from '@/interface';
+import { PlayerState, Race, FlashMessage, PurchaseResult, ItemType, BattleResult } from '@/interface';
 import { RACES, ARMORS, WEAPONS, FOODS } from '@/constant/game.constant';
 import { isLevelUp, randomInt } from '@/service/math.service';
 import { formatAdena, formatNumber, fillTemplate } from '@/util/format.util';
@@ -67,7 +67,9 @@ export function restoreHealth(player: PlayerState, amount: number): number {
     return player.health - oldHealth;
 }
 
-export function resolveBattleOutcome(player: PlayerState, hpLost: number, xpGained: number, adenaGained: number, enemiesKilled: number, damageBlocked: number, isCritical: boolean): boolean {
+export function resolveBattleOutcome(player: PlayerState, result: BattleResult): boolean {
+    let { hpLost, xpGained, adenaGained, enemiesKilled, damageBlocked, isCritical } = result;
+
     // hpLost = 0; // DEBUG: never die
     // xpGained = xpGained * 250; // DEBUG: level up faster
     // adenaGained = adenaGained * 500; // DEBUG: get adena faster
@@ -138,17 +140,71 @@ export function purchaseItem(player: PlayerState, itemType: ItemType, itemId: nu
 }
 
 /**
+ * Returns the player's total attack power (currently just the weapon stat).
+ */
+export function getTotalAttack(player: PlayerState): number {
+    const weapon = WEAPONS[player.weaponId] || WEAPONS[0];
+    return weapon.stat;
+}
+
+/**
+ * Returns the player's total defense value (currently just the armor stat).
+ */
+export function getTotalDefense(player: PlayerState): number {
+    const armor = ARMORS[player.armorId] || ARMORS[0];
+    return armor.stat;
+}
+
+/**
+ * Returns the player's total HP regeneration per tick (race base + armor bonus).
+ */
+export function getTotalRegen(player: PlayerState): number {
+    const race = RACES[player.raceId];
+    const armor = ARMORS[player.armorId];
+    return (race?.regen ?? 0) + (armor?.regen ?? 0);
+}
+
+/**
+ * Returns the player's total critical hit chance (race base + weapon bonus).
+ */
+export function getTotalCrit(player: PlayerState): number {
+    const race = RACES[player.raceId];
+    const weapon = WEAPONS[player.weaponId];
+    return (race?.crit ?? 0) + (weapon?.crit ?? 0);
+}
+
+/**
+ * Gathers active status effects (auras) for a player based on their current state.
+ * This can be easily extended with more complex logic (e.g., duration-based buffs).
+ */
+export function getPlayerAuras(player: PlayerState) {
+    const auras = [];
+
+    if (player.isResting) {
+        auras.push({ id: 'resting', icon: '⛺', label: 'Resting' });
+
+        const maxHp = RACES[player.raceId]?.startHealth ?? 0;
+        if (player.health < maxHp && getTotalRegen(player) > 0)
+            auras.push({ id: 'regenerating', icon: '🌿', label: 'Regenerating' });
+    }
+
+    if (player.inCombat && !player.dead)
+        auras.push({ id: 'combat', icon: '⚔️', label: 'In Combat' });
+
+    return auras;
+}
+
+/**
  * processTick — entry point for all time-based passive effects (regen, future buffs/debuffs).
  * Called by SocketService on every TICK_CONFIG.intervalMs tick.
+ * 
  * Returns true if the player state was modified (so the socket knows to emit).
  */
 export function processTick(player: PlayerState): boolean {
     if (player.dead)
         return false;
 
-    const race = RACES[player.raceId];
-    const armor = ARMORS[player.armorId];
-    const totalRegen = race.regen + (armor.regen ?? 0);
+    const totalRegen = getTotalRegen(player);
     if (totalRegen <= 0)
         return false;
 

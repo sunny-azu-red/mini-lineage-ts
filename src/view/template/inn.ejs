@@ -3,24 +3,26 @@
     The young lady greets you and sets you at a table.
 </p>
 
-<table class="data-table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th title="Health Point Recovery">HP Recovery</th>
-            <th>Adena</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% items.forEach(function(food) { %>
+<div class="table-container">
+    <table class="data-table" style="min-width: 400px">
+        <thead>
             <tr>
-                <td><%= food.emoji %> <%= food.name %></td>
-                <td><%= food.statFormatted %></td>
-                <td class="gold">🪙 <%= food.costFormatted %></td>
+                <th>Name</th>
+                <th title="Health Point Recovery">HP Recovery</th>
+                <th>Adena</th>
             </tr>
-        <% }); %>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <% items.forEach(function(food) { %>
+                <tr>
+                    <td><%= food.emoji %> <%= food.name %></td>
+                    <td><%= food.statFormatted %></td>
+                    <td class="gold">🪙 <%= food.costFormatted %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
 
 <form action="/inn" method="post">
     <div class="form-row">

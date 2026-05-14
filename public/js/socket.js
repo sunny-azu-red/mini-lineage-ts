@@ -1,14 +1,59 @@
 (function () {
     const socket = io();
 
+    // development test: emit a secure ping event
+    socket.emit('ping', { timestamp: Date.now() });
+    socket.on('pong', (data) => {
+        console.log(`[SOCKET] Secure Pong received:`, data);
+    });
+
     // listen for server-pushed HP updates (regen ticks, future buff/debuff ticks)
     socket.on('player_update', (data) => {
-        if (!data || data.health == null)
+        if (!data)
             return;
 
-        const newHp = data.health;
-        const maxHp = data.maxHealth;
+        // update auras (buffs/debuffs) regardless of HP change
+        if (data.auras)
+            updateAuras(data.auras);
 
+        // update health bar, value counter, and related UI states (low health warnings)
+        if (data.health != null)
+            updateHealth(data.health, data.maxHealth);
+    });
+
+    /**
+     * Efficiently updates the auras container by comparing incoming IDs
+     * with the current ones, ensuring animations only play for new entries.
+     */
+    function updateAuras(newAuras) {
+        const container = document.getElementById('auras');
+        if (!container)
+            return;
+
+        const currentAuraEls = Array.from(container.querySelectorAll('.header-stats-value'));
+        const currentKey = currentAuraEls.map(el => el.dataset.auraId + el.innerText).join(',');
+        const newKey = newAuras.map(a => a.id + a.icon).join(',');
+
+        // skip if nothing changed to avoid flickering or re-triggering animations
+        if (currentKey === newKey)
+            return;
+
+        // rebuild the container, but new elements get the fade-in class
+        container.innerHTML = '';
+        newAuras.forEach(aura => {
+            const span = document.createElement('span');
+            span.className = 'header-stats-value aura-fade-in';
+            span.dataset.auraId = aura.id;
+            span.title = aura.label;
+            span.innerText = aura.icon;
+            container.appendChild(span);
+        });
+    }
+
+    /**
+     * Updates the health bar, value counter, and related UI states (low health warnings).
+     */
+    function updateHealth(newHp, maxHp) {
         // read the currently displayed HP from the DOM
         const hpEl = document.querySelector('#hp-bar ~ .bar-text .animate-val');
         const prevHp = hpEl ? (parseInt(hpEl.innerText.replace(/,/g, '')) || newHp) : newHp;
@@ -54,11 +99,5 @@
                 setTimeout(() => hpBar.classList.remove('regen-active'), 500);
             }
         }
-    });
-
-    // development test: emit a secure ping event
-    socket.emit('ping', { timestamp: Date.now() });
-    socket.on('pong', (data) => {
-        console.log(`[SOCKET] Secure Pong received:`, data);
-    });
+    }
 })();

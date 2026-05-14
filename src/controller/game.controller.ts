@@ -17,7 +17,7 @@ export const getHome = (req: Request, res: Response) => {
 export const postGameStart = (req: Request, res: Response, next: NextFunction) => {
     const parsed = GameStartSchema.safeParse(req.body);
     if (!parsed.success)
-        return next(new Error('Invalid race selection'));
+        return next(new Error('Invalid name or race selection'));
 
     const race = RACES[parsed.data.select_race];
     const player = res.locals.player;

@@ -8,38 +8,40 @@
 </div>
 
 <% if (rows.length > 0) { %>
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th class="center">Level</th>
-                <th>Total XP</th>
-                <th>Wealth</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% rows.forEach(function(row) { %>
+    <div class="table-container">
+        <table class="data-table" style="min-width: 545px">
+            <thead>
                 <tr>
-                    <td>
-                        <%= row.name %>
-                    </td>
-                    <td class="center">
-                        <%= row.level %>
-                    </td>
-                    <td class="xp">
-                        <%= row.totalXp %>
-                    </td>
-                    <td class="gold">
-                        🪙 <%= row.adena %>
-                    </td>
-                    <td class="muted">
-                        <%= row.date %>
-                    </td>
+                    <th>Name</th>
+                    <th class="center">Level</th>
+                    <th>Total XP</th>
+                    <th>Wealth</th>
+                    <th>Date</th>
                 </tr>
-                <% }); %>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <% rows.forEach(function(row) { %>
+                    <tr>
+                        <td>
+                            <%= row.name %>
+                        </td>
+                        <td class="center">
+                            <%= row.level %>
+                        </td>
+                        <td class="xp">
+                            <%= row.totalXp %>
+                        </td>
+                        <td class="gold">
+                            🪙 <%= row.adena %>
+                        </td>
+                        <td class="muted">
+                            <%= row.date %>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
+    </div>
 <% } else { %>
     <p>
         The halls are silent. No soul has yet earned a place among these hallowed pillars. The chronicle of champions awaits its first entry.

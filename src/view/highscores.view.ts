@@ -1,6 +1,6 @@
 import { readTemplate, render } from './base.view';
 import { renderSimplePage } from './layout.view';
-import { formatAdena, formatNumber, slugify } from '@/util/format.util';
+import { formatAdena, formatNumber, slugify, truncate } from '@/util/format.util';
 import { RACES } from '@/constant/game.constant';
 import { HighscoreEntry } from '@/interface';
 
@@ -14,7 +14,7 @@ export function renderHighscoresView(highscores: HighscoreEntry[] = [], activeRa
         const emoji = RACES[score.race_id]?.emoji || '❓';
 
         return {
-            name: `${emoji} ${score.name}`,
+            name: `${emoji} ${truncate(score.name, 20)}`,
             level: formatNumber(score.level),
             totalXp: formatNumber(score.total_xp),
             adena: formatAdena(score.adena),

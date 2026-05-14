@@ -3,26 +3,28 @@
     The old man greets you and lets you look through his armors.
 </p>
 
-<table class="data-table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th title="Health Point Regeneration">HP Regen</th>
-            <th title="Physical Defense">P. Defense</th>
-            <th>Adena</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% items.forEach(function(armor) { %>
+<div class="table-container">
+    <table class="data-table" style="min-width: 400px">
+        <thead>
             <tr>
-                <td><%= armor.emoji %> <%= armor.name %></td>
-                <td><% if (armor.regen > 0) { %><span class="heal">+<%= armor.regen %></span><% } else { %><span class="muted">-</span><% } %></td>
-                <td><%= armor.statFormatted %></td>
-                <td class="gold">🪙 <%= armor.costFormatted %></td>
+                <th>Name</th>
+                <th title="Health Point Regeneration">HP Regen</th>
+                <th title="Physical Defense">P. Defense</th>
+                <th>Adena</th>
             </tr>
-        <% }); %>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <% items.forEach(function(armor) { %>
+                <tr>
+                    <td><%= armor.emoji %> <%= armor.name %></td>
+                    <td><% if (armor.regen > 0) { %><span class="heal">+<%= armor.regen %></span><% } else { %><span class="muted">-</span><% } %></td>
+                    <td><%= armor.statFormatted %></td>
+                    <td class="gold">🪙 <%= armor.costFormatted %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
 
 <form action="/shop/armors" method="post">
     <div class="form-row">

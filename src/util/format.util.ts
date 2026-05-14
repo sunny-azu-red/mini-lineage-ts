@@ -67,3 +67,8 @@ export function slugify(text: string): string {
         .replace(/[^\w-]+/g, '')  // Remove all non-word chars
         .replace(/--+/g, '-');    // Replace multiple - with single -
 }
+
+export function truncate(text: string, length: number): string {
+    if (text.length <= length) return text;
+    return text.substring(0, length) + '...';
+}

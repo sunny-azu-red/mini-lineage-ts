@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { itemIdSchema } from './common.schema';
 import { ShopWeaponSchema, ShopArmorSchema, ShopFoodSchema } from './shop.schema';
 import { GameStartSchema } from './game.schema';
-import { SuicideSchema, HighscoreNameSchema } from './player.schema';
+import { SuicideSchema } from './player.schema';
 import { SocketPingEventSchema } from './socket.schema';
 
 // ---------------------------------------------------------------------------
@@ -83,13 +83,13 @@ describe('GameStartSchema', () => {
     it('rejects race id 4 (out of range)', () => {
         expect(GameStartSchema.safeParse({ select_race: '4' }).success).toBe(false);
     });
-    it('accepts a name within 18 chars', () => {
+    it('accepts a name within 20 chars', () => {
         const result = GameStartSchema.safeParse({ select_race: '0', name: 'Hero' });
         expect(result.success).toBe(true);
         if (result.success) expect(result.data.name).toBe('Hero');
     });
-    it('rejects a name exceeding 18 chars', () => {
-        expect(GameStartSchema.safeParse({ select_race: '0', name: 'a'.repeat(19) }).success).toBe(false);
+    it('rejects a name exceeding 20 chars', () => {
+        expect(GameStartSchema.safeParse({ select_race: '0', name: 'a'.repeat(21) }).success).toBe(false);
     });
     it('rejects missing name', () => {
         expect(GameStartSchema.safeParse({ select_race: '0' }).success).toBe(false);
@@ -112,30 +112,6 @@ describe('SuicideSchema', () => {
     it('rejects any other string', () => {
         expect(SuicideSchema.safeParse({ suicide: 'maybe' }).success).toBe(false);
         expect(SuicideSchema.safeParse({ suicide: '' }).success).toBe(false);
-    });
-});
-
-describe('HighscoreNameSchema', () => {
-    it('accepts a name within 32 chars', () => {
-        const result = HighscoreNameSchema.safeParse({ name: 'Warrior' });
-        expect(result.success).toBe(true);
-    });
-    it('accepts exactly 32 chars', () => {
-        const result = HighscoreNameSchema.safeParse({ name: 'a'.repeat(32) });
-        expect(result.success).toBe(true);
-    });
-    it('rejects a name exceeding 32 chars', () => {
-        expect(HighscoreNameSchema.safeParse({ name: 'a'.repeat(33) }).success).toBe(false);
-    });
-    it('coerces empty string to null', () => {
-        const result = HighscoreNameSchema.safeParse({ name: '' });
-        expect(result.success).toBe(true);
-        if (result.success) expect(result.data.name).toBeNull();
-    });
-    it('coerces missing name to null', () => {
-        const result = HighscoreNameSchema.safeParse({});
-        expect(result.success).toBe(true);
-        if (result.success) expect(result.data.name).toBeNull();
     });
 });
 

@@ -3,26 +3,28 @@
     The nice man greets you and lets you look through his swords.
 </p>
 
-<table class="data-table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th title="Critical Hit Chance">C. Hit %</th>
-            <th title="Physical Attack">P. Attack</th>
-            <th>Adena</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% items.forEach(function(weapon) { %>
+<div class="table-container">
+    <table class="data-table" style="min-width: 400px">
+        <thead>
             <tr>
-                <td><%= weapon.emoji %> <%= weapon.name %></td>
-                <td><% if (weapon.crit > 0) { %><span class="crit"><%= weapon.crit %>%</span><% } else { %><span class="muted">-</span><% } %></td>
-                <td><%= weapon.statFormatted %></td>
-                <td class="gold">🪙 <%= weapon.costFormatted %></td>
+                <th>Name</th>
+                <th title="Critical Hit Chance">C. Hit %</th>
+                <th title="Physical Attack">P. Attack</th>
+                <th>Adena</th>
             </tr>
-        <% }); %>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <% items.forEach(function(weapon) { %>
+                <tr>
+                    <td><%= weapon.emoji %> <%= weapon.name %></td>
+                    <td><% if (weapon.crit > 0) { %><span class="crit"><%= weapon.crit %>%</span><% } else { %><span class="muted">-</span><% } %></td>
+                    <td><%= weapon.statFormatted %></td>
+                    <td class="gold">🪙 <%= weapon.costFormatted %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
 
 <form action="/shop/weapons" method="post">
     <div class="form-row">

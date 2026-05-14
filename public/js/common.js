@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Targets all <button>, <input[type=submit]>, and <a class="btn"> elements.
      * Disables the element on first click and re-enables after a safety timeout.
      */
-    const SAFETY_TIMEOUT_MS = 5000;
+    const SAFETY_TIMEOUT_MS = 3000;
     const actionables = document.querySelectorAll('button, input[type="submit"], a.btn');
 
     actionables.forEach(el => {

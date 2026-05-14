@@ -6,5 +6,5 @@ const RACE_IDS = RACES.map(r => r.id);
 
 export const GameStartSchema = z.object({
     select_race: itemIdSchema(RACE_IDS),
-    name: z.string().trim().min(1).max(18),
+    name: z.string().trim().min(1).max(20),
 });
