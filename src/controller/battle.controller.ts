@@ -14,8 +14,8 @@ export const getBattle = (req: Request, res: Response, next: NextFunction) => {
     if (player.ambushed)
         player.ambushed = false;
 
-    const results = simulateBattle(player.raceId, player.weaponId, player.armorId);
-    results.isLevelUp = resolveBattleOutcome(player, results.hpLost, results.xpGained, results.adenaGained, results.enemiesKilled, results.damageBlocked, results.isCritical);
+    const results = simulateBattle(player);
+    results.isLevelUp = resolveBattleOutcome(player, results);
     if (player.dead)
         return saveAndRedirect(req, res, next, '/death');
 

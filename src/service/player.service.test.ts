@@ -11,6 +11,11 @@ import {
     purchaseItem,
     resolveBattleOutcome,
     processTick,
+    getTotalRegen,
+    getTotalCrit,
+    getTotalAttack,
+    getTotalDefense,
+    getPlayerAuras,
 } from './player.service';
 import { statisticsRepository } from '@/repository/statistics.repository';
 
@@ -193,7 +198,7 @@ describe('purchaseItem — food', () => {
 describe('resolveBattleOutcome', () => {
     it('kills the player on lethal damage', () => {
         const p = makePlayer({ health: 5 });
-        const flash = resolveBattleOutcome(p, 10, 100, 50, 3, 2, false);
+        const flash = resolveBattleOutcome(p, { hpLost: 10, xpGained: 100, adenaGained: 50, enemiesKilled: 3, damageBlocked: 2, isCritical: false } as any);
         expect(p.dead).toBe(true);
         expect(p.health).toBe(0);
         expect(flash).toBe(false);
@@ -201,19 +206,19 @@ describe('resolveBattleOutcome', () => {
     it('returns a level-up flash and restores hp on level-up', () => {
         const p = makePlayer({ health: 90, experience: 0, raceId: 0 });
         // Level 2 threshold is calculateXpForLevel(2) = 780
-        const flash = resolveBattleOutcome(p, 0, 780, 0, 0, 0, false);
+        const flash = resolveBattleOutcome(p, { hpLost: 0, xpGained: 780, adenaGained: 0, enemiesKilled: 0, damageBlocked: 0, isCritical: false } as any);
         expect(flash).toBe(true);
         expect(p.health).toBe(RACES[0].startHealth); // full HP on level up
     });
     it('increments total_levels_gained and total_hp_healed on level-up', () => {
         const p = makePlayer({ health: 60, experience: 0, raceId: 0 });
-        resolveBattleOutcome(p, 0, 780, 0, 0, 0, false);
+        resolveBattleOutcome(p, { hpLost: 0, xpGained: 780, adenaGained: 0, enemiesKilled: 0, damageBlocked: 0, isCritical: false } as any);
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_levels_gained');
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_hp_healed', 40); // 100 - 60
     });
     it('returns null flash and updates stats on normal battle', () => {
         const p = makePlayer({ health: 80, adena: 100, experience: 0 });
-        const flash = resolveBattleOutcome(p, 10, 50, 25, 5, 3, false);
+        const flash = resolveBattleOutcome(p, { hpLost: 10, xpGained: 50, adenaGained: 25, enemiesKilled: 5, damageBlocked: 3, isCritical: false } as any);
         expect(flash).toBe(false);
         expect(p.health).toBe(70);
         expect(p.adena).toBe(125);
@@ -224,7 +229,7 @@ describe('resolveBattleOutcome', () => {
 
     it('increments global stats during battle', () => {
         const p = makePlayer({ health: 100 });
-        resolveBattleOutcome(p, 10, 50, 25, 5, 7, false);
+        resolveBattleOutcome(p, { hpLost: 10, xpGained: 50, adenaGained: 25, enemiesKilled: 5, damageBlocked: 7, isCritical: false } as any);
 
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_battles');
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_enemies_killed', 5);
@@ -237,13 +242,13 @@ describe('resolveBattleOutcome', () => {
 
     it('increments total_deaths when player dies', () => {
         const p = makePlayer({ health: 5 });
-        resolveBattleOutcome(p, 10, 0, 0, 0, 0, false);
+        resolveBattleOutcome(p, { hpLost: 10, xpGained: 0, adenaGained: 0, enemiesKilled: 0, damageBlocked: 0, isCritical: false } as any);
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_deaths');
     });
 
     it('increments total_critical_hits when isCritical is true', () => {
         const p = makePlayer({ health: 100 });
-        resolveBattleOutcome(p, 10, 50, 25, 5, 7, true);
+        resolveBattleOutcome(p, { hpLost: 10, xpGained: 50, adenaGained: 25, enemiesKilled: 5, damageBlocked: 7, isCritical: true } as any);
         expect(statisticsRepository.increment).toHaveBeenCalledWith('total_critical_hits');
     });
 
@@ -251,7 +256,7 @@ describe('resolveBattleOutcome', () => {
         const p = makePlayer({ health: 100 });
         delete (p as any).totalBattles;
         delete (p as any).totalEnemiesKilled;
-        resolveBattleOutcome(p, 0, 0, 0, 10, 0, false);
+        resolveBattleOutcome(p, { hpLost: 0, xpGained: 0, adenaGained: 0, enemiesKilled: 10, damageBlocked: 0, isCritical: false } as any);
         expect(p.totalBattles).toBe(1);
         expect(p.totalEnemiesKilled).toBe(10);
     });
@@ -344,6 +349,118 @@ describe('getRace (internal branch coverage)', () => {
     it('resolveBattleOutcome returns true for level up', () => {
         const p = makePlayer({ experience: 0, raceId: 0, health: 50 });
         // Level 2: 780 XP
-        expect(resolveBattleOutcome(p, 0, 780, 0, 0, 0, false)).toBe(true);
+        expect(resolveBattleOutcome(p, { hpLost: 0, xpGained: 780, adenaGained: 0, enemiesKilled: 0, damageBlocked: 0, isCritical: false } as any)).toBe(true);
+    });
+});
+
+describe('getTotalRegen', () => {
+    it('returns race regen + armor regen for Human with Knight\'s Plate', () => {
+        const p = makePlayer({ raceId: 0, armorId: 3 }); // Human (regen 1) + Knight's Plate (regen 1)
+        expect(getTotalRegen(p)).toBe(2);
+    });
+
+    it('returns 0 for Orc with no regen armor', () => {
+        const p = makePlayer({ raceId: 1, armorId: 0 }); // Orc (regen 0) + Peasant's Tunic (regen 0)
+        expect(getTotalRegen(p)).toBe(0);
+    });
+
+    it('returns armor regen alone when race has 0 regen', () => {
+        const p = makePlayer({ raceId: 1, armorId: 3 }); // Orc (regen 0) + Knight's Plate (regen 1)
+        expect(getTotalRegen(p)).toBe(1);
+    });
+
+    it('returns race regen alone when armor has 0 regen', () => {
+        const p = makePlayer({ raceId: 2, armorId: 0 }); // Elf (regen 3) + Peasant's Tunic (regen 0)
+        expect(getTotalRegen(p)).toBe(3);
+    });
+});
+
+describe('getTotalCrit', () => {
+    it('returns race crit + weapon crit for Human with Echos of Valhalla', () => {
+        const p = makePlayer({ raceId: 0, weaponId: 3 }); // Human (crit 4) + Echos of Valhalla (crit 3)
+        expect(getTotalCrit(p)).toBe(7);
+    });
+
+    it('returns race crit alone with starter weapon', () => {
+        const p = makePlayer({ raceId: 0, weaponId: 0 }); // Human (crit 4) + Apprentice Blade (crit 0)
+        expect(getTotalCrit(p)).toBe(4);
+    });
+
+    it('returns weapon crit alone when race has 0 crit', () => {
+        const p = makePlayer({ raceId: 1, weaponId: 3 }); // Orc (crit 0) + Echos of Valhalla (crit 3)
+        expect(getTotalCrit(p)).toBe(3);
+    });
+
+    it('returns 0 when both race and weapon have 0 crit', () => {
+        const p = makePlayer({ raceId: 1, weaponId: 0 }); // Orc (crit 0) + Apprentice Blade (crit 0)
+        expect(getTotalCrit(p)).toBe(0);
+    });
+
+    describe('getTotalAttack', () => {
+        it('returns the weapon stat for Elven Needle', () => {
+            const p = makePlayer({ weaponId: 1 }); // Elven Needle: stat 16
+            expect(getTotalAttack(p)).toBe(16);
+        });
+
+        it('falls back to starter weapon for invalid ID', () => {
+            const p = makePlayer({ weaponId: 999 });
+            expect(getTotalAttack(p)).toBe(7); // Brawler's Fists: stat 7
+        });
+    });
+
+    describe('getTotalDefense', () => {
+        it('returns the armor stat for Brigandine Leathers', () => {
+            const p = makePlayer({ armorId: 1 }); // Brigandine Leathers: stat 10
+            expect(getTotalDefense(p)).toBe(10);
+        });
+
+        it('falls back to starter armor for invalid ID', () => {
+            const p = makePlayer({ armorId: 999 });
+            expect(getTotalDefense(p)).toBe(2); // Peasant's Tunic: stat 2
+        });
+    });
+});
+
+describe('getPlayerAuras', () => {
+    it('returns resting aura when resting at full HP', () => {
+        const p = makePlayer({ raceId: 0, health: 100, isResting: true });
+        const auras = getPlayerAuras(p);
+        expect(auras).toEqual([{ id: 'resting', icon: '⛺', label: 'Resting' }]);
+    });
+
+    it('returns resting + regenerating when resting with low HP and regen > 0', () => {
+        const p = makePlayer({ raceId: 2, health: 50, armorId: 0, isResting: true }); // Elf (regen 3)
+        const auras = getPlayerAuras(p);
+        expect(auras).toEqual([
+            { id: 'resting', icon: '⛺', label: 'Resting' },
+            { id: 'regenerating', icon: '🌿', label: 'Regenerating' },
+        ]);
+    });
+
+    it('returns only resting for Orc resting with low HP and no regen', () => {
+        const p = makePlayer({ raceId: 1, health: 80, armorId: 0, isResting: true }); // Orc (regen 0)
+        const auras = getPlayerAuras(p);
+        expect(auras).toEqual([{ id: 'resting', icon: '⛺', label: 'Resting' }]);
+    });
+
+    it('returns resting + regenerating for Orc with regen armor', () => {
+        const p = makePlayer({ raceId: 1, health: 80, armorId: 3, isResting: true }); // Orc + Knight's Plate (regen 1)
+        const auras = getPlayerAuras(p);
+        expect(auras).toEqual([
+            { id: 'resting', icon: '⛺', label: 'Resting' },
+            { id: 'regenerating', icon: '🌿', label: 'Regenerating' },
+        ]);
+    });
+
+    it('returns combat aura when in combat', () => {
+        const p = makePlayer({ inCombat: true });
+        const auras = getPlayerAuras(p);
+        expect(auras).toEqual([{ id: 'combat', icon: '⚔️', label: 'In Combat' }]);
+    });
+
+    it('returns empty array when not resting and not in combat', () => {
+        const p = makePlayer();
+        const auras = getPlayerAuras(p);
+        expect(auras).toEqual([]);
     });
 });

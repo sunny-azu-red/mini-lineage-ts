@@ -4,7 +4,7 @@ import { RequestHandler } from 'express';
 import { sessionStore } from '@/config/database.config';
 import { acquireSessionLock } from '@/util/lock.util';
 import { TICK_CONFIG, RACES } from '@/constant/game.constant';
-import { processTick, isGameStarted } from '@/service/player.service';
+import { processTick, isGameStarted, getPlayerAuras } from '@/service/player.service';
 import { PlayerState } from '@/interface';
 import { logger } from '@/config/logger.config';
 import { z } from 'zod';
@@ -14,6 +14,78 @@ const GRACE_PERIOD_MS = 10_000;
 const sessionTracker = new Map<string, { socketIds: Set<string>, lastSeen: number }>();
 
 let io: SocketIOServer;
+
+/**
+ * Builds the standardized player_update payload sent to connected clients.
+ */
+function buildPlayerUpdate(player: PlayerState) {
+    return {
+        health: player.health,
+        maxHealth: player.raceId !== undefined ? RACES[player.raceId].startHealth : null,
+        auras: getPlayerAuras(player),
+    };
+}
+
+/**
+ * Emits a player_update event to all sockets tracked under a given session.
+ */
+function emitToSession(tracker: { socketIds: Set<string> }, player: PlayerState) {
+    const payload = buildPlayerUpdate(player);
+
+    tracker.socketIds.forEach(socketId => {
+        const targetSocket = io.sockets.sockets.get(socketId);
+        if (targetSocket)
+            targetSocket.emit('player_update', payload);
+    });
+}
+
+/**
+ * Processes a single session's tick: loads the session, applies passive effects,
+ * persists changes, and emits updates to connected clients.
+ */
+function processSessionTick(tracker: { socketIds: Set<string> }, sessionId: string) {
+    acquireSessionLock(sessionId).then((release) => {
+        sessionStore.get(sessionId, (err, session) => {
+            if (err || !session) {
+                release();
+                return;
+            }
+
+            const player = session as unknown as PlayerState;
+            if (!isGameStarted(player)) {
+                release();
+                return;
+            }
+
+            logger.debug(`[TICK] ${player.name} "${sessionId}"`);
+
+            // only tick if the player is in a resting state (set by zoneMiddleware)
+            if (!player.isResting) {
+                release();
+                return;
+            }
+
+            // apply regeneration logic
+            const oldHp = player.health;
+            const changed = processTick(player);
+            if (!changed) {
+                release();
+                return;
+            }
+
+            logger.debug(`[REGEN] ${player.name} | HPR: +${player.health - oldHp} | HP: ${oldHp} -> ${player.health}`);
+
+            // persist the updated session and notify all connected clients
+            sessionStore.set(sessionId, session, (saveErr) => {
+                release();
+                if (saveErr)
+                    return;
+
+                emitToSession(tracker, player);
+            });
+        });
+    });
+}
 
 export function initSocketService(server: HttpServer, sessionMiddleware: RequestHandler): void {
     io = new SocketIOServer(server, {
@@ -63,10 +135,7 @@ export function initSocketService(server: HttpServer, sessionMiddleware: Request
             sessionStore.get(sessionId, (err, session) => {
                 if (err || !session) return;
                 const player = session as PlayerState;
-                socket.emit('player_update', {
-                    health: player.health,
-                    maxHealth: player.raceId !== undefined ? RACES[player.raceId].startHealth : null,
-                });
+                socket.emit('player_update', buildPlayerUpdate(player));
             });
 
             // tracker logic
@@ -109,57 +178,7 @@ export function initSocketService(server: HttpServer, sessionMiddleware: Request
                 return;
             }
 
-            // acquire session lock to prevent collisions with HTTP requests
-            acquireSessionLock(sessionId).then((release) => {
-                // load session from store to get latest player state and flags
-                sessionStore.get(sessionId, (err, session) => {
-                    if (err || !session) {
-                        release();
-                        return;
-                    }
-
-                    const player = session as unknown as PlayerState;
-                    if (!isGameStarted(player)) {
-                        release();
-                        return;
-                    }
-
-                    logger.debug(`[TICK] ${player.name} "${sessionId}"`);
-
-                    // only tick if the player is in a resting state (set by zoneMiddleware)
-                    if (!player.isResting) {
-                        release();
-                        return;
-                    }
-
-                    // apply regeneration logic
-                    const oldHp = player.health;
-                    const changed = processTick(player);
-                    if (!changed) {
-                        release();
-                        return;
-                    }
-
-                    logger.debug(`[REGEN] ${player.name} | HPR: +${player.health - oldHp} | HP: ${oldHp} -> ${player.health}`);
-
-                    // persist the updated session and notify all connected clients
-                    sessionStore.set(sessionId, session, (saveErr) => {
-                        release();
-                        if (saveErr)
-                            return;
-
-                        tracker.socketIds.forEach(socketId => {
-                            const targetSocket = io.sockets.sockets.get(socketId);
-                            if (targetSocket) {
-                                targetSocket.emit('player_update', {
-                                    health: player.health,
-                                    maxHealth: player.raceId !== undefined ? RACES[player.raceId].startHealth : null,
-                                });
-                            }
-                        });
-                    });
-                });
-            });
+            processSessionTick(tracker, sessionId);
         });
     }, TICK_CONFIG.intervalMs);
 }

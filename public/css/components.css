@@ -45,7 +45,6 @@
     color: var(--text-secondary);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
     flex-shrink: 0;
-    margin-left: 8px;
 }
 
 .header-name {
@@ -58,6 +57,28 @@
 
 .header-stats-value {
     color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-stats-value:first-child {
+    margin-left: 8px;
+}
+
+.aura-fade-in {
+    animation: aura-fade-in 0.4s ease-out forwards;
+}
+
+@keyframes aura-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-4px) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 .header-stats-divider {
